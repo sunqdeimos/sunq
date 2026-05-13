@@ -1,144 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SUNQS MARKET | Product</title>
 
 <style>
-  body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#070707;
-    color:#fff;
-  }
+*{box-sizing:border-box;}
 
-  header{
-    padding:20px;
-    border-bottom:1px solid rgba(255,204,51,0.3);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-  }
+body{
+  margin:0;
+  font-family:Arial;
+  background:
+    radial-gradient(circle at top, rgba(255,204,51,0.08), transparent 40%),
+    #070707;
+  color:#fff;
+  animation:fadeIn 0.4s ease;
+}
 
-  .logo{
-    color:#ffcc33;
-    font-weight:bold;
-    letter-spacing:2px;
-  }
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(6px);}
+  to{opacity:1; transform:translateY(0);}
+}
 
-  a{
-    color:#ffcc33;
-    text-decoration:none;
-    margin-left:15px;
-  }
+header{
+  padding:20px;
+  border-bottom:1px solid rgba(255,204,51,0.15);
+  background:rgba(10,10,10,0.8);
+  backdrop-filter:blur(10px);
+}
 
-  .container{
-    padding:40px 20px;
-    display:flex;
-    justify-content:center;
-  }
+a{
+  color:#ffcc33;
+  text-decoration:none;
+  margin-right:10px;
+}
 
-  .box{
-    background:#171717;
-    border:1px solid rgba(255,204,51,0.3);
-    padding:25px;
-    border-radius:12px;
-    max-width:500px;
-    width:100%;
-  }
+.box{
+  max-width:500px;
+  margin:60px auto;
+  padding:20px;
+  background:#111;
+  border:1px solid #ffcc33;
+  border-radius:12px;
+}
 
-  h1{
-    color:#ffcc33;
-    margin-top:0;
-  }
+h1{color:#ffcc33;}
 
-  .price{
-    color:#ffcc33;
-    font-size:20px;
-    margin:10px 0;
-  }
+.price{color:#ffcc33;font-size:20px;}
 
-  .desc{
-    color:#bbb;
-    line-height:1.5;
-    margin-bottom:20px;
-  }
+button{
+  width:100%;
+  padding:12px;
+  background:#000;
+  border:1px solid #ffcc33;
+  color:#ffcc33;
+  cursor:pointer;
+  transition:0.2s;
+}
 
-  button{
-    width:100%;
-    padding:12px;
-    background:#000;
-    border:1px solid #ffcc33;
-    color:#ffcc33;
-    cursor:pointer;
-    border-radius:8px;
-  }
-
-  button:hover{
-    background:#111;
-  }
+button:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 20px rgba(255,204,51,0.12);
+}
 </style>
 </head>
 
 <body>
 
 <header>
-  <div class="logo">SUNQS MARKET</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="shop.html">Shop</a>
-  </nav>
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
 </header>
 
-<div class="container">
-  <div class="box">
+<div class="box">
+  <h1 id="name"></h1>
+  <div class="price" id="price"></div>
+  <p id="desc"></p>
 
-    <h1 id="name">Loading...</h1>
-    <div class="price" id="price">$0</div>
-    <div class="desc" id="desc">Loading product details...</div>
-
-    <button onclick="alert('Cart system is UI-only for now')">
-      Add to Cart
-    </button>
-
-  </div>
+  <button onclick="addToCart(name,price)">Add to Cart</button>
 </div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-const item = params.get("item");
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-const products = {
-  "1": {
-    name: "Item One",
-    price: "$10",
-    desc: "This is a placeholder product description for Item One."
-  },
-  "2": {
-    name: "Item Two",
-    price: "$15",
-    desc: "This is a placeholder product description for Item Two."
-  },
-  "3": {
-    name: "Item Three",
-    price: "$20",
-    desc: "This is a placeholder product description for Item Three."
-  },
-  "4": {
-    name: "Item Four",
-    price: "$25",
-    desc: "This is a placeholder product description for Item Four."
-  }
+function addToCart(name,price){
+  cart.push({name,price});
+  localStorage.setItem("cart",JSON.stringify(cart));
+  alert("Added to cart");
+}
+
+const items={
+  "1":{name:"Item One",price:"$10",desc:"Placeholder product."},
+  "2":{name:"Item Two",price:"$15",desc:"Placeholder product."},
+  "3":{name:"Item Three",price:"$20",desc:"Placeholder product."}
 };
 
-if(products[item]){
-  document.getElementById("name").innerText = products[item].name;
-  document.getElementById("price").innerText = products[item].price;
-  document.getElementById("desc").innerText = products[item].desc;
-} else {
-  document.getElementById("name").innerText = "Product not found";
-  document.getElementById("desc").innerText = "This item does not exist.";
+let id=new URLSearchParams(window.location.search).get("item");
+
+if(items[id]){
+  document.getElementById("name").innerText=items[id].name;
+  document.getElementById("price").innerText=items[id].price;
+  document.getElementById("desc").innerText=items[id].desc;
 }
 </script>
 
