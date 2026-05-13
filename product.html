@@ -12,15 +12,14 @@ body{
   background:#070707;
   color:#fff;
   opacity:0;
-  transition:opacity 0.6s ease;
+  transition:0.6s;
 }
 
 body.loaded{opacity:1;}
 
 header{
   padding:20px;
-  border-bottom:1px solid rgba(255,204,51,0.15);
-  background:rgba(10,10,10,0.85);
+  border-bottom:1px solid #333;
 }
 
 a{
@@ -44,7 +43,6 @@ button{
   background:#000;
   border:1px solid #ffcc33;
   color:#ffcc33;
-  cursor:pointer;
 }
 </style>
 </head>
@@ -52,50 +50,33 @@ button{
 <body>
 
 <header>
-  <a href="index.html" onclick="navigate(event,'index.html')">Home</a>
-  <a href="sunqs.html" onclick="navigate(event,'sunqs.html')">SUNQS SIDE</a>
-  <a href="jets.html" onclick="navigate(event,'jets.html')">JETS SIDE</a>
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
 </header>
 
 <div class="box">
   <h1 id="name"></h1>
   <div id="price"></div>
   <p id="desc"></p>
-
-  <button onclick="add()">Add to Cart</button>
 </div>
 
 <script>
-window.addEventListener("load",()=>document.body.classList.add("loaded"));
-
-function navigate(e,url){
-  e.preventDefault();
-  document.body.classList.remove("loaded");
-  setTimeout(()=>window.location.href=url,400);
-}
-
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-function add(){
-  cart.push({name:document.getElementById("name").innerText});
-  localStorage.setItem("cart",JSON.stringify(cart));
-  alert("Added");
-}
+window.onload=()=>document.body.classList.add("loaded");
 
 const items={
-  "1":{name:"SUNQS A",price:"$10",desc:"Product"},
-  "2":{name:"SUNQS B",price:"$15",desc:"Product"},
-  "3":{name:"SUNQS C",price:"$20",desc:"Product"},
-  "4":{name:"SUNQS D",price:"$25",desc:"Product"},
-  "5":{name:"SUNQS E",price:"$30",desc:"Product"},
-  "6":{name:"SUNQS F",price:"$35",desc:"Product"},
+  1:{name:"SUNQS A",price:"$10",desc:"Product"},
+  2:{name:"SUNQS B",price:"$15",desc:"Product"},
+  3:{name:"SUNQS C",price:"$20",desc:"Product"},
+  4:{name:"SUNQS D",price:"$25",desc:"Product"},
+  5:{name:"SUNQS E",price:"$30",desc:"Product"},
+  6:{name:"SUNQS F",price:"$35",desc:"Product"},
 
-  "101":{name:"JETS A",price:"$12",desc:"Product"},
-  "102":{name:"JETS B",price:"$18",desc:"Product"},
-  "103":{name:"JETS C",price:"$22",desc:"Product"},
-  "104":{name:"JETS D",price:"$28",desc:"Product"},
-  "105":{name:"JETS E",price:"$33",desc:"Product"},
-  "106":{name:"JETS F",price:"$40",desc:"Product"}
+  101:{name:"JETS A",price:"$12",desc:"Product"},
+  102:{name:"JETS B",price:"$18",desc:"Product"},
+  103:{name:"JETS C",price:"$22",desc:"Product"},
+  104:{name:"JETS D",price:"$28",desc:"Product"},
+  105:{name:"JETS E",price:"$33",desc:"Product"},
+  106:{name:"JETS F",price:"$40",desc:"Product"}
 };
 
 let id=new URLSearchParams(window.location.search).get("item");
