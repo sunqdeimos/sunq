@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About - SUNQS MARKET</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#070707;
+  color:#fff;
+  opacity:0;
+  transition:0.6s ease;
+}
+
+body.loaded{opacity:1;}
+
+header{
+  padding:20px;
+  border-bottom:1px solid #333;
+}
+
+a{
+  color:#ffcc33;
+  text-decoration:none;
+  margin-right:12px;
+}
+
+.container{
+  max-width:800px;
+  margin:80px auto;
+  padding:20px;
+}
+
+h1{
+  color:#ffcc33;
+  letter-spacing:2px;
+}
+
+.box{
+  margin-top:20px;
+  padding:20px;
+  border:1px solid rgba(255,204,51,0.3);
+  border-radius:14px;
+  background:#111;
+  line-height:1.6;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="about.html">About</a>
+</header>
+
+<div class="container">
+  <h1>About SUNQS MARKET</h1>
+
+  <div class="box">
+    SUNQS MARKET is a W.I.P online marketplace built for experimental digital storefront systems.  
+    <br><br>
+    This project focuses on learning product layouts, UI structure, and interactive web design.  
+    <br><br>
+    The goal is to create a clean, scalable shopping experience that can evolve into a full ecommerce system.
+  </div>
+</div>
+
+<script>
+window.onload=()=>document.body.classList.add("loaded");
+</script>
+
+</body>
+</html>
