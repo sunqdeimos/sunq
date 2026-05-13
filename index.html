@@ -1,9 +1,123 @@
-<html>
-  <head>
-    <title>my site</title>
-  </head>
-  <body>
-    <h1>sunqs store</h1>
-    <p>this is my website</p>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sunq store</title>
+
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --panel: #141414;
+      --gold: #d4af37;
+      --gold-soft: #f0d77a;
+      --text: #f5f5f5;
+      --muted: #aaaaaa;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      padding: 28px 20px;
+      text-align: center;
+      background: linear-gradient(180deg, #111, #0a0a0a);
+      border-bottom: 1px solid rgba(212,175,55,0.2);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: 2px;
+      color: var(--gold);
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .container {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background: var(--panel);
+      padding: 15px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid rgba(212,175,55,0.15);
+      transition: transform 0.15s ease, border 0.15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border: 1px solid rgba(212,175,55,0.5);
+    }
+
+    .name {
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .price {
+      color: var(--gold-soft);
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--muted);
+      font-size: 12px;
+      border-top: 1px solid rgba(212,175,55,0.1);
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>SUNQ STORE</h1>
+    <div class="subtitle">gold standard items. minimal. clean.</div>
+  </header>
+
+  <div class="container">
+
+    <div class="card">
+      <div class="name">product one</div>
+      <div class="price">$10</div>
+    </div>
+
+    <div class="card">
+      <div class="name">product two</div>
+      <div class="price">$20</div>
+    </div>
+
+    <div class="card">
+      <div class="name">product three</div>
+      <div class="price">$30</div>
+    </div>
+
+    <div class="card">
+      <div class="name">product four</div>
+      <div class="price">$40</div>
+    </div>
+
+  </div>
+
+  <footer>
+    © 2026 sunq store
+  </footer>
+
+</body>
 </html>
