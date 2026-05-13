@@ -12,7 +12,7 @@ body{
   background:#070707;
   color:#fff;
   opacity:0;
-  transition:0.6s;
+  transition:0.6s ease;
 }
 
 body.loaded{opacity:1;}
@@ -22,6 +22,7 @@ header{
   border-bottom:1px solid #333;
   display:flex;
   justify-content:space-between;
+  align-items:center;
 }
 
 a{
@@ -30,40 +31,48 @@ a{
   margin-right:10px;
 }
 
-.toggle{
-  display:flex;
-  gap:10px;
-}
-
 .toggle button{
   padding:8px 12px;
   background:#111;
   border:1px solid #ffcc33;
   color:#ffcc33;
   cursor:pointer;
+  margin-left:5px;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:15px;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
   padding:20px;
 }
 
 .card{
-  background:#111;
-  border:1px solid #ffcc33;
-  padding:15px;
-  border-radius:12px;
+  background:linear-gradient(145deg,#121212,#0d0d0d);
+  border:1px solid rgba(255,204,51,0.25);
+  padding:28px;
+  border-radius:16px;
   cursor:pointer;
-  transition:0.25s;
+  transition:0.25s ease;
+
+  min-height:140px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
 }
 
 .card:hover{
-  transform:translateY(-6px);
+  transform:translateY(-10px) scale(1.02);
+  border-color:#ffcc33;
+  box-shadow:0 15px 40px rgba(255,204,51,0.18);
 }
 
-.price{color:#ffcc33;}
+.price{
+  color:#ffcc33;
+  font-size:20px;
+  font-weight:bold;
+  margin-top:10px;
+}
 </style>
 </head>
 
@@ -84,7 +93,7 @@ a{
 <div id="grid" class="grid"></div>
 
 <script>
-window.onload=()=>{document.body.classList.add("loaded");setSide('sunqs');};
+window.onload=()=>{document.body.classList.add("loaded");setSide("sunqs");};
 
 function nav(e,url){
   e.preventDefault();
@@ -111,17 +120,20 @@ const products={
   ]
 };
 
-let current="sunqs";
-
 function setSide(side){
-  current=side;
   const grid=document.getElementById("grid");
   grid.innerHTML="";
 
   products[side].forEach(p=>{
     const div=document.createElement("div");
     div.className="card";
-    div.innerHTML=`${p.name}<div class="price">${p.price}</div>`;
+
+    div.innerHTML=`
+      <div style="font-size:20px;font-weight:bold;">${p.name}</div>
+      <div style="color:#aaa;margin-top:8px;">Digital product</div>
+      <div class="price">${p.price}</div>
+    `;
+
     div.onclick=()=>location.href="product.html?item="+p.id;
     grid.appendChild(div);
   });
