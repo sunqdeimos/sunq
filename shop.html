@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop | SUNQ</title>
+    <title>Shop | SUNQ Marketplace</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,60 +21,60 @@
 
     <main>
         <section class="collection">
-            <h2 class="collection-title">SUNQS</h2>
-            <div class="product-grid" id="sunqs-grid"></div>
+            <h2 class="collection-title">Collection One</h2>
+            <div class="product-grid" id="collection1-grid"></div>
         </section>
 
         <section class="collection">
-            <h2 class="collection-title">JETS</h2>
-            <div class="product-grid" id="jets-grid"></div>
+            <h2 class="collection-title">Collection Two</h2>
+            <div class="product-grid" id="collection2-grid"></div>
         </section>
     </main>
 
     <script>
-        // Same product database as product.html
+        // Generic placeholder items (not clothing)
         const items = {
-            "sunqs-a": {
-                id: "sunqs-a",
-                name: "SUNQ Alpha Hoodie",
-                price: 89.00,
-                image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+A",
-                category: "sunqs"
+            "item-a": {
+                id: "item-a",
+                name: "Placeholder Item A",
+                price: 29.99,
+                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+A",
+                category: "collection1"
             },
-            "sunqs-b": {
-                id: "sunqs-b",
-                name: "SUNQ Essential Tee",
-                price: 39.00,
-                image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+B",
-                category: "sunqs"
+            "item-b": {
+                id: "item-b",
+                name: "Placeholder Item B",
+                price: 49.99,
+                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+B",
+                category: "collection1"
             },
-            "sunqs-c": {
-                id: "sunqs-c",
-                name: "SUNQ Cargo Pants",
-                price: 129.00,
-                image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+C",
-                category: "sunqs"
+            "item-c": {
+                id: "item-c",
+                name: "Placeholder Item C",
+                price: 19.99,
+                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+C",
+                category: "collection1"
             },
-            "jets-a": {
-                id: "jets-a",
-                name: "JETS Varsity Jacket",
-                price: 199.00,
-                image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+A",
-                category: "jets"
+            "item-d": {
+                id: "item-d",
+                name: "Placeholder Item D",
+                price: 99.99,
+                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+D",
+                category: "collection2"
             },
-            "jets-b": {
-                id: "jets-b",
-                name: "JETS Cap",
-                price: 35.00,
-                image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+B",
-                category: "jets"
+            "item-e": {
+                id: "item-e",
+                name: "Placeholder Item E",
+                price: 14.99,
+                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+E",
+                category: "collection2"
             },
-            "jets-c": {
-                id: "jets-c",
-                name: "JETS Technical Trousers",
-                price: 149.00,
-                image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+C",
-                category: "jets"
+            "item-f": {
+                id: "item-f",
+                name: "Placeholder Item F",
+                price: 199.99,
+                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+F",
+                category: "collection2"
             }
         };
 
@@ -83,7 +83,7 @@
             if (!container) return;
             const products = Object.values(items).filter(p => p.category === category);
             if (products.length === 0) {
-                container.innerHTML = '<p>No products in this collection yet.</p>';
+                container.innerHTML = '<p>No items in this collection yet.</p>';
                 return;
             }
             let html = '';
@@ -94,7 +94,7 @@
                         <div class="product-info">
                             <h3>${p.name}</h3>
                             <p class="price">$${p.price.toFixed(2)}</p>
-                            <a href="product.html?item=${p.id}" class="view-btn">View Product</a>
+                            <a href="product.html?item=${p.id}" class="view-btn">View Item</a>
                         </div>
                     </div>
                 `;
@@ -114,8 +114,8 @@
             if (countSpan) countSpan.innerText = total;
         }
 
-        renderProductGrid('sunqs-grid', 'sunqs');
-        renderProductGrid('jets-grid', 'jets');
+        renderProductGrid('collection1-grid', 'collection1');
+        renderProductGrid('collection2-grid', 'collection2');
         updateCartCountDisplay();
         window.addEventListener('storage', updateCartCountDisplay);
     </script>
