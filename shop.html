@@ -9,73 +9,61 @@
 
 <body>
 
-<nav class="navbar">
-  <div class="nav-container">
-    <a class="logo" href="index.html">SUNQ</a>
-    <div class="nav-links">
-      <a href="shop.html">Shop</a>
-      <a href="about.html">About</a>
-      <a href="cart.html">Cart</a>
-    </div>
-  </div>
-</nav>
+<header>
+  <a href="index.html" class="logo navlink">SUNQ</a>
 
-<div class="hero">
-  <div class="hero-title">SHOP</div>
-</div>
+  <div>
+    <a href="shop.html" class="navlink">Shop</a>
+    <a href="about.html" class="navlink">About</a>
+    <a href="cart.html" class="navlink">Cart</a>
+  </div>
+</header>
 
 <div class="filter-bar">
-  <button class="filter-btn active" onclick="filter('all')">ALL</button>
-  <button class="filter-btn" onclick="filter('sunqs')">SUNQS</button>
-  <button class="filter-btn" onclick="filter('jets')">JETS</button>
+  <button class="filter-btn active" onclick="filter('all',event)">ALL</button>
+  <button class="filter-btn" onclick="filter('sunqs',event)">SUNQS</button>
+  <button class="filter-btn" onclick="filter('jets',event)">JETS</button>
 </div>
 
-<div class="product-grid" id="grid"></div>
+<div class="grid" id="grid"></div>
 
 <script>
-const items = [
-  {id:"1", name:"SUNQS A", price:10, img:"images/sunqs-a.jpg", tag:"sunqs"},
-  {id:"2", name:"SUNQS B", price:15, img:"images/sunqs-b.jpg", tag:"sunqs"},
-  {id:"3", name:"SUNQS C", price:20, img:"images/sunqs-c.jpg", tag:"sunqs"},
-  {id:"4", name:"SUNQS D", price:25, img:"images/sunqs-d.jpg", tag:"sunqs"},
-  {id:"5", name:"SUNQS E", price:30, img:"images/sunqs-e.jpg", tag:"sunqs"},
+window.onload=()=>document.body.classList.add("loaded");
 
-  {id:"6", name:"JETS A", price:12, img:"images/jets-a.jpg", tag:"jets"},
-  {id:"7", name:"JETS B", price:18, img:"images/jets-b.jpg", tag:"jets"},
-  {id:"8", name:"JETS C", price:22, img:"images/jets-c.jpg", tag:"jets"},
-  {id:"9", name:"JETS D", price:28, img:"images/jets-d.jpg", tag:"jets"},
-  {id:"10", name:"JETS E", price:33, img:"images/jets-e.jpg", tag:"jets"}
+const items=[
+  {id:"item-a",name:"SUNQS A",price:10,cat:"sunqs"},
+  {id:"item-b",name:"SUNQS B",price:15,cat:"sunqs"},
+  {id:"item-c",name:"SUNQS C",price:20,cat:"sunqs"},
+  {id:"item-d",name:"JETS A",price:25,cat:"jets"},
+  {id:"item-e",name:"JETS B",price:30,cat:"jets"},
+  {id:"item-f",name:"JETS C",price:40,cat:"jets"}
 ];
 
 let current="all";
 
-function filter(type){
-  current = type;
-
-  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
-  event.target.classList.add("active");
-
-  render();
-}
-
 function render(){
-  const grid = document.getElementById("grid");
-  grid.innerHTML="";
+  const g=document.getElementById("grid");
+  g.innerHTML="";
 
-  items
-    .filter(i=>current==="all"||i.tag===current)
+  items.filter(i=>current==="all"||i.cat===current)
     .forEach(i=>{
-      grid.innerHTML += `
-        <div class="product-card">
-          <img src="${i.img}">
-          <div class="product-info">
-            <h3>${i.name}</h3>
-            <div class="price">$${i.price}</div>
-            <a class="button-primary" href="product.html?item=${i.id}">View</a>
-          </div>
+      g.innerHTML+=`
+        <div class="card">
+          <h2>${i.name}</h2>
+          <p>$${i.price}</p>
+          <a class="button-primary" href="product.html?item=${i.id}">View</a>
         </div>
       `;
     });
+}
+
+function filter(type,e){
+  current=type;
+
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+  e.target.classList.add("active");
+
+  render();
 }
 
 render();
