@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHOP</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#070707;
+  color:#fff;
+  opacity:0;
+  transition:0.6s;
+}
+
+body.loaded{opacity:1;}
+
+header{
+  padding:20px;
+  border-bottom:1px solid #333;
+  display:flex;
+  justify-content:space-between;
+}
+
+a{
+  color:#ffcc33;
+  text-decoration:none;
+  margin-right:10px;
+}
+
+.toggle{
+  display:flex;
+  gap:10px;
+}
+
+.toggle button{
+  padding:8px 12px;
+  background:#111;
+  border:1px solid #ffcc33;
+  color:#ffcc33;
+  cursor:pointer;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:15px;
+  padding:20px;
+}
+
+.card{
+  background:#111;
+  border:1px solid #ffcc33;
+  padding:15px;
+  border-radius:12px;
+  cursor:pointer;
+  transition:0.25s;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+}
+
+.price{color:#ffcc33;}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <a href="index.html" onclick="nav(event,'index.html')">Home</a>
+    <a href="shop.html" onclick="nav(event,'shop.html')">Shop</a>
+  </div>
+
+  <div class="toggle">
+    <button onclick="setSide('sunqs')">SUNQS</button>
+    <button onclick="setSide('jets')">JETS</button>
+  </div>
+</header>
+
+<div id="grid" class="grid"></div>
+
+<script>
+window.onload=()=>{document.body.classList.add("loaded");setSide('sunqs');};
+
+function nav(e,url){
+  e.preventDefault();
+  document.body.classList.remove("loaded");
+  setTimeout(()=>location.href=url,400);
+}
+
+const products={
+  sunqs:[
+    {id:1,name:"SUNQS A",price:"$10"},
+    {id:2,name:"SUNQS B",price:"$15"},
+    {id:3,name:"SUNQS C",price:"$20"},
+    {id:4,name:"SUNQS D",price:"$25"},
+    {id:5,name:"SUNQS E",price:"$30"},
+    {id:6,name:"SUNQS F",price:"$35"},
+  ],
+  jets:[
+    {id:101,name:"JETS A",price:"$12"},
+    {id:102,name:"JETS B",price:"$18"},
+    {id:103,name:"JETS C",price:"$22"},
+    {id:104,name:"JETS D",price:"$28"},
+    {id:105,name:"JETS E",price:"$33"},
+    {id:106,name:"JETS F",price:"$40"},
+  ]
+};
+
+let current="sunqs";
+
+function setSide(side){
+  current=side;
+  const grid=document.getElementById("grid");
+  grid.innerHTML="";
+
+  products[side].forEach(p=>{
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=`${p.name}<div class="price">${p.price}</div>`;
+    div.onclick=()=>location.href="product.html?item="+p.id;
+    grid.appendChild(div);
+  });
+}
+</script>
+
+</body>
+</html>
