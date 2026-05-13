@@ -1,91 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About | SUNQ</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About | SUNQ</title>
+<link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">SUNQ</a>
-            <div class="nav-links">
-                <a href="shop.html">Shop</a>
-                <a href="about.html">About</a>
-                <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-            </div>
-        </div>
-    </nav>
+<header>
+  <a href="index.html" class="logo">SUNQ</a>
+  <div>
+    <a href="shop.html" class="navlink">Shop</a>
+    <a href="about.html" class="navlink">About</a>
+    <a href="cart.html" class="navlink">Cart</a>
+  </div>
+</header>
 
-    <main class="about-page">
-        <h1>About SUNQ</h1>
-        <p><strong>W.I.P online marketplace</strong> – we're building a place to buy and sell unique items. Currently in active development. More features coming soon.</p>
-        <p>For early access or questions: <strong>studio@sunq.com</strong></p>
-    </main>
+<div class="about-page">
+  <h1>About SUNQ</h1>
 
-    <script>
-        function getCart() {
-            const stored = localStorage.getItem('sunqCart');
-            return stored ? JSON.parse(stored) : [];
-        }
+  <p>
+    W.I.P online marketplace built as a structured storefront experiment focused on clean UI, product browsing, and scalable marketplace design.
+  </p>
 
-        function updateCartCountDisplay() {
-            const cart = getCart();
-            let total = 0;
-            cart.forEach(item => { total += item.quantity; });
-            const countSpan = document.getElementById('cart-count');
-            if (countSpan) countSpan.innerText = total;
-        }
-        updateCartCountDisplay();
-        window.addEventListener('storage', updateCartCountDisplay);
-    </script>
+  <p>
+    This project is actively evolving into a full marketplace system with collections, product pages, and cart functionality.
+  </p>
 
-    <style>
-        .about-page {
-            max-width: 800px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-            line-height: 1.6;
-        }
-        .about-page h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--gold, #D4AF37);
-        }
-        .about-page p {
-            font-size: 1.1rem;
-        }
-        /* navbar styling */
-        .navbar {
-            background: rgba(10,10,10,0.8);
-            backdrop-filter: blur(12px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--gold, #D4AF37);
-            text-decoration: none;
-        }
-        .nav-links a {
-            color: white;
-            margin-left: 2rem;
-            text-decoration: none;
-        }
-        .nav-links a:hover {
-            color: var(--gold, #D4AF37);
-        }
-    </style>
+  <p>
+    crimsonsobased@gmail.com
+  </p>
+</div>
+
+<script>
+window.onload=()=>document.body.classList.add("loaded");
+</script>
+
 </body>
 </html>
