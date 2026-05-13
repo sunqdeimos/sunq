@@ -12,7 +12,7 @@ body{
   background:#070707;
   color:#fff;
   opacity:0;
-  transition:0.6s;
+  transition:0.6s ease;
 }
 
 body.loaded{opacity:1;}
@@ -29,12 +29,12 @@ a{
 }
 
 .box{
-  max-width:500px;
+  max-width:520px;
   margin:60px auto;
   padding:20px;
   background:#111;
   border:1px solid #ffcc33;
-  border-radius:12px;
+  border-radius:14px;
 }
 
 button{
@@ -43,6 +43,7 @@ button{
   background:#000;
   border:1px solid #ffcc33;
   color:#ffcc33;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -50,8 +51,8 @@ button{
 <body>
 
 <header>
-  <a href="index.html">Home</a>
-  <a href="shop.html">Shop</a>
+  <a href="index.html" onclick="nav(event,'index.html')">Home</a>
+  <a href="shop.html" onclick="nav(event,'shop.html')">Shop</a>
 </header>
 
 <div class="box">
@@ -62,6 +63,12 @@ button{
 
 <script>
 window.onload=()=>document.body.classList.add("loaded");
+
+function nav(e,url){
+  e.preventDefault();
+  document.body.classList.remove("loaded");
+  setTimeout(()=>location.href=url,400);
+}
 
 const items={
   1:{name:"SUNQS A",price:"$10",desc:"Product"},
