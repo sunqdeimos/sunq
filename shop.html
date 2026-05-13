@@ -6,16 +6,37 @@
 <title>SUNQS MARKET | Shop</title>
 
 <style>
-body{margin:0;font-family:Arial;background:#070707;color:#fff;}
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:Arial;
+  background:
+    radial-gradient(circle at top, rgba(255,204,51,0.08), transparent 40%),
+    #070707;
+  color:#fff;
+  animation:fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(6px);}
+  to{opacity:1; transform:translateY(0);}
+}
 
 header{
   padding:20px;
-  border-bottom:1px solid #333;
+  border-bottom:1px solid rgba(255,204,51,0.15);
+  background:rgba(10,10,10,0.8);
+  backdrop-filter:blur(10px);
   display:flex;
   justify-content:space-between;
 }
 
-a{color:#ffcc33;text-decoration:none;margin-right:10px;}
+a{
+  color:#ffcc33;
+  text-decoration:none;
+  margin-right:10px;
+}
 
 .grid{
   display:grid;
@@ -26,9 +47,17 @@ a{color:#ffcc33;text-decoration:none;margin-right:10px;}
 
 .card{
   background:#111;
-  border:1px solid #ffcc33;
-  padding:15px;
+  border:1px solid rgba(255,204,51,0.2);
+  padding:16px;
+  border-radius:12px;
   cursor:pointer;
+  transition:0.25s;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+  border-color:#ffcc33;
+  box-shadow:0 10px 25px rgba(255,204,51,0.12);
 }
 
 .price{color:#ffcc33;}
@@ -40,8 +69,9 @@ a{color:#ffcc33;text-decoration:none;margin-right:10px;}
   background:#111;
   border:1px solid #ffcc33;
   padding:10px 15px;
-  color:#ffcc33;
   border-radius:20px;
+  color:#ffcc33;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -57,19 +87,16 @@ a{color:#ffcc33;text-decoration:none;margin-right:10px;}
 
 <div class="grid">
 
-  <div class="card" onclick="addToCart('Item One','$10');go('1')">
-    Item One
-    <div class="price">$10</div>
+  <div class="card" onclick="addToCart('Item One','$10');go(1)">
+    Item One <div class="price">$10</div>
   </div>
 
-  <div class="card" onclick="addToCart('Item Two','$15');go('2')">
-    Item Two
-    <div class="price">$15</div>
+  <div class="card" onclick="addToCart('Item Two','$15');go(2)">
+    Item Two <div class="price">$15</div>
   </div>
 
-  <div class="card" onclick="addToCart('Item Three','$20');go('3')">
-    Item Three
-    <div class="price">$20</div>
+  <div class="card" onclick="addToCart('Item Three','$20');go(3)">
+    Item Three <div class="price">$20</div>
   </div>
 
 </div>
