@@ -6,6 +6,7 @@
 <title>Shop</title>
 <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
 <nav class="navbar">
@@ -14,81 +15,70 @@
     <div class="nav-links">
       <a href="shop.html">Shop</a>
       <a href="about.html">About</a>
-      <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+      <a href="cart.html">Cart</a>
     </div>
   </div>
 </nav>
 
-<div style="text-align:center;padding:20px;">
-  <button class="filter-btn active" onclick="filter('all',this)">All</button>
-  <button class="filter-btn" onclick="filter('sunqs',this)">SUNQS</button>
-  <button class="filter-btn" onclick="filter('jets',this)">JETS</button>
+<div class="hero">
+  <div class="hero-title">SHOP</div>
 </div>
 
-<div class="grid" id="grid"></div>
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filter('all')">ALL</button>
+  <button class="filter-btn" onclick="filter('sunqs')">SUNQS</button>
+  <button class="filter-btn" onclick="filter('jets')">JETS</button>
+</div>
+
+<div class="product-grid" id="grid"></div>
 
 <script>
 const items = [
-  {id:"a",name:"SUNQS A",price:10,cat:"sunqs"},
-  {id:"b",name:"SUNQS B",price:15,cat:"sunqs"},
-  {id:"c",name:"SUNQS C",price:20,cat:"sunqs"},
-  {id:"d",name:"SUNQS D",price:25,cat:"sunqs"},
-  {id:"e",name:"SUNQS E",price:30,cat:"sunqs"},
+  {id:"1", name:"SUNQS A", price:10, img:"images/sunqs-a.jpg", tag:"sunqs"},
+  {id:"2", name:"SUNQS B", price:15, img:"images/sunqs-b.jpg", tag:"sunqs"},
+  {id:"3", name:"SUNQS C", price:20, img:"images/sunqs-c.jpg", tag:"sunqs"},
+  {id:"4", name:"SUNQS D", price:25, img:"images/sunqs-d.jpg", tag:"sunqs"},
+  {id:"5", name:"SUNQS E", price:30, img:"images/sunqs-e.jpg", tag:"sunqs"},
 
-  {id:"f",name:"JETS A",price:12,cat:"jets"},
-  {id:"g",name:"JETS B",price:18,cat:"jets"},
-  {id:"h",name:"JETS C",price:22,cat:"jets"},
-  {id:"i",name:"JETS D",price:28,cat:"jets"},
-  {id:"j",name:"JETS E",price:35,cat:"jets"},
+  {id:"6", name:"JETS A", price:12, img:"images/jets-a.jpg", tag:"jets"},
+  {id:"7", name:"JETS B", price:18, img:"images/jets-b.jpg", tag:"jets"},
+  {id:"8", name:"JETS C", price:22, img:"images/jets-c.jpg", tag:"jets"},
+  {id:"9", name:"JETS D", price:28, img:"images/jets-d.jpg", tag:"jets"},
+  {id:"10", name:"JETS E", price:33, img:"images/jets-e.jpg", tag:"jets"}
 ];
 
 let current="all";
 
-function render(){
-  const g=document.getElementById("grid");
+function filter(type){
+  current = type;
 
-  g.style.opacity=0;
-  setTimeout(()=>{
-
-    g.innerHTML="";
-
-    items
-    .filter(i=>current==="all"?true:i.cat===current)
-    .forEach(i=>{
-      g.innerHTML+=`
-        <div class="card">
-          <h2>${i.name}</h2>
-          <p>$${i.price}</p>
-          <a class="button-primary" href="product.html?id=${i.id}">View</a>
-        </div>
-      `;
-    });
-
-    g.style.opacity=1;
-
-  },150);
-}
-
-function filter(c,btn){
-  current=c;
-
-  document.querySelectorAll(".filter-btn")
-  .forEach(b=>b.classList.remove("active"));
-
-  btn.classList.add("active");
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+  event.target.classList.add("active");
 
   render();
 }
 
-render();
+function render(){
+  const grid = document.getElementById("grid");
+  grid.innerHTML="";
 
-/* CART */
-function getCart(){
-  return JSON.parse(localStorage.getItem("sunqCart")) || [];
+  items
+    .filter(i=>current==="all"||i.tag===current)
+    .forEach(i=>{
+      grid.innerHTML += `
+        <div class="product-card">
+          <img src="${i.img}">
+          <div class="product-info">
+            <h3>${i.name}</h3>
+            <div class="price">$${i.price}</div>
+            <a class="button-primary" href="product.html?item=${i.id}">View</a>
+          </div>
+        </div>
+      `;
+    });
 }
 
-document.getElementById("cart-count").innerText =
-getCart().reduce((a,b)=>a+b.quantity,0);
+render();
 </script>
 
 </body>
