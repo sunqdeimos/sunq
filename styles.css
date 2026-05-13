@@ -256,3 +256,25 @@ body {
     font-size: 18px;
   }
 }
+/* ================= HERO CENTER BUTTON FIX ================= */
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.hero .button-primary {
+  display: inline-block;
+  margin-top: 10px;
+}
