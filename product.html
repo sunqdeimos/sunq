@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product | SUNQ</title>
+<title>Product</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
 <header>
-  <a href="index.html" class="logo">SUNQ</a>
+  <a href="index.html" class="logo navlink">SUNQ</a>
 
   <div>
     <a href="shop.html" class="navlink">Shop</a>
@@ -19,81 +19,63 @@
   </div>
 </header>
 
-<div class="product-grid" id="product-container"></div>
+<div class="product-grid" id="wrap"></div>
 
 <script>
 window.onload=()=>document.body.classList.add("loaded");
 
-const items = {
-  "sunqs-0": {name:"SUNQS ITEM 1",price:10,img:"https://placehold.co/600x600",desc:["Entry-level marketplace listing","Clean digital product slot","Instant access item"]},
-  "sunqs-1": {name:"SUNQS ITEM 2",price:15,img:"https://placehold.co/600x600",desc:["Mid-tier listing","Improved visibility placement","Balanced value item"]},
-  "jets-0": {name:"JETS ITEM 1",price:15,img:"https://placehold.co/600x600",desc:["Starter JETS product","Secondary collection item","Budget-friendly listing"]}
+const items={
+  "item-a":{name:"SUNQS A",price:10,desc:["Entry item","Clean listing","Starter product"]},
+  "item-b":{name:"SUNQS B",price:15,desc:["Mid tier","Better exposure","Balanced value"]},
+  "item-c":{name:"SUNQS C",price:20,desc:["Premium listing","Strong demand","Reliable"]},
+  "item-d":{name:"JETS A",price:25,desc:["Jets entry","Secondary line","Growing demand"]},
+  "item-e":{name:"JETS B",price:30,desc:["Higher tier","Limited supply","Premium feel"]},
+  "item-f":{name:"JETS C",price:40,desc:["Top Jets item","Rare","High value"]}
 };
 
 function getCart(){
   return JSON.parse(localStorage.getItem("sunqCart"))||[];
 }
 
-function saveCart(cart){
-  localStorage.setItem("sunqCart",JSON.stringify(cart));
+function saveCart(c){
+  localStorage.setItem("sunqCart",JSON.stringify(c));
 }
 
-function addToCart(id){
-  let cart=getCart();
-  let item=cart.find(i=>i.id===id);
-
-  if(item) item.quantity++;
-  else cart.push({id,quantity:1});
-
-  saveCart(cart);
-  updateCartCount();
+function add(id){
+  let c=getCart();
+  let f=c.find(i=>i.id===id);
+  if(f)f.quantity++;
+  else c.push({id,quantity:1});
+  saveCart(c);
 }
 
-function updateCartCount(){
-  let cart=getCart();
-  let total=cart.reduce((a,b)=>a+b.quantity,0);
-  document.getElementById("cart-count").innerText=total;
-}
-
-function loadProduct(){
+function load(){
   const id=new URLSearchParams(location.search).get("item");
   const p=items[id];
 
-  const container=document.getElementById("product-container");
+  const w=document.getElementById("wrap");
 
   if(!p){
-    container.innerHTML=`
-      <div class="card">
-        <h2>Item not found</h2>
-        <a href="shop.html" class="button-primary">Back to Shop</a>
-      </div>
-    `;
+    w.innerHTML=`<div class="card"><h2>Not found</h2></div>`;
     return;
   }
 
-  container.innerHTML=`
-    <div class="card">
-      <img src="${p.img}" style="width:100%; border-radius:18px;">
-    </div>
-
+  w.innerHTML=`
     <div class="card">
       <h1>${p.name}</h1>
       <h2>$${p.price}</h2>
 
-      <ul style="margin-top:20px; line-height:1.8; font-size:18px;">
+      <ul>
         ${p.desc.map(d=>`<li>• ${d}</li>`).join("")}
       </ul>
 
-      <div style="margin-top:25px; display:flex; gap:12px; flex-wrap:wrap;">
-        <button onclick="addToCart('${id}')">Add to Cart</button>
-        <a href="shop.html" class="button-primary" style="text-decoration:none;">Back to Shop</a>
-      </div>
+      <button onclick="add('${id}')">Add to Cart</button>
+      <a href="shop.html" class="button-primary">Back</a>
     </div>
   `;
 }
 
-loadProduct();
-updateCartCount();
+load();
 </script>
 
 </body>
