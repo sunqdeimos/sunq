@@ -1,36 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>SUNQ Marketplace</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>TEST</title>
 </head>
-<body>
 
-<nav class="navbar">
-  <div class="nav-container">
-    <a class="logo" href="index.html">SUNQ</a>
-    <div class="nav-links">
-      <a href="shop.html">Shop</a>
-      <a href="about.html">About</a>
-      <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-    </div>
-  </div>
-</nav>
-
-<section class="hero">
-  <h1 class="hero-title">SUNQ Marketplace</h1>
-  <p class="hero-subtitle">Curated independent items</p>
-  <a class="button-primary" href="shop.html">Browse Items</a>
-</section>
-
-<script>
-const getCart=()=>JSON.parse(localStorage.getItem("sunqCart"))||[];
-const update=()=>{
-  document.getElementById("cart-count").innerText=
-    getCart().reduce((a,b)=>a+b.quantity,0);
-};
-update();
-</script>
-
+<body style="background:white; color:black; font-size:30px;">
+  IF YOU SEE THIS, INDEX IS WORKING
 </body>
 </html>
