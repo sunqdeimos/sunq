@@ -3,70 +3,109 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shop</title>
+<title>SUNQS MARKET</title>
+
 <link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
 <header>
-  <a href="index.html" class="logo navlink">SUNQ</a>
+  <a href="index.html" class="logo">SUNQ</a>
 
-  <div>
-    <a href="shop.html" class="navlink">Shop</a>
-    <a href="about.html" class="navlink">About</a>
-    <a href="cart.html" class="navlink">Cart</a>
+  <div class="nav-right">
+    <a class="navlink" href="index.html">Home</a>
+    <a class="navlink" href="shop.html">Shop</a>
+    <a class="navlink" href="about.html">About</a>
+    <a class="navlink" href="cart.html">Cart (<span id="cart-count">0</span>)</a>
   </div>
 </header>
 
-<div class="filter-bar">
-  <button class="filter-btn active" onclick="filter('all',event)">ALL</button>
-  <button class="filter-btn" onclick="filter('sunqs',event)">SUNQS</button>
-  <button class="filter-btn" onclick="filter('jets',event)">JETS</button>
+<div class="hero">
+  <h1>SUNQS MARKET</h1>
+  <p>Browse SUNQS and JETS collections. Filter, search, and explore listings.</p>
+</div>
+
+<div class="shop-controls">
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="ALL">ALL</button>
+    <button class="filter-btn" data-filter="SUNQS">SUNQS</button>
+    <button class="filter-btn" data-filter="JETS">JETS</button>
+  </div>
+
+  <input class="search" id="search" placeholder="Search products...">
 </div>
 
 <div class="grid" id="grid"></div>
 
+<script src="products.js"></script>
+
 <script>
-window.onload=()=>document.body.classList.add("loaded");
+window.onload=()=>{
+  document.body.classList.add("loaded");
+  updateCartCountDisplay();
+};
 
-const items=[
-  {id:"item-a",name:"SUNQS A",price:10,cat:"sunqs"},
-  {id:"item-b",name:"SUNQS B",price:15,cat:"sunqs"},
-  {id:"item-c",name:"SUNQS C",price:20,cat:"sunqs"},
-  {id:"item-d",name:"JETS A",price:25,cat:"jets"},
-  {id:"item-e",name:"JETS B",price:30,cat:"jets"},
-  {id:"item-f",name:"JETS C",price:40,cat:"jets"}
-];
+let currentFilter="ALL";
 
-let current="all";
+function renderProducts(){
+  const grid=document.getElementById("grid");
+  const search=document.getElementById("search").value.toLowerCase().trim();
 
-function render(){
-  const g=document.getElementById("grid");
-  g.innerHTML="";
+  grid.innerHTML="";
 
-  items.filter(i=>current==="all"||i.cat===current)
-    .forEach(i=>{
-      g.innerHTML+=`
-        <div class="card">
-          <h2>${i.name}</h2>
-          <p>$${i.price}</p>
-          <a class="button-primary" href="product.html?item=${i.id}">View</a>
-        </div>
-      `;
-    });
+  let filtered=PRODUCTS.filter(p=>{
+    const matchesFilter = currentFilter==="ALL" || p.category===currentFilter;
+    const matchesSearch = p.name.toLowerCase().includes(search);
+    return matchesFilter && matchesSearch;
+  });
+
+  if(filtered.length===0){
+    grid.innerHTML=`<div class="card"><div class="content"><h2>No results</h2><p>Try another search or filter.</p></div></div>`;
+    return;
+  }
+
+  filtered.forEach(p=>{
+    const card=document.createElement("div");
+    card.className="card";
+
+    card.innerHTML=`
+      <img src="${p.img}">
+      <div class="content">
+        <div class="badge">${p.category}</div>
+        <h2>${p.name}</h2>
+        <p>${p.desc}</p>
+        <div class="price">$${p.price}</div>
+        <br>
+        <a class="button-primary" href="product.html?item=${p.id}">View Product</a>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
 }
 
-function filter(type,e){
-  current=type;
+document.querySelectorAll(".filter-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
 
-  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
-  e.target.classList.add("active");
+    currentFilter=btn.dataset.filter;
 
-  render();
-}
+    document.getElementById("grid").style.opacity="0";
+    setTimeout(()=>{
+      renderProducts();
+      document.getElementById("grid").style.opacity="1";
+    },200);
+  });
+});
 
-render();
+document.getElementById("search").addEventListener("input", ()=>{
+  renderProducts();
+});
+
+renderProducts();
 </script>
 
 </body>
