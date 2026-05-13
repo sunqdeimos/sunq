@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product | SUNQ</title>
+    <title>Item | SUNQ Marketplace</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,76 +21,74 @@
 
     <main class="product-page">
         <div class="product-container" id="product-container">
-            <div class="loading">Loading product...</div>
+            <div class="loading">Loading item...</div>
         </div>
     </main>
 
     <script>
-        // ---------- PRODUCT DATABASE ----------
+        // Generic placeholder items (match shop.html)
         const items = {
-            "sunqs-a": {
-                id: "sunqs-a",
-                name: "SUNQ Alpha Hoodie",
-                collection: "SUNQS",
-                price: 89.00,
-                description: "Premium heavyweight hoodie with embroidered SUNQ logo.",
-                image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+A",
-                category: "sunqs"
+            "item-a": {
+                id: "item-a",
+                name: "Placeholder Item A",
+                collection: "Collection One",
+                price: 29.99,
+                description: "This is a generic placeholder item. Replace with your real product description, images, and details.",
+                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+A",
+                category: "collection1"
             },
-            "sunqs-b": {
-                id: "sunqs-b",
-                name: "SUNQ Essential Tee",
-                collection: "SUNQS",
-                price: 39.00,
-                description: "Classic crewneck t-shirt, garment-dyed soft feel.",
-                image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+B",
-                category: "sunqs"
+            "item-b": {
+                id: "item-b",
+                name: "Placeholder Item B",
+                collection: "Collection One",
+                price: 49.99,
+                description: "This is a generic placeholder item. Replace with your real product description, images, and details.",
+                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+B",
+                category: "collection1"
             },
-            "sunqs-c": {
-                id: "sunqs-c",
-                name: "SUNQ Cargo Pants",
-                collection: "SUNQS",
-                price: 129.00,
-                description: "Oversized cargo pants with multiple pockets.",
-                image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+C",
-                category: "sunqs"
+            "item-c": {
+                id: "item-c",
+                name: "Placeholder Item C",
+                collection: "Collection One",
+                price: 19.99,
+                description: "This is a generic placeholder item. Replace with your real product description, images, and details.",
+                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+C",
+                category: "collection1"
             },
-            "jets-a": {
-                id: "jets-a",
-                name: "JETS Varsity Jacket",
-                collection: "JETS",
-                price: 199.00,
-                description: "Wool-blend varsity jacket with leather sleeves.",
-                image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+A",
-                category: "jets"
+            "item-d": {
+                id: "item-d",
+                name: "Placeholder Item D",
+                collection: "Collection Two",
+                price: 99.99,
+                description: "This is a generic placeholder item. Replace with your real product description, images, and details.",
+                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+D",
+                category: "collection2"
             },
-            "jets-b": {
-                id: "jets-b",
-                name: "JETS Cap",
-                collection: "JETS",
-                price: 35.00,
-                description: "Structured 6-panel cap with curved brim.",
-                image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+B",
-                category: "jets"
+            "item-e": {
+                id: "item-e",
+                name: "Placeholder Item E",
+                collection: "Collection Two",
+                price: 14.99,
+                description: "This is a generic placeholder item. Replace with your real product description, images, and details.",
+                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+E",
+                category: "collection2"
             },
-            "jets-c": {
-                id: "jets-c",
-                name: "JETS Technical Trousers",
-                collection: "JETS",
-                price: 149.00,
-                description: "Slim-fit trousers with water-repellent finish.",
-                image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+C",
-                category: "jets"
+            "item-f": {
+                id: "item-f",
+                name: "Placeholder Item F",
+                collection: "Collection Two",
+                price: 199.99,
+                description: "This is a generic placeholder item. Replace with your real product description, images, and details.",
+                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+F",
+                category: "collection2"
             }
         };
 
-        // Helper: get URL parameter
         function getParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
 
-        // Cart functions (using sunqCart key)
         function getCart() {
             const stored = localStorage.getItem('sunqCart');
             return stored ? JSON.parse(stored) : [];
@@ -113,10 +111,10 @@
 
         function updateCartCountDisplay() {
             const cart = getCart();
-            let totalItems = 0;
-            cart.forEach(item => { totalItems += item.quantity; });
+            let total = 0;
+            cart.forEach(item => { total += item.quantity; });
             const countSpan = document.getElementById('cart-count');
-            if (countSpan) countSpan.innerText = totalItems;
+            if (countSpan) countSpan.innerText = total;
         }
 
         function showMessage(msg, type) {
@@ -131,7 +129,6 @@
             }
         }
 
-        // Display product
         function displayProduct(productId) {
             const container = document.getElementById('product-container');
             const product = items[productId];
@@ -139,7 +136,7 @@
             if (!product) {
                 container.innerHTML = `
                     <div class="product-error">
-                        <h2>Product not found</h2>
+                        <h2>Item not found</h2>
                         <p>Sorry, the item you're looking for doesn't exist.</p>
                         <a href="shop.html" class="button-primary">Return to Shop</a>
                     </div>
@@ -179,7 +176,6 @@
             });
         }
 
-        // Initialize page
         function init() {
             const itemId = getParam('item');
             if (itemId) {
@@ -187,7 +183,7 @@
             } else {
                 document.getElementById('product-container').innerHTML = `
                     <div class="product-error">
-                        <h2>No product selected</h2>
+                        <h2>No item selected</h2>
                         <p>Please go to the shop and choose an item.</p>
                         <a href="shop.html" class="button-primary">Visit Shop</a>
                     </div>
