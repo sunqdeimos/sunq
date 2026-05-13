@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart | SUNQ</title>
+    <title>Cart | SUNQ Marketplace</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -27,14 +27,14 @@
     </main>
 
     <script>
-        // Product database (same as shop.html and product.html)
+        // Must match the items in shop.html and product.html
         const items = {
-            "sunqs-a": { id: "sunqs-a", name: "SUNQ Alpha Hoodie", price: 89.00, image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+A" },
-            "sunqs-b": { id: "sunqs-b", name: "SUNQ Essential Tee", price: 39.00, image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+B" },
-            "sunqs-c": { id: "sunqs-c", name: "SUNQ Cargo Pants", price: 129.00, image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+C" },
-            "jets-a": { id: "jets-a", name: "JETS Varsity Jacket", price: 199.00, image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+A" },
-            "jets-b": { id: "jets-b", name: "JETS Cap", price: 35.00, image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+B" },
-            "jets-c": { id: "jets-c", name: "JETS Technical Trousers", price: 149.00, image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+C" }
+            "item-a": { id: "item-a", name: "Placeholder Item A", price: 29.99, image: "https://placehold.co/600x600/1a1a1a/white?text=Item+A" },
+            "item-b": { id: "item-b", name: "Placeholder Item B", price: 49.99, image: "https://placehold.co/600x600/1a1a1a/white?text=Item+B" },
+            "item-c": { id: "item-c", name: "Placeholder Item C", price: 19.99, image: "https://placehold.co/600x600/1a1a1a/white?text=Item+C" },
+            "item-d": { id: "item-d", name: "Placeholder Item D", price: 99.99, image: "https://placehold.co/600x600/1a1a1a/white?text=Item+D" },
+            "item-e": { id: "item-e", name: "Placeholder Item E", price: 14.99, image: "https://placehold.co/600x600/1a1a1a/white?text=Item+E" },
+            "item-f": { id: "item-f", name: "Placeholder Item F", price: 199.99, image: "https://placehold.co/600x600/1a1a1a/white?text=Item+F" }
         };
 
         function getCart() {
@@ -68,7 +68,7 @@
                 return;
             }
 
-            let itemsHtml = '<div class="cart-header"><span>Product</span><span>Price</span><span>Quantity</span><span>Total</span><span></span></div>';
+            let itemsHtml = '<div class="cart-header"><span>Item</span><span>Price</span><span>Quantity</span><span>Total</span><span></span></div>';
             let subtotal = 0;
 
             cart.forEach(cartItem => {
@@ -100,7 +100,6 @@
             `;
             checkoutDiv.innerHTML = '<button id="checkout-btn" class="button-primary">Proceed to Checkout</button>';
 
-            // Attach event listeners
             document.querySelectorAll('.cart-qty').forEach(input => {
                 input.addEventListener('change', (e) => {
                     const id = e.target.getAttribute('data-id');
@@ -148,114 +147,26 @@
     </script>
 
     <style>
-        .cart-page {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        .cart-header, .cart-row {
-            display: grid;
-            grid-template-columns: 3fr 1fr 1fr 1fr 0.5fr;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid #333;
-        }
-        .cart-header {
-            font-weight: bold;
-            color: var(--gold, #D4AF37);
-        }
-        .cart-product {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .cart-img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .cart-qty {
-            width: 70px;
-            padding: 0.3rem;
-            background: #2a2a2a;
-            border: 1px solid #555;
-            color: white;
-            border-radius: 5px;
-            text-align: center;
-        }
-        .remove-btn {
-            background: #a00;
-            color: white;
-            border: none;
-            padding: 0.3rem 0.8rem;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .remove-btn:hover {
-            background: #c22;
-        }
-        .cart-summary {
-            margin-top: 2rem;
-            text-align: right;
-            font-size: 1.2rem;
-        }
-        .summary-line {
-            margin: 0.5rem 0;
-        }
-        .summary-total {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--gold, #D4AF37);
-        }
-        .empty-cart {
-            text-align: center;
-            padding: 3rem;
-            font-size: 1.2rem;
-        }
-        .button-primary {
-            background: var(--gold, #D4AF37);
-            color: #0a0a0a;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 2rem;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-        .button-primary:hover {
-            background: #c5a028;
-        }
-        /* navbar styles */
-        .navbar {
-            background: rgba(10,10,10,0.8);
-            backdrop-filter: blur(12px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--gold, #D4AF37);
-            text-decoration: none;
-        }
-        .nav-links a {
-            color: white;
-            margin-left: 2rem;
-            text-decoration: none;
-        }
-        .nav-links a:hover {
-            color: var(--gold, #D4AF37);
-        }
+        /* same styles as before */
+        .cart-page { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+        .cart-header, .cart-row { display: grid; grid-template-columns: 3fr 1fr 1fr 1fr 0.5fr; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #333; }
+        .cart-header { font-weight: bold; color: var(--gold, #D4AF37); }
+        .cart-product { display: flex; align-items: center; gap: 1rem; }
+        .cart-img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; }
+        .cart-qty { width: 70px; padding: 0.3rem; background: #2a2a2a; border: 1px solid #555; color: white; border-radius: 5px; text-align: center; }
+        .remove-btn { background: #a00; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 5px; cursor: pointer; }
+        .remove-btn:hover { background: #c22; }
+        .cart-summary { margin-top: 2rem; text-align: right; font-size: 1.2rem; }
+        .summary-line { margin: 0.5rem 0; }
+        .summary-total { font-size: 1.5rem; font-weight: bold; color: var(--gold, #D4AF37); }
+        .empty-cart { text-align: center; padding: 3rem; font-size: 1.2rem; }
+        .button-primary { background: var(--gold, #D4AF37); color: #0a0a0a; border: none; padding: 0.8rem 2rem; border-radius: 2rem; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+        .button-primary:hover { background: #c5a028; }
+        .navbar { background: rgba(10,10,10,0.8); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
+        .nav-container { display: flex; justify-content: space-between; padding: 1rem 2rem; max-width: 1400px; margin: 0 auto; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--gold, #D4AF37); text-decoration: none; }
+        .nav-links a { color: white; margin-left: 2rem; text-decoration: none; }
+        .nav-links a:hover { color: var(--gold, #D4AF37); }
     </style>
 </body>
 </html>
