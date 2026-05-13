@@ -1,40 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SUNQS MARKET</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUNQ | Home</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-<header>
-  <a class="navlink" href="index.html">Home</a>
-  <a class="navlink" href="shop.html">Shop</a>
-  <a class="navlink" href="about.html">About</a>
-</header>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">SUNQ</a>
+            <div class="nav-links">
+                <a href="shop.html">Shop</a>
+                <a href="about.html">About</a>
+                <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+            </div>
+        </div>
+    </nav>
 
-<div class="page">
+    <main>
+        <section class="hero">
+            <h1 class="hero-title">SUNQ / JETS</h1>
+            <p class="hero-subtitle">Streetwear & technical apparel</p>
+            <a href="shop.html" class="button-primary">Shop Now</a>
+        </section>
 
-  <h1>SUNQS MARKET</h1>
+        <!-- You can keep your existing featured content or collections preview here -->
+    </main>
 
-  <p style="color:#ddd; font-size:20px; margin-top:14px;">
-    A clean marketplace interface built for structured browsing and product discovery.
-  </p>
+    <script>
+        // Cart counter - keeps the number in nav bar updated
+        function updateCartCountDisplay() {
+            const cart = JSON.parse(localStorage.getItem('sunqCart')) || [];
+            let total = 0;
+            cart.forEach(item => { total += item.quantity; });
+            const countSpan = document.getElementById('cart-count');
+            if (countSpan) countSpan.innerText = total;
+        }
+        updateCartCountDisplay();
+        // Listen for cart changes from other tabs
+        window.addEventListener('storage', updateCartCountDisplay);
+    </script>
 
-  <div style="margin-top:40px; display:flex; gap:16px; flex-wrap:wrap;">
-    <button onclick="location.href='shop.html'">Enter Shop</button>
-    <button onclick="location.href='about.html'" style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,204,51,0.45); color:var(--gold3);">
-      Learn More
-    </button>
-  </div>
-
-</div>
-
+    <!-- Optional: ensure hero styling matches your existing CSS -->
+    <style>
+        .hero {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+        .hero-title {
+            font-size: 4rem;
+            color: var(--gold, #D4AF37);
+            margin-bottom: 1rem;
+        }
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .button-primary {
+            background: var(--gold, #D4AF37);
+            color: #0a0a0a;
+            padding: 0.8rem 2rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: background 0.2s;
+        }
+        .button-primary:hover {
+            background: #c5a028;
+        }
+    </style>
 </body>
 </html>
