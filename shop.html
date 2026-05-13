@@ -27,10 +27,8 @@
 
     <div class="filter-bar">
       <button class="filter-btn active" onclick="setFilter('all')">All</button>
-      <button class="filter-btn" onclick="setFilter('a')">Item A</button>
-      <button class="filter-btn" onclick="setFilter('b')">Item B</button>
-      <button class="filter-btn" onclick="setFilter('c')">Item C</button>
-      <button class="filter-btn" onclick="setFilter('d')">Item D</button>
+      <button class="filter-btn" onclick="setFilter('sunq')">SUNQ</button>
+      <button class="filter-btn" onclick="setFilter('jet')">JET</button>
     </div>
 
     <div id="product-grid" class="grid"></div>
@@ -38,22 +36,45 @@
   </main>
 
   <script>
+    // ================= CART =================
+    function getCart() {
+      return JSON.parse(localStorage.getItem("sunqCart")) || [];
+    }
+
+    function updateCartCount() {
+      const cart = getCart();
+      const total = cart.reduce((sum, i) => sum + i.quantity, 0);
+      const el = document.getElementById("cart-count");
+      if (el) el.textContent = total;
+    }
+
+    updateCartCount();
+
+    // ================= PRODUCTS =================
     const PRODUCTS = [
-      { id: "a", name: "Item A", price: 29.99 },
-      { id: "b", name: "Item B", price: 49.99 },
-      { id: "c", name: "Item C", price: 19.99 },
-      { id: "d", name: "Item D", price: 99.99 }
+      // SUNQ
+      { id: "s1", name: "SUNQ Alpha", price: 29.99, category: "sunq" },
+      { id: "s2", name: "SUNQ Nova", price: 39.99, category: "sunq" },
+      { id: "s3", name: "SUNQ Core", price: 24.99, category: "sunq" },
+      { id: "s4", name: "SUNQ Pulse", price: 44.99, category: "sunq" },
+      { id: "s5", name: "SUNQ Edge", price: 59.99, category: "sunq" },
+
+      // JET
+      { id: "j1", name: "JET Strike", price: 34.99, category: "jet" },
+      { id: "j2", name: "JET Velocity", price: 49.99, category: "jet" },
+      { id: "j3", name: "JET Flux", price: 27.99, category: "jet" },
+      { id: "j4", name: "JET Aero", price: 64.99, category: "jet" },
+      { id: "j5", name: "JET Prime", price: 79.99, category: "jet" }
     ];
 
     let currentFilter = "all";
-
     const grid = document.getElementById("product-grid");
 
     function renderProducts() {
       let filtered = PRODUCTS;
 
       if (currentFilter !== "all") {
-        filtered = PRODUCTS.filter(p => p.id === currentFilter);
+        filtered = PRODUCTS.filter(p => p.category === currentFilter);
       }
 
       grid.innerHTML = filtered.map(p => `
