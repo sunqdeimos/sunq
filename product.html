@@ -3,79 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product</title>
+<title>Product | SUNQ</title>
+
 <link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
 <header>
-  <a href="index.html" class="logo navlink">SUNQ</a>
+  <a href="index.html" class="logo">SUNQ</a>
 
-  <div>
-    <a href="shop.html" class="navlink">Shop</a>
-    <a href="about.html" class="navlink">About</a>
-    <a href="cart.html" class="navlink">Cart (<span id="cart-count">0</span>)</a>
+  <div class="nav-right">
+    <a class="navlink" href="index.html">Home</a>
+    <a class="navlink" href="shop.html">Shop</a>
+    <a class="navlink" href="about.html">About</a>
+    <a class="navlink" href="cart.html">Cart (<span id="cart-count">0</span>)</a>
   </div>
 </header>
 
-<div class="product-grid" id="wrap"></div>
+<div class="product-wrap" id="wrap">
+  Loading...
+</div>
+
+<script src="products.js"></script>
 
 <script>
-window.onload=()=>document.body.classList.add("loaded");
-
-const items={
-  "item-a":{name:"SUNQS A",price:10,desc:["Entry item","Clean listing","Starter product"]},
-  "item-b":{name:"SUNQS B",price:15,desc:["Mid tier","Better exposure","Balanced value"]},
-  "item-c":{name:"SUNQS C",price:20,desc:["Premium listing","Strong demand","Reliable"]},
-  "item-d":{name:"JETS A",price:25,desc:["Jets entry","Secondary line","Growing demand"]},
-  "item-e":{name:"JETS B",price:30,desc:["Higher tier","Limited supply","Premium feel"]},
-  "item-f":{name:"JETS C",price:40,desc:["Top Jets item","Rare","High value"]}
+window.onload=()=>{
+  document.body.classList.add("loaded");
+  updateCartCountDisplay();
 };
 
-function getCart(){
-  return JSON.parse(localStorage.getItem("sunqCart"))||[];
-}
+const params=new URLSearchParams(window.location.search);
+const id=params.get("item");
 
-function saveCart(c){
-  localStorage.setItem("sunqCart",JSON.stringify(c));
-}
+const product=getProductById(id);
+const wrap=document.getElementById("wrap");
 
-function add(id){
-  let c=getCart();
-  let f=c.find(i=>i.id===id);
-  if(f)f.quantity++;
-  else c.push({id,quantity:1});
-  saveCart(c);
-}
-
-function load(){
-  const id=new URLSearchParams(location.search).get("item");
-  const p=items[id];
-
-  const w=document.getElementById("wrap");
-
-  if(!p){
-    w.innerHTML=`<div class="card"><h2>Not found</h2></div>`;
-    return;
-  }
-
-  w.innerHTML=`
-    <div class="card">
-      <h1>${p.name}</h1>
-      <h2>$${p.price}</h2>
-
-      <ul>
-        ${p.desc.map(d=>`<li>• ${d}</li>`).join("")}
-      </ul>
-
-      <button onclick="add('${id}')">Add to Cart</button>
-      <a href="shop.html" class="button-primary">Back</a>
+if(!product){
+  wrap.innerHTML=`
+    <div class="product-details">
+      <h1>Item not found</h1>
+      <p class="product-desc">This product does not exist.</p>
+      <a class="button-primary" href="shop.html">Return to Shop</a>
     </div>
   `;
-}
+}else{
+  wrap.innerHTML=`
+    <div class="product-grid">
+      <div class="product-img">
+        <img src="${product.img}">
+      </div>
 
-load();
+      <div class="product-details">
+        <div class="badge">${product.category}</div>
+        <h1>${product.name}</h1>
+
+        <div class="price">$${product.price}</div>
+
+        <div class="product-desc">${product.desc}</div>
+
+        <div class="product-meta">
+          <b>Includes:</b>
+          <ul>
+            <li>Premium listing access</li>
+            <li>Fast delivery system (W.I.P)</li>
+            <li>Secure checkout placeholder</li>
+          </ul>
+        </div>
+
+        <div class="qty-row">
+          <input id="qty" type="number" value="1" min="1" max="10">
+          <button id="add">Add to Cart</button>
+        </div>
+
+        <div class="notice" id="msg"></div>
+
+        <br>
+        <a class="button-secondary" href="shop.html">← Back to Shop</a>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("add").onclick=()=>{
+    let qty=parseInt(document.getElementById("qty").value);
+    if(isNaN(qty) || qty<1) qty=1;
+
+    addToCart(product.id, qty);
+    updateCartCountDisplay();
+
+    const msg=document.getElementById("msg");
+    msg.innerText="Added to cart!";
+    setTimeout(()=>msg.innerText="", 2000);
+  };
+}
 </script>
 
 </body>
