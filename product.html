@@ -3,50 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SUNQS MARKET | Product</title>
+<title>Product</title>
 
 <style>
 *{box-sizing:border-box;}
-
 body{
   margin:0;
   font-family:Arial;
-  background:
-    radial-gradient(circle at top, rgba(255,204,51,0.08), transparent 40%),
-    #070707;
+  background:#070707;
   color:#fff;
-  animation:fadeIn 0.4s ease;
+  animation:fade 0.4s ease;
 }
 
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(6px);}
-  to{opacity:1; transform:translateY(0);}
+@keyframes fade{
+  from{opacity:0; transform:translateY(8px);}
+  to{opacity:1;}
 }
 
 header{
   padding:20px;
-  border-bottom:1px solid rgba(255,204,51,0.15);
-  background:rgba(10,10,10,0.8);
-  backdrop-filter:blur(10px);
+  border-bottom:1px solid #333;
 }
 
-a{
-  color:#ffcc33;
-  text-decoration:none;
-  margin-right:10px;
-}
+a{color:#ffcc33;text-decoration:none;margin-right:10px;}
 
 .box{
-  max-width:500px;
+  max-width:520px;
   margin:60px auto;
   padding:20px;
   background:#111;
   border:1px solid #ffcc33;
   border-radius:12px;
+  transition:0.2s;
+}
+
+.box:hover{
+  box-shadow:0 10px 30px rgba(255,204,51,0.12);
 }
 
 h1{color:#ffcc33;}
-
 .price{color:#ffcc33;font-size:20px;}
 
 button{
@@ -61,7 +56,6 @@ button{
 
 button:hover{
   transform:translateY(-3px);
-  box-shadow:0 10px 20px rgba(255,204,51,0.12);
 }
 </style>
 </head>
@@ -70,7 +64,8 @@ button:hover{
 
 <header>
   <a href="index.html">Home</a>
-  <a href="shop.html">Shop</a>
+  <a href="sunqs.html">SUNQS SIDE</a>
+  <a href="jets.html">JETS SIDE</a>
 </header>
 
 <div class="box">
@@ -91,9 +86,19 @@ function addToCart(name,price){
 }
 
 const items={
-  "1":{name:"Item One",price:"$10",desc:"Placeholder product."},
-  "2":{name:"Item Two",price:"$15",desc:"Placeholder product."},
-  "3":{name:"Item Three",price:"$20",desc:"Placeholder product."}
+  "1":{name:"SUNQS Item A",price:"$10",desc:"Sunqs product"},
+  "2":{name:"SUNQS Item B",price:"$15",desc:"Sunqs product"},
+  "3":{name:"SUNQS Item C",price:"$20",desc:"Sunqs product"},
+  "4":{name:"SUNQS Item D",price:"$25",desc:"Sunqs product"},
+  "5":{name:"SUNQS Item E",price:"$30",desc:"Sunqs product"},
+  "6":{name:"SUNQS Item F",price:"$35",desc:"Sunqs product"},
+
+  "101":{name:"JETS Item A",price:"$12",desc:"Jets product"},
+  "102":{name:"JETS Item B",price:"$18",desc:"Jets product"},
+  "103":{name:"JETS Item C",price:"$22",desc:"Jets product"},
+  "104":{name:"JETS Item D",price:"$28",desc:"Jets product"},
+  "105":{name:"JETS Item E",price:"$33",desc:"Jets product"},
+  "106":{name:"JETS Item F",price:"$40",desc:"Jets product"}
 };
 
 let id=new URLSearchParams(window.location.search).get("item");
