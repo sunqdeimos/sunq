@@ -30,6 +30,9 @@
   </main>
 
   <script>
+    // -----------------------------
+    // CART STORAGE (single source)
+    // -----------------------------
     function getCart() {
       return JSON.parse(localStorage.getItem("sunqCart")) || [];
     }
@@ -47,7 +50,10 @@
       if (el) el.textContent = total;
     }
 
-    // SAME PRODUCT DATA SYSTEM
+    // -----------------------------
+    // SINGLE PRODUCT SOURCE
+    // (must match shop/product IDs)
+    // -----------------------------
     const PRODUCTS = {
       a: { id: "a", name: "Item A", price: 29.99 },
       b: { id: "b", name: "Item B", price: 49.99 },
@@ -55,10 +61,15 @@
       d: { id: "d", name: "Item D", price: 99.99 }
     };
 
+    // -----------------------------
+    // RENDER CART (SAFE VERSION)
+    // -----------------------------
     function renderCart() {
       const cart = getCart();
       const container = document.getElementById("cart-items");
       const summary = document.getElementById("cart-summary");
+
+      if (!container) return;
 
       if (cart.length === 0) {
         container.innerHTML = "<p>Your cart is empty.</p>";
@@ -67,46 +78,61 @@
       }
 
       let total = 0;
+      container.innerHTML = "";
 
-      container.innerHTML = cart.map(item => {
+      cart.forEach(item => {
         const product = PRODUCTS[item.id];
-        if (!product) return "";
+
+        // If product missing, still show it (no silent failure)
+        if (!product) {
+          container.innerHTML += `
+            <div class="card">
+              <h3>Unknown item</h3>
+              <p>ID: ${item.id}</p>
+              <button class="button-primary" onclick="removeItem('${item.id}')">
+                Remove
+              </button>
+            </div>
+          `;
+          return;
+        }
 
         const itemTotal = product.price * item.quantity;
         total += itemTotal;
 
-        return `
-          <div class="card" style="margin-bottom:1rem;">
+        container.innerHTML += `
+          <div class="card">
             <h3>${product.name}</h3>
             <p>$${product.price}</p>
 
-            <div style="margin-top:10px;">
+            <div style="margin:10px 0;">
               <button onclick="changeQty('${item.id}', -1)">-</button>
               <span style="margin:0 10px;">${item.quantity}</span>
               <button onclick="changeQty('${item.id}', 1)">+</button>
             </div>
 
-            <p style="margin-top:10px;">Total: $${itemTotal.toFixed(2)}</p>
+            <p>Total: $${itemTotal.toFixed(2)}</p>
 
             <button class="button-primary" onclick="removeItem('${item.id}')">
               Remove
             </button>
           </div>
         `;
-      }).join("");
+      });
 
-      summary.innerHTML = `
-        <h2>Total: $${total.toFixed(2)}</h2>
-      `;
+      summary.innerHTML = `<h2>Total: $${total.toFixed(2)}</h2>`;
     }
 
-    function changeQty(id, change) {
+    // -----------------------------
+    // CART ACTIONS
+    // -----------------------------
+    function changeQty(id, delta) {
       const cart = getCart();
       const item = cart.find(i => i.id === id);
 
       if (!item) return;
 
-      item.quantity += change;
+      item.quantity += delta;
 
       if (item.quantity <= 0) {
         const index = cart.findIndex(i => i.id === id);
@@ -122,6 +148,7 @@
       saveCart(cart);
     }
 
+    // INIT
     updateCartCount();
     renderCart();
   </script>
