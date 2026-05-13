@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart | SUNQ</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">SUNQ</a>
+            <div class="nav-links">
+                <a href="shop.html">Shop</a>
+                <a href="about.html">About</a>
+                <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="cart-page">
+        <h1>Your Cart</h1>
+        <div id="cart-items-container" class="cart-items"></div>
+        <div id="cart-summary" class="cart-summary"></div>
+        <div id="checkout-section" style="text-align: center; margin-top: 2rem;"></div>
+    </main>
+
+    <script>
+        // Same product database as before (copy from shop.html or product.html)
+        const items = {
+            "sunqs-a": { id: "sunqs-a", name: "SUNQ Alpha Hoodie", price: 89.00, image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+A" },
+            "sunqs-b": { id: "sunqs-b", name: "SUNQ Essential Tee", price: 39.00, image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+B" },
+            "sunqs-c": { id: "sunqs-c", name: "SUNQ Cargo Pants", price: 129.00, image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+C" },
+            "jets-a": { id: "jets-a", name: "JETS Varsity Jacket", price: 199.00, image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+A" },
+            "jets-b": { id: "jets-b", name: "JETS Cap", price: 35.00, image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+B" },
+            "jets-c": { id: "jets-c", name: "JETS Technical Trousers", price: 149.00, image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+C" }
+        };
+
+        function getCart() {
+            return JSON.parse(localStorage.getItem('sunqCart')) || [];
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem('sunqCart', JSON.stringify(cart));
+            updateCartCountDisplay();
+            renderCart(); // re-render the cart page
+        }
+
+        function updateCartCountDisplay() {
+            const cart = getCart();
+            let total = 0;
+            cart.forEach(item => { total += item.quantity; });
+            const countSpan = document.getElementById('cart-count');
+            if (countSpan) countSpan.innerText = total;
+        }
+
+        function renderCart() {
+            const cart = getCart();
+            const container = document.getElementById('cart-items-container');
+            const summaryDiv = document.getElementById('cart-summary');
+            const checkoutDiv = document.getElementById('checkout-section');
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="empty-cart">Your cart is empty. <a href="shop.html">Continue shopping</a>.</p>';
+                summaryDiv.innerHTML = '';
+                checkoutDiv.innerHTML = '';
+                return;
+            }
+
+            let itemsHtml = '<div class="cart-header"><span>Product</span><span>Price</span><span>Quantity</span><span>Total</span><span></span></div>';
+            let subtotal = 0;
+
+            cart.forEach(cartItem => {
+                const product = items[cartItem.id];
+                if (!product) return;
+                const itemTotal = product.price * cartItem.quantity;
+                subtotal += itemTotal;
+                itemsHtml += `
+                    <div class="cart-row" data-id="${cartItem.id}">
+                        <div class="cart-product">
+                            <img src="${product.image}" alt="${product.name}" class="cart-img">
+                            <span>${product.name}</span>
+                        </div>
+                        <div>$${product.price.toFixed(2)}</div>
+                        <div>
+                            <input type="number" min="1" value="${cartItem.quantity}" class="cart-qty" data-id="${cartItem.id}">
+                        </div>
+                        <div>$${itemTotal.toFixed(2)}</div>
+                        <div><button class="remove-btn" data-id="${cartItem.id}">Remove</button></div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = itemsHtml;
+            summaryDiv.innerHTML = `
+                <div class="summary-line">Subtotal: $${subtotal.toFixed(2)}</div>
+                <div class="summary-line">Shipping: Calculated at next step</div>
+                <div class="summary-total">Total: $${subtotal.toFixed(2)}</div>
+            `;
+            checkoutDiv.innerHTML = '<button id="checkout-btn" class="button-primary">Proceed to Checkout</button>';
+
+            // Attach event listeners for quantity changes and remove buttons
+            document.querySelectorAll('.cart-qty').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    let newQty = parseInt(e.target.value);
+                    if (isNaN(newQty) || newQty < 1) newQty = 1;
+                    updateQuantity(id, newQty);
+                });
+            });
+            document.querySelectorAll('.remove-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = btn.getAttribute('data-id');
+                    removeFromCart(id);
+                });
+            });
+            document.getElementById('checkout-btn')?.addEventListener('click', () => {
+                alert('Checkout will be integrated with PayPal/Stripe next. Ready to add?');
+                // You can replace this with real payment integration later
+            });
+        }
+
+        function updateQuantity(productId, newQuantity) {
+            let cart = getCart();
+            const index = cart.findIndex(item => item.id === productId);
+            if (index !== -1) {
+                if (newQuantity <= 0) {
+                    cart.splice(index, 1);
+                } else {
+                    cart[index].quantity = newQuantity;
+                }
+                saveCart(cart);
+            }
+        }
+
+        function removeFromCart(productId) {
+            let cart = getCart();
+            cart = cart.filter(item => item.id !== productId);
+            saveCart(cart);
+        }
+
+        // Initial render
+        renderCart();
+        updateCartCountDisplay();
+
+        // Sync cart count across tabs
+        window.addEventListener('storage', () => {
+            updateCartCountDisplay();
+            renderCart();
+        });
+    </script>
+
+    <style>
+        .cart-page {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .cart-header, .cart-row {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr 1fr 0.5fr;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #333;
+        }
+        .cart-header {
+            font-weight: bold;
+            color: var(--gold, #D4AF37);
+        }
+        .cart-product {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .cart-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .cart-qty {
+            width: 70px;
+            padding: 0.3rem;
+            background: #2a2a2a;
+            border: 1px solid #555;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .remove-btn {
+            background: #a00;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .remove-btn:hover {
+            background: #c22;
+        }
+        .cart-summary {
+            margin-top: 2rem;
+            text-align: right;
+            font-size: 1.2rem;
+        }
+        .summary-line {
+            margin: 0.5rem 0;
+        }
+        .summary-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--gold, #D4AF37);
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+        }
+        .button-primary {
+            background: var(--gold, #D4AF37);
+            color: #0a0a0a;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        .button-primary:hover {
+            background: #c5a028;
+        }
+        /* navbar styles already included */
+    </style>
+</body>
+</html>
