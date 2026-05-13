@@ -6,26 +6,29 @@
 <title>SUNQS SIDE</title>
 
 <style>
-*{box-sizing:border-box;}
 body{
   margin:0;
   font-family:Arial;
   background:#070707;
   color:#fff;
-  animation:fade 0.4s ease;
+  opacity:0;
+  transition:opacity 0.6s ease;
 }
 
-@keyframes fade{
-  from{opacity:0; transform:translateY(8px);}
-  to{opacity:1;}
-}
+body.loaded{opacity:1;}
 
 header{
   padding:20px;
-  border-bottom:1px solid #333;
+  border-bottom:1px solid rgba(255,204,51,0.15);
+  background:rgba(10,10,10,0.85);
+  backdrop-filter:blur(10px);
 }
 
-a{color:#ffcc33;text-decoration:none;margin-right:10px;}
+a{
+  color:#ffcc33;
+  text-decoration:none;
+  margin-right:10px;
+}
 
 .grid{
   display:grid;
@@ -36,8 +39,8 @@ a{color:#ffcc33;text-decoration:none;margin-right:10px;}
 
 .card{
   background:#111;
-  border:1px solid rgba(255,204,51,0.25);
-  padding:16px;
+  border:1px solid #ffcc33;
+  padding:15px;
   border-radius:12px;
   cursor:pointer;
   transition:0.25s;
@@ -46,35 +49,38 @@ a{color:#ffcc33;text-decoration:none;margin-right:10px;}
 .card:hover{
   transform:translateY(-6px);
   box-shadow:0 10px 25px rgba(255,204,51,0.12);
-  border-color:#ffcc33;
 }
-
-.price{color:#ffcc33;}
 </style>
 </head>
 
 <body>
 
 <header>
-  <a href="index.html">Home</a>
-  <a href="sunqs.html">SUNQS SIDE</a>
-  <a href="jets.html">JETS SIDE</a>
+  <a href="index.html" onclick="navigate(event,'index.html')">Home</a>
+  <a href="sunqs.html" onclick="navigate(event,'sunqs.html')">SUNQS SIDE</a>
+  <a href="jets.html" onclick="navigate(event,'jets.html')">JETS SIDE</a>
 </header>
 
 <div class="grid">
-
-<div class="card" onclick="go(1)">SUNQS Item A<div class="price">$10</div></div>
-<div class="card" onclick="go(2)">SUNQS Item B<div class="price">$15</div></div>
-<div class="card" onclick="go(3)">SUNQS Item C<div class="price">$20</div></div>
-<div class="card" onclick="go(4)">SUNQS Item D<div class="price">$25</div></div>
-<div class="card" onclick="go(5)">SUNQS Item E<div class="price">$30</div></div>
-<div class="card" onclick="go(6)">SUNQS Item F<div class="price">$35</div></div>
-
+  <div class="card" onclick="go(1)">SUNQS A<div style="color:#ffcc33">$10</div></div>
+  <div class="card" onclick="go(2)">SUNQS B<div style="color:#ffcc33">$15</div></div>
+  <div class="card" onclick="go(3)">SUNQS C<div style="color:#ffcc33">$20</div></div>
+  <div class="card" onclick="go(4)">SUNQS D<div style="color:#ffcc33">$25</div></div>
+  <div class="card" onclick="go(5)">SUNQS E<div style="color:#ffcc33">$30</div></div>
+  <div class="card" onclick="go(6)">SUNQS F<div style="color:#ffcc33">$35</div></div>
 </div>
 
 <script>
+window.addEventListener("load",()=>document.body.classList.add("loaded"));
+
+function navigate(e,url){
+  e.preventDefault();
+  document.body.classList.remove("loaded");
+  setTimeout(()=>window.location.href=url,400);
+}
+
 function go(id){
-  location.href="product.html?item="+id;
+  navigate(event,"product.html?item="+id);
 }
 </script>
 
