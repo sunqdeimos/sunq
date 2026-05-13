@@ -28,6 +28,15 @@
 
   <!-- JS MUST BE AT BOTTOM -->
   <script src="product.js"></script>
-
+<script>
+  window.onerror = function(msg, src, line, col, err) {
+    document.body.innerHTML =
+      "<pre style='color:white;padding:20px;'>" +
+      "ERROR: " + msg + "\n" +
+      "Line: " + line + "\n" +
+      "Column: " + col +
+      "</pre>";
+  };
+</script>
 </body>
 </html>
