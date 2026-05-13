@@ -6,39 +6,29 @@
   <title>sunq store</title>
 
   <style>
-    :root {
-      --bg: #0a0a0a;
-      --panel: #141414;
-      --gold: #d4af37;
-      --gold-soft: #f0d77a;
-      --text: #f5f5f5;
-      --muted: #aaaaaa;
-    }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      background: #0a0a0a;
+      color: #f5f5f5;
     }
 
     header {
-      padding: 28px 20px;
       text-align: center;
-      background: linear-gradient(180deg, #111, #0a0a0a);
-      border-bottom: 1px solid rgba(212,175,55,0.2);
+      padding: 30px 20px;
+      background: #111;
+      border-bottom: 1px solid #d4af37;
     }
 
     h1 {
       margin: 0;
-      font-size: 30px;
+      color: #d4af37;
       letter-spacing: 2px;
-      color: var(--gold);
     }
 
     .subtitle {
-      margin-top: 6px;
-      color: var(--muted);
+      color: #aaa;
+      margin-top: 5px;
       font-size: 14px;
     }
 
@@ -50,35 +40,28 @@
     }
 
     .card {
-      background: var(--panel);
-      padding: 15px;
+      background: #141414;
+      border: 1px solid rgba(212,175,55,0.2);
       border-radius: 12px;
+      padding: 15px;
       text-align: center;
-      border: 1px solid rgba(212,175,55,0.15);
-      transition: transform 0.15s ease, border 0.15s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-      border: 1px solid rgba(212,175,55,0.5);
     }
 
     .name {
-      color: var(--text);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .price {
-      color: var(--gold-soft);
+      color: #d4af37;
       font-weight: bold;
     }
 
     footer {
       text-align: center;
       padding: 20px;
-      color: var(--muted);
+      color: #777;
       font-size: 12px;
-      border-top: 1px solid rgba(212,175,55,0.1);
+      border-top: 1px solid rgba(212,175,55,0.2);
       margin-top: 20px;
     }
   </style>
@@ -88,7 +71,7 @@
 
   <header>
     <h1>SUNQ STORE</h1>
-    <div class="subtitle">gold standard items. minimal. clean.</div>
+    <div class="subtitle">simple gold-themed storefront</div>
   </header>
 
   <div class="container">
