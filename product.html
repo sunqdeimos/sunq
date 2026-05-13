@@ -1,6 +1,33 @@
 <!DOCTYPE html>
 <html>
-<body style="background:black;color:white;font-size:30px;">
-  PAGE IS LOADING
+<head>
+  <title>Product</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <div id="product-container"></div>
+
+  <script src="data.js"></script>
+
+  <script>
+    const id = new URLSearchParams(location.search).get("item");
+    const p = PRODUCTS[id];
+
+    const box = document.getElementById("product-container");
+
+    if (!p) {
+      box.innerHTML = "<h2>Item not found</h2>";
+    } else {
+      box.innerHTML = `
+        <h1>${p.name}</h1>
+        <img src="${p.image}" style="width:300px">
+        <p>$${p.price}</p>
+        <p>${p.description}</p>
+      `;
+    }
+  </script>
+
 </body>
 </html>
