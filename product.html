@@ -62,4 +62,159 @@ header{
   text-shadow:0 0 18px rgba(255,204,51,0.5);
 }
 
-.wrap
+.wrap{
+  max-width:1000px;
+  margin:0 auto;
+  padding:70px 20px 80px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px;
+}
+
+@media(max-width:900px){
+  .wrap{grid-template-columns:1fr;}
+}
+
+.imgbox{
+  border-radius:24px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  background:rgba(0,0,0,0.55);
+  backdrop-filter:blur(12px);
+  min-height:380px;
+}
+
+.imgbox img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.details{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:25px;
+  backdrop-filter:blur(12px);
+}
+
+.details h1{
+  margin:0;
+  color:var(--gold3);
+  font-size:34px;
+  letter-spacing:2px;
+  text-shadow:0 0 18px rgba(255,204,51,0.2);
+}
+
+.price{
+  margin-top:12px;
+  font-size:28px;
+  font-weight:900;
+  color:var(--gold3);
+}
+
+.desc{
+  margin-top:18px;
+  color:#ddd;
+  line-height:1.7;
+  font-size:14px;
+}
+
+.btn{
+  margin-top:25px;
+  width:100%;
+  padding:15px;
+  border-radius:16px;
+  border:none;
+  cursor:pointer;
+  font-weight:900;
+  font-size:15px;
+  background:linear-gradient(135deg,var(--gold3),var(--gold2));
+  color:#000;
+  transition:0.25s ease;
+  box-shadow:0 15px 55px rgba(255,204,51,0.18);
+}
+
+.btn:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 20px 80px rgba(255,204,51,0.30);
+}
+
+.footer{
+  padding:40px 20px;
+  border-top:1px solid rgba(255,204,51,0.12);
+  text-align:center;
+  color:#ccc;
+  font-size:13px;
+  background:rgba(0,0,0,0.55);
+  backdrop-filter:blur(10px);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <a class="navlink" href="index.html">Home</a>
+  <a class="navlink" href="shop.html">Shop</a>
+  <a class="navlink" href="about.html">About</a>
+</header>
+
+<div class="wrap">
+  <div class="imgbox">
+    <img id="img" src="images/sunqs-a.jpg">
+  </div>
+
+  <div class="details">
+    <h1 id="name">Product</h1>
+    <div class="price" id="price">$0</div>
+    <div class="desc" id="desc">Loading...</div>
+
+    <button class="btn" onclick="fakeCheckout()">Proceed to Checkout</button>
+  </div>
+</div>
+
+<div class="footer">
+  © SUNQS MARKET • W.I.P online marketplace
+</div>
+
+<script>
+window.onload=()=>document.body.classList.add("loaded");
+
+function fakeCheckout(){
+  alert("Checkout system is W.I.P");
+}
+
+const items={
+  1:{name:"SUNQS A",price:"$10",desc:"Entry-level listing for quick purchase.",img:"images/sunqs-a.jpg"},
+  2:{name:"SUNQS B",price:"$15",desc:"Mid-tier listing with added value.",img:"images/sunqs-b.jpg"},
+  3:{name:"SUNQS C",price:"$20",desc:"Standard premium product listing.",img:"images/sunqs-c.jpg"},
+  4:{name:"SUNQS D",price:"$25",desc:"Higher-tier digital bundle listing.",img:"images/sunqs-d.jpg"},
+  5:{name:"SUNQS E",price:"$30",desc:"Exclusive premium listing category.",img:"images/sunqs-e.jpg"},
+  6:{name:"SUNQS F",price:"$35",desc:"High-demand product listing.",img:"images/sunqs-f.jpg"},
+  7:{name:"SUNQS G",price:"$40",desc:"Advanced listing with extra perks.",img:"images/sunqs-g.jpg"},
+  8:{name:"SUNQS H",price:"$45",desc:"Top-tier premium listing slot.",img:"images/sunqs-h.jpg"},
+
+  101:{name:"JETS A",price:"$12",desc:"Starter listing from the JETS lineup.",img:"images/jets-a.jpg"},
+  102:{name:"JETS B",price:"$18",desc:"Upgraded listing with more features.",img:"images/jets-b.jpg"},
+  103:{name:"JETS C",price:"$22",desc:"Balanced mid-tier JETS product.",img:"images/jets-c.jpg"},
+  104:{name:"JETS D",price:"$28",desc:"Higher tier listing with more demand.",img:"images/jets-d.jpg"},
+  105:{name:"JETS E",price:"$33",desc:"Premium high-tier JETS listing.",img:"images/jets-e.jpg"},
+  106:{name:"JETS F",price:"$40",desc:"Top quality premium digital listing.",img:"images/jets-f.jpg"},
+  107:{name:"JETS G",price:"$48",desc:"Rare listing slot with extra value.",img:"images/jets-g.jpg"},
+  108:{name:"JETS H",price:"$55",desc:"Ultra tier listing reserved for top buyers.",img:"images/jets-h.jpg"}
+};
+
+let id=new URLSearchParams(window.location.search).get("item");
+
+if(items[id]){
+  document.getElementById("name").innerText=items[id].name;
+  document.getElementById("price").innerText=items[id].price;
+  document.getElementById("desc").innerText=items[id].desc;
+  document.getElementById("img").src=items[id].img;
+}
+</script>
+
+</body>
+</html>
