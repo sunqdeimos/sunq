@@ -1,41 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cart</title>
 <link rel="stylesheet" href="styles.css">
-<script defer src="app.js"></script>
 </head>
-
 <body>
 
-<header>
-  <a class="navlink" href="index.html">Home</a>
-  <a class="navlink" href="shop.html">Shop</a>
-  <a class="navlink" href="about.html">About</a>
-  <a class="navlink" href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-</header>
+<nav class="navbar">
+  <div class="nav-container">
+    <a class="logo" href="index.html">SUNQ</a>
+    <div class="nav-links">
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+    </div>
+  </div>
+</nav>
 
-<div class="page">
-  <h1>Cart</h1>
-  <div id="cart"></div>
-</div>
+<div class="cart-page" id="cart"></div>
 
 <script>
-function render(){
-  const cart = getCart();
-  const box = document.getElementById("cart");
+function getCart(){
+  return JSON.parse(localStorage.getItem("sunqCart"))||[];
+}
 
-  box.innerHTML = cart.map(i=>{
-    const p = items[i.id];
-    return `
-      <div class="card">
-        ${p.name} x ${i.quantity}
-      </div>
-    `;
-  }).join("");
+function render(){
+  let cart=getCart();
+  let html="";
+  cart.forEach(i=>{
+    html+=`<p>${i.id} x ${i.quantity}</p>`;
+  });
+  document.getElementById("cart").innerHTML=html || "Empty cart";
 }
 
 render();
-updateCartUI();
 </script>
 
 </body>
