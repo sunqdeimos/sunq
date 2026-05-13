@@ -1,126 +1,130 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cart | SUNQ</title>
-
-<link rel="stylesheet" href="styles.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart | SUNQ</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<header>
-  <a href="index.html" class="logo">SUNQ</a>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">SUNQ</a>
 
-  <div class="nav-right">
-    <a class="navlink" href="index.html">Home</a>
-    <a class="navlink" href="shop.html">Shop</a>
-    <a class="navlink" href="about.html">About</a>
-    <a class="navlink" href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-  </div>
-</header>
-
-<div class="cart-wrap">
-  <h1 style="color:var(--gold3); font-size:48px;">Your Cart</h1>
-  <p style="color:#ddd;">Review items before checkout.</p>
-
-  <div id="cart-area"></div>
-
-  <div id="total-area" style="margin-top:30px;"></div>
-</div>
-
-<script src="products.js"></script>
-
-<script>
-window.onload=()=>{
-  document.body.classList.add("loaded");
-  updateCartCountDisplay();
-  renderCart();
-};
-
-function renderCart(){
-  const cart=getCart();
-  const area=document.getElementById("cart-area");
-  const totalArea=document.getElementById("total-area");
-
-  if(cart.length===0){
-    area.innerHTML=`
-      <div class="card">
-        <div class="content">
-          <h2>Your cart is empty</h2>
-          <p>Go back to the shop and add items.</p>
-          <a class="button-primary" href="shop.html">Browse Shop</a>
-        </div>
+      <div class="nav-links">
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
       </div>
-    `;
-    totalArea.innerHTML="";
-    return;
-  }
-
-  let subtotal=0;
-  area.innerHTML="";
-
-  cart.forEach(item=>{
-    const product=getProductById(item.id);
-    if(!product) return;
-
-    const total=product.price * item.quantity;
-    subtotal += total;
-
-    const row=document.createElement("div");
-    row.className="cart-row";
-
-    row.innerHTML=`
-      <div class="cart-product">
-        <img src="${product.img}">
-        <div>
-          <div style="font-weight:950; color:var(--gold3);">${product.name}</div>
-          <div style="color:#ccc; font-size:14px;">${product.category}</div>
-        </div>
-      </div>
-
-      <div style="font-weight:900;">$${product.price}</div>
-
-      <div>
-        <input class="cart-qty" type="number" min="1" max="10" value="${item.quantity}" style="width:80px; padding:12px; border-radius:14px; border:1px solid rgba(255,204,51,0.3); background:rgba(0,0,0,0.35); color:white; font-size:16px; text-align:center;">
-      </div>
-
-      <div style="font-weight:900;">$${total}</div>
-
-      <div>
-        <button class="remove-btn">Remove</button>
-      </div>
-    `;
-
-    row.querySelector(".remove-btn").onclick=()=>{
-      removeFromCart(product.id);
-      updateCartCountDisplay();
-      renderCart();
-    };
-
-    row.querySelector(".cart-qty").onchange=(e)=>{
-      let q=parseInt(e.target.value);
-      if(isNaN(q) || q<1) q=1;
-
-      updateCartQuantity(product.id, q);
-      updateCartCountDisplay();
-      renderCart();
-    };
-
-    area.appendChild(row);
-  });
-
-  totalArea.innerHTML=`
-    <div class="card">
-      <h2 style="margin:0; color:var(--gold3);">Summary</h2>
-      <p style="color:#ddd;">Subtotal: <b>$${subtotal}</b></p>
-      <button onclick="alert('Checkout system is W.I.P')">Proceed to Checkout</button>
     </div>
-  `;
-}
-</script>
+  </nav>
+
+  <main class="shop">
+    <h1 class="page-title">Your Cart</h1>
+
+    <div id="cart-items"></div>
+
+    <div id="cart-summary" style="text-align:center; margin-top:2rem;"></div>
+  </main>
+
+  <script>
+    function getCart() {
+      return JSON.parse(localStorage.getItem("sunqCart")) || [];
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem("sunqCart", JSON.stringify(cart));
+      renderCart();
+      updateCartCount();
+    }
+
+    function updateCartCount() {
+      const cart = getCart();
+      const total = cart.reduce((sum, i) => sum + i.quantity, 0);
+      const el = document.getElementById("cart-count");
+      if (el) el.textContent = total;
+    }
+
+    // SAME PRODUCT DATA SYSTEM
+    const PRODUCTS = {
+      a: { id: "a", name: "Item A", price: 29.99 },
+      b: { id: "b", name: "Item B", price: 49.99 },
+      c: { id: "c", name: "Item C", price: 19.99 },
+      d: { id: "d", name: "Item D", price: 99.99 }
+    };
+
+    function renderCart() {
+      const cart = getCart();
+      const container = document.getElementById("cart-items");
+      const summary = document.getElementById("cart-summary");
+
+      if (cart.length === 0) {
+        container.innerHTML = "<p>Your cart is empty.</p>";
+        summary.innerHTML = "";
+        return;
+      }
+
+      let total = 0;
+
+      container.innerHTML = cart.map(item => {
+        const product = PRODUCTS[item.id];
+        if (!product) return "";
+
+        const itemTotal = product.price * item.quantity;
+        total += itemTotal;
+
+        return `
+          <div class="card" style="margin-bottom:1rem;">
+            <h3>${product.name}</h3>
+            <p>$${product.price}</p>
+
+            <div style="margin-top:10px;">
+              <button onclick="changeQty('${item.id}', -1)">-</button>
+              <span style="margin:0 10px;">${item.quantity}</span>
+              <button onclick="changeQty('${item.id}', 1)">+</button>
+            </div>
+
+            <p style="margin-top:10px;">Total: $${itemTotal.toFixed(2)}</p>
+
+            <button class="button-primary" onclick="removeItem('${item.id}')">
+              Remove
+            </button>
+          </div>
+        `;
+      }).join("");
+
+      summary.innerHTML = `
+        <h2>Total: $${total.toFixed(2)}</h2>
+      `;
+    }
+
+    function changeQty(id, change) {
+      const cart = getCart();
+      const item = cart.find(i => i.id === id);
+
+      if (!item) return;
+
+      item.quantity += change;
+
+      if (item.quantity <= 0) {
+        const index = cart.findIndex(i => i.id === id);
+        cart.splice(index, 1);
+      }
+
+      saveCart(cart);
+    }
+
+    function removeItem(id) {
+      let cart = getCart();
+      cart = cart.filter(i => i.id !== id);
+      saveCart(cart);
+    }
+
+    updateCartCount();
+    renderCart();
+  </script>
 
 </body>
 </html>
