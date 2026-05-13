@@ -6,28 +6,21 @@
   --panel:rgba(5,5,5,0.72);
   --border:rgba(255,204,51,0.20);
 
-  /* GLOBAL SCALE SYSTEM */
-  --text-sm:16px;
-  --text-md:20px;
-  --text-lg:28px;
-  --text-xl:42px;
   --text-hero:64px;
-
-  --space-sm:12px;
-  --space-md:24px;
-  --space-lg:48px;
+  --text-xl:42px;
+  --text-lg:28px;
+  --text-md:20px;
 }
 
 body{
   margin:0;
   font-family:Inter, Arial;
   font-size:var(--text-md);
-  color:#fff;
   background:linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.95)), #050505;
+  color:#fff;
   overflow-x:hidden;
 }
 
-/* NAV */
 header{
   padding:28px 50px;
   position:sticky;
@@ -35,14 +28,13 @@ header{
   background:rgba(0,0,0,0.75);
   backdrop-filter:blur(16px);
   display:flex;
-  align-items:center;
+  gap:24px;
 }
 
 .navlink{
   color:var(--gold3);
-  text-decoration:none;
-  margin-right:26px;
   font-weight:800;
+  text-decoration:none;
   font-size:20px;
 }
 
@@ -50,75 +42,20 @@ header{
   color:var(--gold2);
 }
 
-/* PAGE WRAP */
 .page{
-  max-width:1600px;
+  max-width:1400px;
   margin:0 auto;
-  padding:80px 50px;
+  padding:70px 50px;
 }
 
-/* TITLES */
-h1{
-  font-size:var(--text-hero);
-  margin:0;
-  color:var(--gold3);
-}
+h1{ font-size:var(--text-hero); color:var(--gold3); }
 
-h2{
-  font-size:var(--text-xl);
-  color:var(--gold3);
-}
-
-/* BUTTONS */
 button{
   font-size:18px;
   font-weight:900;
-  padding:16px 22px;
-  border-radius:18px;
+  padding:14px 20px;
+  border-radius:16px;
   border:none;
   cursor:pointer;
   background:linear-gradient(135deg,var(--gold3),var(--gold2));
-  transition:0.2s ease;
-}
-
-button:hover{
-  transform:translateY(-4px);
-}
-
-/* CARDS */
-.card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:26px;
-  padding:26px;
-  transition:0.25s ease;
-}
-
-.card:hover{
-  transform:translateY(-10px);
-  border-color:rgba(255,204,51,0.6);
-}
-
-/* GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(380px,1fr));
-  gap:34px;
-}
-
-/* FILTER BUTTONS */
-.filter-btn{
-  padding:14px 22px;
-  border-radius:16px;
-  font-weight:900;
-  font-size:18px;
-  cursor:pointer;
-  border:1px solid rgba(255,204,51,0.45);
-  background:rgba(0,0,0,0.4);
-  color:var(--gold3);
-}
-
-.filter-btn.active{
-  background:linear-gradient(135deg,var(--gold3),var(--gold2));
-  color:#000;
 }
