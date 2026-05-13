@@ -20,9 +20,9 @@
 </nav>
 
 <div style="text-align:center;padding:20px;">
-  <button onclick="filter('all')">All</button>
-  <button onclick="filter('sunqs')">SUNQS</button>
-  <button onclick="filter('jets')">JETS</button>
+  <button class="filter-btn active" onclick="filter('all',this)">All</button>
+  <button class="filter-btn" onclick="filter('sunqs',this)">SUNQS</button>
+  <button class="filter-btn" onclick="filter('jets',this)">JETS</button>
 </div>
 
 <div class="grid" id="grid"></div>
@@ -45,30 +45,48 @@ const items = [
 let current="all";
 
 function render(){
-  let g=document.getElementById("grid");
-  g.innerHTML="";
-  items.filter(i=>current==="all"?true:i.cat===current)
-  .forEach(i=>{
-    g.innerHTML+=`
-      <div class="card">
-        <h2>${i.name}</h2>
-        <p>$${i.price}</p>
-        <a href="product.html?id=${i.id}" class="button-primary">View</a>
-      </div>
-    `;
-  });
+  const g=document.getElementById("grid");
+
+  g.style.opacity=0;
+  setTimeout(()=>{
+
+    g.innerHTML="";
+
+    items
+    .filter(i=>current==="all"?true:i.cat===current)
+    .forEach(i=>{
+      g.innerHTML+=`
+        <div class="card">
+          <h2>${i.name}</h2>
+          <p>$${i.price}</p>
+          <a class="button-primary" href="product.html?id=${i.id}">View</a>
+        </div>
+      `;
+    });
+
+    g.style.opacity=1;
+
+  },150);
 }
 
-function filter(c){
+function filter(c,btn){
   current=c;
+
+  document.querySelectorAll(".filter-btn")
+  .forEach(b=>b.classList.remove("active"));
+
+  btn.classList.add("active");
+
   render();
 }
 
 render();
 
+/* CART */
 function getCart(){
   return JSON.parse(localStorage.getItem("sunqCart")) || [];
 }
+
 document.getElementById("cart-count").innerText =
 getCart().reduce((a,b)=>a+b.quantity,0);
 </script>
