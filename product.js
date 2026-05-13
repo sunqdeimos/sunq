@@ -22,9 +22,7 @@
   </nav>
 
   <main class="product-page">
-
     <div id="product-container"></div>
-
   </main>
 
   <script>
@@ -45,7 +43,7 @@
       updateCartCount();
     }
 
-    // ================= PRODUCTS =================
+    // ================= PRODUCT DATA =================
     const PRODUCTS = {
       s1: { id: "s1", name: "SUNQ Alpha", price: 29.99 },
       s2: { id: "s2", name: "SUNQ Nova", price: 39.99 },
@@ -60,12 +58,17 @@
       j5: { id: "j5", name: "JET Prime", price: 79.99 }
     };
 
+    // ================= GET PRODUCT ID =================
     const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
+    const id = params.get("id")?.trim();
 
     const product = PRODUCTS[id];
     const container = document.getElementById("product-container");
 
+    console.log("Requested ID:", id);
+    console.log("Available products:", Object.keys(PRODUCTS));
+
+    // ================= ADD TO CART =================
     function addToCart(id) {
       const cart = getCart();
       const item = cart.find(i => i.id === id);
@@ -76,11 +79,14 @@
       saveCart(cart);
     }
 
+    // ================= RENDER =================
     function renderProduct() {
+
       if (!product) {
         container.innerHTML = `
           <div class="product-layout">
             <h2>Item not found</h2>
+            <p style="opacity:0.7;">This product does not exist or the link is incorrect.</p>
             <a class="button-primary" href="shop.html">Back to shop</a>
           </div>
         `;
@@ -99,7 +105,7 @@
             <p class="price">$${product.price}</p>
 
             <p class="description">
-              A curated product from SUNQS MARKET. Minimal, clean, intentional.
+              A curated product from SUNQS MARKET. Clean, minimal, and intentionally designed.
             </p>
 
             <button class="button-primary" onclick="addToCart('${product.id}')">
