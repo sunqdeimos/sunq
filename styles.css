@@ -26,9 +26,9 @@ body {
 ========================= */
 
 :root {
-  --gold: #E6C200;
-  --gold-hover: #C9A400;
-  --gold-glow: rgba(230, 194, 0, 0.18);
+  --gold: #F2D24B;
+  --gold-hover: #D9B93F;
+  --gold-glow: rgba(242, 210, 75, 0.14);
 }
 
 /* =========================
