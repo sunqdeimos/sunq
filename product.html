@@ -1,26 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product</title>
-<link rel="stylesheet" href="styles.css">
-</head>
-<body>
-
-<nav class="navbar">
-  <div class="nav-container">
-    <a class="logo" href="index.html">SUNQ</a>
-    <div class="nav-links">
-      <a href="shop.html">Shop</a>
-      <a href="about.html">About</a>
-      <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-    </div>
-  </div>
-</nav>
-
-<div class="product-page" id="page"></div>
-
 <script>
 const items={
   a:{name:"SUNQS A",price:10,desc:"Item A"},
@@ -36,7 +13,6 @@ const items={
 };
 
 let id=new URLSearchParams(location.search).get("id");
-
 let p=items[id];
 
 document.getElementById("page").innerHTML = p ? `
@@ -45,19 +21,30 @@ document.getElementById("page").innerHTML = p ? `
     <h1>${p.name}</h1>
     <p>$${p.price}</p>
     <p>${p.desc}</p>
-    <button onclick="add()">Add to Cart</button>
+    <button onclick="addToCart()">Add to Cart</button>
   </div>
 </div>
 ` : "Not found";
 
-function add(){
-  let cart=JSON.parse(localStorage.getItem("sunqCart"))||[];
-  let i=cart.find(x=>x.id===id);
-  if(i)i.quantity++;
-  else cart.push({id,quantity:1});
-  localStorage.setItem("sunqCart",JSON.stringify(cart));
+function getCart(){
+  return JSON.parse(localStorage.getItem("sunqCart")) || [];
+}
+
+function saveCart(c){
+  localStorage.setItem("sunqCart", JSON.stringify(c));
+}
+
+function addToCart(){
+  let cart=getCart();
+
+  let item=cart.find(x=>x.id===id);
+
+  if(item){
+    item.quantity++;
+  }else{
+    cart.push({id:id,quantity:1});
+  }
+
+  saveCart(cart);
 }
 </script>
-
-</body>
-</html>
