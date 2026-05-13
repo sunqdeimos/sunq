@@ -44,18 +44,20 @@
     }
 
     // ================= PRODUCT DATA =================
-    const PRODUCTS = {
-      s1: { id: "s1", name: "SUNQ Alpha", price: 29.99 },
-      s2: { id: "s2", name: "SUNQ Nova", price: 39.99 },
-      s3: { id: "s3", name: "SUNQ Core", price: 24.99 },
-      s4: { id: "s4", name: "SUNQ Pulse", price: 44.99 },
-      s5: { id: "s5", name: "SUNQ Edge", price: 59.99 },
+    const PRODUCTS = [
+  // ================= SUNQ =================
+  { id: "s1", name: "SUNQ A", price: 9.99, category: "sunq" },
+  { id: "s2", name: "SUNQ B", price: 19.99, category: "sunq" },
+  { id: "s3", name: "SUNQ C", price: 29.99, category: "sunq" },
+  { id: "s4", name: "SUNQ D", price: 39.99, category: "sunq" },
+  { id: "s5", name: "SUNQ E", price: 49.99, category: "sunq" },
 
-      j1: { id: "j1", name: "JET Strike", price: 34.99 },
-      j2: { id: "j2", name: "JET Velocity", price: 49.99 },
-      j3: { id: "j3", name: "JET Flux", price: 27.99 },
-      j4: { id: "j4", name: "JET Aero", price: 64.99 },
-      j5: { id: "j5", name: "JET Prime", price: 79.99 }
+  // ================= JET =================
+  { id: "j1", name: "JET F", price: 9.99, category: "jet" },
+  { id: "j2", name: "JET G", price: 19.99, category: "jet" },
+  { id: "j3", name: "JET H", price: 29.99, category: "jet" },
+  { id: "j4", name: "JET I", price: 39.99, category: "jet" },
+  { id: "j5", name: "JET J", price: 49.99, category: "jet" }
     };
 
     // ================= GET PRODUCT ID =================
