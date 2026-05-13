@@ -24,9 +24,10 @@ body{
   font-family:Inter, Arial;
   color:#fff;
 
+  /* image removed because it was causing issues */
   background:
-    linear-gradient(to bottom, rgba(0,0,0,0.75), rgba(0,0,0,0.93)),
-    url("images/gold-bg.jpg");
+    linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.95)),
+    #050505;
 
   background-size:cover;
   background-position:center;
@@ -145,4 +146,43 @@ button{
 
 .feature-card{
   background:var(--panel);
-  border:1px solid
+  border:1px solid var(--border);
+}
+</style>
+
+</head>
+<body>
+
+<header>
+  <a class="navlink" href="#">Home</a>
+  <a class="navlink" href="#">Market</a>
+  <a class="navlink" href="#">Profile</a>
+</header>
+
+<div class="hero">
+  <h1>SUNQS MARKET</h1>
+  <p>A clean marketplace interface</p>
+
+  <div class="cta">
+    <button class="btn-primary">Enter</button>
+    <button class="btn-secondary">Learn More</button>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Features</div>
+  <div class="grid">
+    <div class="feature-card"></div>
+    <div class="feature-card"></div>
+    <div class="feature-card"></div>
+  </div>
+</div>
+
+<script>
+window.addEventListener("load", () => {
+  document.body.classList.add("loaded");
+});
+</script>
+
+</body>
+</html>
