@@ -1,267 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SUNQS MARKET</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUNQS MARKET | Home</title>
 
 <style>
-  :root{
-    --bg:#070707;
-    --panel:#171717;
-    --gold:#ffcc33;
-    --gold-glow:#ffd966;
-    --text:#f5f5f5;
-    --muted:#b5b5b5;
-  }
-
-  body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:var(--bg);
-    color:var(--text);
-  }
-
-  header{
-    background:linear-gradient(180deg,#121212,#070707);
-    border-bottom:1px solid rgba(255,204,51,0.3);
-  }
-
-  .topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:20px;
-  }
-
-  .logo{
-    color:var(--gold);
-    font-weight:bold;
-    letter-spacing:2px;
-    font-size:18px;
-  }
-
-  .menu{
-    font-size:26px;
-    cursor:pointer;
-    color:var(--gold);
-    user-select:none;
-  }
-
-  .dropdown{
-    display:none;
-    flex-direction:column;
-    background:#111;
-    border-top:1px solid rgba(255,204,51,0.25);
-  }
-
-  .dropdown a{
-    padding:12px 20px;
-    text-decoration:none;
-    color:var(--muted);
-    border-bottom:1px solid rgba(255,255,255,0.05);
-  }
-
-  .dropdown a:hover{
-    color:var(--gold-glow);
-  }
-
-  .search{
-    padding:0 20px 15px 20px;
-  }
-
-  .search input{
-    width:100%;
-    padding:10px;
-    border-radius:8px;
-    border:none;
-    outline:none;
-    background:#111;
-    color:white;
-  }
-
-  section{
-    padding:30px 20px;
-  }
-
-  .section-title{
-    font-size:18px;
-    margin-bottom:15px;
-    color:var(--gold);
-  }
-
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:15px;
-  }
-
-  .card{
-    background:var(--panel);
-    border:1px solid rgba(255,204,51,0.18);
-    border-radius:12px;
-    padding:18px;
-    text-align:center;
-    cursor:pointer;
-    transition:0.2s;
-  }
-
-  .card:hover{
-    transform:translateY(-4px);
-    border-color:rgba(255,204,51,0.7);
-    box-shadow:0 0 18px rgba(255,204,51,0.12);
-  }
-
-  .name{
-    font-size:14px;
-    margin-bottom:8px;
-  }
-
-  .price{
-    color:var(--gold-glow);
-    font-weight:bold;
-  }
-
-  .cart{
-    position:fixed;
-    bottom:20px;
-    right:20px;
-    background:#111;
-    border:1px solid rgba(255,204,51,0.3);
-    padding:12px 14px;
-    border-radius:50px;
-    color:var(--gold);
-    cursor:pointer;
-  }
-
-  footer{
-    text-align:center;
-    padding:20px;
-    font-size:12px;
-    color:#777;
-    border-top:1px solid rgba(255,204,51,0.2);
-  }
+body{margin:0;font-family:Arial;background:#070707;color:#fff;}
+header{padding:20px;border-bottom:1px solid #333;}
+a{color:#ffcc33;text-decoration:none;margin-right:15px;}
+.hero{padding:60px 20px;text-align:center;}
+h1{color:#ffcc33;letter-spacing:3px;}
+button{padding:10px 15px;background:#111;border:1px solid #ffcc33;color:#ffcc33;cursor:pointer;}
+button:hover{background:#222;}
 </style>
 </head>
 
 <body>
 
 <header>
-
-  <div class="topbar">
-    <div class="logo">SUNQS MARKET</div>
-    <div class="menu" onclick="toggleMenu()">☰</div>
-  </div>
-
-  <div id="dropdown" class="dropdown">
-    <a href="#featured">Featured</a>
-    <a href="#new">New Arrivals</a>
-    <a href="#contact">Contact</a>
-  </div>
-
-  <div class="search">
-    <input type="text" id="search" onkeyup="searchItems()" placeholder="Search listings..." />
-  </div>
-
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
 </header>
 
-<section id="featured">
-  <div class="section-title">Featured</div>
-  <div class="grid">
-
-    <div class="card" onclick="openItem('Featured Item 1',10)">
-      <div class="name">Featured Item 1</div>
-      <div class="price">$10.00</div>
-    </div>
-
-    <div class="card" onclick="openItem('Featured Item 2',15)">
-      <div class="name">Featured Item 2</div>
-      <div class="price">$15.00</div>
-    </div>
-
-    <div class="card" onclick="openItem('Featured Item 3',20)">
-      <div class="name">Featured Item 3</div>
-      <div class="price">$20.00</div>
-    </div>
-
-    <div class="card" onclick="openItem('Featured Item 4',25)">
-      <div class="name">Featured Item 4</div>
-      <div class="price">$25.00</div>
-    </div>
-
-  </div>
-</section>
-
-<section id="new">
-  <div class="section-title">New Arrivals</div>
-  <div class="grid">
-
-    <div class="card" onclick="openItem('New Item A',12)">
-      <div class="name">New Item A</div>
-      <div class="price">$12.00</div>
-    </div>
-
-    <div class="card" onclick="openItem('New Item B',18)">
-      <div class="name">New Item B</div>
-      <div class="price">$18.00</div>
-    </div>
-
-    <div class="card" onclick="openItem('New Item C',22)">
-      <div class="name">New Item C</div>
-      <div class="price">$22.00</div>
-    </div>
-
-    <div class="card" onclick="openItem('New Item D',30)">
-      <div class="name">New Item D</div>
-      <div class="price">$30.00</div>
-    </div>
-
-  </div>
-</section>
-
-<section id="contact">
-  <div class="section-title">Contact</div>
-  <p style="color:#aaa; line-height:1.6;">
-    Email: support@sunq.store<br/>
-    Instagram: @sunqsmarket
-  </p>
-</section>
-
-<div class="cart" onclick="alert('Cart system is UI-only for now')">
-  Cart (<span id="cartCount">0</span>)
+<div class="hero">
+  <h1>SUNQS MARKET</h1>
+  <p>simple digital marketplace</p>
+  <a href="shop.html"><button>Enter Shop</button></a>
 </div>
-
-<footer>
-  © 2026 SUNQS MARKET
-</footer>
-
-<script>
-
-let cartCount = 0;
-
-function toggleMenu(){
-  const menu = document.getElementById("dropdown");
-  menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
-}
-
-function searchItems(){
-  let input = document.getElementById("search").value.toLowerCase();
-  let cards = document.querySelectorAll(".card");
-
-  cards.forEach(card => {
-    let text = card.innerText.toLowerCase();
-    card.style.display = text.includes(input) ? "block" : "none";
-  });
-}
-
-function openItem(name, price){
-  cartCount++;
-  document.getElementById("cartCount").innerText = cartCount;
-
-  alert(name + "\nPrice: $" + price);
-}
-
-</script>
 
 </body>
 </html>
