@@ -6,43 +6,37 @@
 <title>Product</title>
 
 <style>
-*{box-sizing:border-box;}
 body{
   margin:0;
   font-family:Arial;
   background:#070707;
   color:#fff;
-  animation:fade 0.4s ease;
+  opacity:0;
+  transition:opacity 0.6s ease;
 }
 
-@keyframes fade{
-  from{opacity:0; transform:translateY(8px);}
-  to{opacity:1;}
-}
+body.loaded{opacity:1;}
 
 header{
   padding:20px;
-  border-bottom:1px solid #333;
+  border-bottom:1px solid rgba(255,204,51,0.15);
+  background:rgba(10,10,10,0.85);
 }
 
-a{color:#ffcc33;text-decoration:none;margin-right:10px;}
+a{
+  color:#ffcc33;
+  text-decoration:none;
+  margin-right:10px;
+}
 
 .box{
-  max-width:520px;
+  max-width:500px;
   margin:60px auto;
   padding:20px;
   background:#111;
   border:1px solid #ffcc33;
   border-radius:12px;
-  transition:0.2s;
 }
-
-.box:hover{
-  box-shadow:0 10px 30px rgba(255,204,51,0.12);
-}
-
-h1{color:#ffcc33;}
-.price{color:#ffcc33;font-size:20px;}
 
 button{
   width:100%;
@@ -51,11 +45,6 @@ button{
   border:1px solid #ffcc33;
   color:#ffcc33;
   cursor:pointer;
-  transition:0.2s;
-}
-
-button:hover{
-  transform:translateY(-3px);
 }
 </style>
 </head>
@@ -63,42 +52,50 @@ button:hover{
 <body>
 
 <header>
-  <a href="index.html">Home</a>
-  <a href="sunqs.html">SUNQS SIDE</a>
-  <a href="jets.html">JETS SIDE</a>
+  <a href="index.html" onclick="navigate(event,'index.html')">Home</a>
+  <a href="sunqs.html" onclick="navigate(event,'sunqs.html')">SUNQS SIDE</a>
+  <a href="jets.html" onclick="navigate(event,'jets.html')">JETS SIDE</a>
 </header>
 
 <div class="box">
   <h1 id="name"></h1>
-  <div class="price" id="price"></div>
+  <div id="price"></div>
   <p id="desc"></p>
 
-  <button onclick="addToCart(name,price)">Add to Cart</button>
+  <button onclick="add()">Add to Cart</button>
 </div>
 
 <script>
+window.addEventListener("load",()=>document.body.classList.add("loaded"));
+
+function navigate(e,url){
+  e.preventDefault();
+  document.body.classList.remove("loaded");
+  setTimeout(()=>window.location.href=url,400);
+}
+
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-function addToCart(name,price){
-  cart.push({name,price});
+function add(){
+  cart.push({name:document.getElementById("name").innerText});
   localStorage.setItem("cart",JSON.stringify(cart));
-  alert("Added to cart");
+  alert("Added");
 }
 
 const items={
-  "1":{name:"SUNQS Item A",price:"$10",desc:"Sunqs product"},
-  "2":{name:"SUNQS Item B",price:"$15",desc:"Sunqs product"},
-  "3":{name:"SUNQS Item C",price:"$20",desc:"Sunqs product"},
-  "4":{name:"SUNQS Item D",price:"$25",desc:"Sunqs product"},
-  "5":{name:"SUNQS Item E",price:"$30",desc:"Sunqs product"},
-  "6":{name:"SUNQS Item F",price:"$35",desc:"Sunqs product"},
+  "1":{name:"SUNQS A",price:"$10",desc:"Product"},
+  "2":{name:"SUNQS B",price:"$15",desc:"Product"},
+  "3":{name:"SUNQS C",price:"$20",desc:"Product"},
+  "4":{name:"SUNQS D",price:"$25",desc:"Product"},
+  "5":{name:"SUNQS E",price:"$30",desc:"Product"},
+  "6":{name:"SUNQS F",price:"$35",desc:"Product"},
 
-  "101":{name:"JETS Item A",price:"$12",desc:"Jets product"},
-  "102":{name:"JETS Item B",price:"$18",desc:"Jets product"},
-  "103":{name:"JETS Item C",price:"$22",desc:"Jets product"},
-  "104":{name:"JETS Item D",price:"$28",desc:"Jets product"},
-  "105":{name:"JETS Item E",price:"$33",desc:"Jets product"},
-  "106":{name:"JETS Item F",price:"$40",desc:"Jets product"}
+  "101":{name:"JETS A",price:"$12",desc:"Product"},
+  "102":{name:"JETS B",price:"$18",desc:"Product"},
+  "103":{name:"JETS C",price:"$22",desc:"Product"},
+  "104":{name:"JETS D",price:"$28",desc:"Product"},
+  "105":{name:"JETS E",price:"$33",desc:"Product"},
+  "106":{name:"JETS F",price:"$40",desc:"Product"}
 };
 
 let id=new URLSearchParams(window.location.search).get("item");
