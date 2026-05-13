@@ -3,48 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SUNQS MARKET | Home</title>
+<title>SUNQS MARKET</title>
 
 <style>
 *{box-sizing:border-box;}
-
 body{
   margin:0;
   font-family:Arial;
-  background:
-    radial-gradient(circle at top, rgba(255,204,51,0.08), transparent 40%),
-    #070707;
+  background:radial-gradient(circle at top,#1a1405,transparent 50%),#070707;
   color:#fff;
-  animation:fadeIn 0.4s ease;
+  animation:fade 0.4s ease;
 }
 
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(6px);}
+@keyframes fade{
+  from{opacity:0; transform:translateY(8px);}
   to{opacity:1; transform:translateY(0);}
 }
 
 header{
   padding:20px;
-  border-bottom:1px solid rgba(255,204,51,0.15);
-  background:rgba(10,10,10,0.8);
-  backdrop-filter:blur(10px);
+  border-bottom:1px solid #333;
 }
 
-a{
-  color:#ffcc33;
-  text-decoration:none;
-  margin-right:15px;
-}
+a{color:#ffcc33;text-decoration:none;margin-right:12px;}
 
 .hero{
   text-align:center;
-  padding:90px 20px;
+  padding:100px 20px;
 }
 
-h1{
-  color:#ffcc33;
-  letter-spacing:2px;
-}
+h1{color:#ffcc33;letter-spacing:3px;}
 
 button{
   padding:12px 16px;
@@ -57,7 +45,7 @@ button{
 
 button:hover{
   transform:translateY(-3px);
-  box-shadow:0 8px 20px rgba(255,204,51,0.15);
+  box-shadow:0 10px 25px rgba(255,204,51,0.15);
 }
 </style>
 </head>
@@ -66,13 +54,14 @@ button:hover{
 
 <header>
   <a href="index.html">Home</a>
-  <a href="shop.html">Shop</a>
+  <a href="sunqs.html">SUNQS SIDE</a>
+  <a href="jets.html">JETS SIDE</a>
 </header>
 
 <div class="hero">
   <h1>SUNQS MARKET</h1>
-  <p style="color:#aaa;">minimal digital storefront</p>
-  <a href="shop.html"><button>Enter Shop</button></a>
+  <p style="color:#aaa;">premium digital storefront</p>
+  <a href="sunqs.html"><button>Enter Store</button></a>
 </div>
 
 </body>
