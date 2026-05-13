@@ -3,27 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cart</title>
+<title>Cart | SUNQ</title>
+
 <link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<nav class="navbar">
-  <div class="nav-container">
-    <a class="logo" href="index.html">SUNQ</a>
-    <div class="nav-links">
-      <a href="shop.html">Shop</a>
-      <a href="about.html">About</a>
-      <a href="cart.html">Cart</a>
-    </div>
-  </div>
-</nav>
+<header>
+  <a href="index.html" class="logo">SUNQ</a>
 
-<div class="hero">
-  <div class="hero-title">Cart</div>
-  <p class="hero-subtitle">WIP</p>
+  <div class="nav-right">
+    <a class="navlink" href="index.html">Home</a>
+    <a class="navlink" href="shop.html">Shop</a>
+    <a class="navlink" href="about.html">About</a>
+    <a class="navlink" href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+  </div>
+</header>
+
+<div class="cart-wrap">
+  <h1 style="color:var(--gold3); font-size:48px;">Your Cart</h1>
+  <p style="color:#ddd;">Review items before checkout.</p>
+
+  <div id="cart-area"></div>
+
+  <div id="total-area" style="margin-top:30px;"></div>
 </div>
+
+<script src="products.js"></script>
+
+<script>
+window.onload=()=>{
+  document.body.classList.add("loaded");
+  updateCartCountDisplay();
+  renderCart();
+};
+
+function renderCart(){
+  const cart=getCart();
+  const area=document.getElementById("cart-area");
+  const totalArea=document.getElementById("total-area");
+
+  if(cart.length===0){
+    area.innerHTML=`
+      <div class="card">
+        <div class="content">
+          <h2>Your cart is empty</h2>
+          <p>Go back to the shop and add items.</p>
+          <a class="button-primary" href="shop.html">Browse Shop</a>
+        </div>
+      </div>
+    `;
+    totalArea.innerHTML="";
+    return;
+  }
+
+  let subtotal=0;
+  area.innerHTML="";
+
+  cart.forEach(item=>{
+    const product=getProductById(item.id);
+    if(!product) return;
+
+    const total=product.price * item.quantity;
+    subtotal += total;
+
+    const row=document.createElement("div");
+    row.className="cart-row";
+
+    row.innerHTML=`
+      <div class="cart-product">
+        <img src="${product.img}">
+        <div>
+          <div style="font-weight:950; color:var(--gold3);">${product.name}</div>
+          <div style="color:#ccc; font-size:14px;">${product.category}</div>
+        </div>
+      </div>
+
+      <div style="font-weight:900;">$${product.price}</div>
+
+      <div>
+        <input class="cart-qty" type="number" min="1" max="10" value="${item.quantity}" style="width:80px; padding:12px; border-radius:14px; border:1px solid rgba(255,204,51,0.3); background:rgba(0,0,0,0.35); color:white; font-size:16px; text-align:center;">
+      </div>
+
+      <div style="font-weight:900;">$${total}</div>
+
+      <div>
+        <button class="remove-btn">Remove</button>
+      </div>
+    `;
+
+    row.querySelector(".remove-btn").onclick=()=>{
+      removeFromCart(product.id);
+      updateCartCountDisplay();
+      renderCart();
+    };
+
+    row.querySelector(".cart-qty").onchange=(e)=>{
+      let q=parseInt(e.target.value);
+      if(isNaN(q) || q<1) q=1;
+
+      updateCartQuantity(product.id, q);
+      updateCartCountDisplay();
+      renderCart();
+    };
+
+    area.appendChild(row);
+  });
+
+  totalArea.innerHTML=`
+    <div class="card">
+      <h2 style="margin:0; color:var(--gold3);">Summary</h2>
+      <p style="color:#ddd;">Subtotal: <b>$${subtotal}</b></p>
+      <button onclick="alert('Checkout system is W.I.P')">Proceed to Checkout</button>
+    </div>
+  `;
+}
+</script>
 
 </body>
 </html>
