@@ -1,91 +1,57 @@
-const PRODUCTS = [
-  {
-    id: "sunqs-a",
-    name: "SUNQS A",
-    price: 10,
-    category: "SUNQS",
-    desc: "Entry-level listing for quick purchase.",
-    img: "https://placehold.co/800x800/0a0a0a/ffcc33?text=SUNQS+A"
-  },
-  {
-    id: "sunqs-b",
-    name: "SUNQS B",
-    price: 15,
-    category: "SUNQS",
-    desc: "Mid-tier listing with added value.",
-    img: "https://placehold.co/800x800/0a0a0a/ffcc33?text=SUNQS+B"
-  },
-  {
-    id: "sunqs-c",
-    name: "SUNQS C",
-    price: 20,
-    category: "SUNQS",
-    desc: "Standard premium product listing.",
-    img: "https://placehold.co/800x800/0a0a0a/ffcc33?text=SUNQS+C"
-  },
-  {
-    id: "sunqs-d",
-    name: "SUNQS D",
-    price: 25,
-    category: "SUNQS",
-    desc: "Higher-tier digital bundle listing.",
-    img: "https://placehold.co/800x800/0a0a0a/ffcc33?text=SUNQS+D"
-  },
-  {
-    id: "sunqs-e",
-    name: "SUNQS E",
-    price: 30,
-    category: "SUNQS",
-    desc: "Exclusive premium listing category.",
-    img: "https://placehold.co/800x800/0a0a0a/ffcc33?text=SUNQS+E"
-  },
+// product.js
 
-  {
-    id: "jets-a",
-    name: "JETS A",
-    price: 12,
-    category: "JETS",
-    desc: "Starter listing from the JETS lineup.",
-    img: "https://placehold.co/800x800/0a0a0a/ffcc33?text=JETS+A"
+const ITEMS = {
+  "item-a": {
+    id: "item-a",
+    name: "Placeholder Item A",
+    price: 29.99,
+    image: "https://placehold.co/600x600/1a1a1a/white?text=Item+A",
+    description: "Generic placeholder item A."
   },
-  {
-    id: "jets-b",
-    name: "JETS B",
-    price: 18,
-    category: "JETS",
-    desc: "Upgraded listing with more features.",
-    img: "https://placehold.co/800x800/0a0a0a/ffcc33?text=JETS+B"
+  "item-b": {
+    id: "item-b",
+    name: "Placeholder Item B",
+    price: 49.99,
+    image: "https://placehold.co/600x600/1a1a1a/white?text=Item+B",
+    description: "Generic placeholder item B."
   },
-  {
-    id: "jets-c",
-    name: "JETS C",
-    price: 22,
-    category: "JETS",
-    desc: "Balanced mid-tier JETS product.",
-    img: "https://placehold.co/800x800/0a0a0a/ffcc33?text=JETS+C"
+  "item-c": {
+    id: "item-c",
+    name: "Placeholder Item C",
+    price: 19.99,
+    image: "https://placehold.co/600x600/1a1a1a/white?text=Item+C",
+    description: "Generic placeholder item C."
   },
-  {
-    id: "jets-d",
-    name: "JETS D",
-    price: 28,
-    category: "JETS",
-    desc: "Higher tier listing with more demand.",
-    img: "https://placehold.co/800x800/0a0a0a/ffcc33?text=JETS+D"
+  "item-d": {
+    id: "item-d",
+    name: "Placeholder Item D",
+    price: 99.99,
+    image: "https://placehold.co/600x600/1a1a1a/white?text=Item+D",
+    description: "Generic placeholder item D."
   },
-  {
-    id: "jets-e",
-    name: "JETS E",
-    price: 35,
-    category: "JETS",
-    desc: "Premium high-tier JETS listing.",
-    img: "https://placehold.co/800x800/0a0a0a/ffcc33?text=JETS+E"
+  "item-e": {
+    id: "item-e",
+    name: "Placeholder Item E",
+    price: 14.99,
+    image: "https://placehold.co/600x600/1a1a1a/white?text=Item+E",
+    description: "Generic placeholder item E."
+  },
+  "item-f": {
+    id: "item-f",
+    name: "Placeholder Item F",
+    price: 199.99,
+    image: "https://placehold.co/600x600/1a1a1a/white?text=Item+F",
+    description: "Generic placeholder item F."
   }
-];
+};
 
-function getProductById(id) {
-  return PRODUCTS.find(p => p.id === id);
+// Get product ID from URL
+function getProductId() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("item");
 }
 
+// CART HELPERS
 function getCart() {
   return JSON.parse(localStorage.getItem("sunqCart")) || [];
 }
@@ -94,48 +60,82 @@ function saveCart(cart) {
   localStorage.setItem("sunqCart", JSON.stringify(cart));
 }
 
-function addToCart(productId, qty = 1) {
+// UPDATE CART COUNT (navbar)
+function updateCartCount() {
   const cart = getCart();
-  const found = cart.find(item => item.id === productId);
+  const total = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-  if (found) {
-    found.quantity += qty;
+  const el = document.getElementById("cart-count");
+  if (el) el.textContent = total;
+}
+
+// ADD TO CART
+function addToCart(id, quantity = 1) {
+  let cart = getCart();
+
+  const existing = cart.find(item => item.id === id);
+
+  if (existing) {
+    existing.quantity += quantity;
   } else {
-    cart.push({ id: productId, quantity: qty });
+    cart.push({ id, quantity });
   }
 
   saveCart(cart);
+  updateCartCount();
 }
 
-function removeFromCart(productId) {
-  let cart = getCart();
-  cart = cart.filter(item => item.id !== productId);
-  saveCart(cart);
-}
+// RENDER PRODUCT PAGE
+function renderProduct() {
+  const id = getProductId();
+  const product = ITEMS[id];
 
-function updateCartQuantity(productId, qty) {
-  const cart = getCart();
-  const found = cart.find(item => item.id === productId);
+  const container = document.getElementById("product-container");
 
-  if (!found) return;
+  if (!container) return;
 
-  found.quantity = qty;
-
-  if (found.quantity <= 0) {
-    removeFromCart(productId);
+  if (!product) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:60px;">
+        <h2>Item not found</h2>
+        <a href="shop.html" class="button-primary">Back to Shop</a>
+      </div>
+    `;
     return;
   }
 
-  saveCart(cart);
+  container.innerHTML = `
+    <div class="product-grid-page">
+      <div>
+        <img src="${product.image}" style="width:100%;border-radius:16px;">
+      </div>
+
+      <div>
+        <h1>${product.name}</h1>
+        <p style="font-size:24px;color:gold;">$${product.price.toFixed(2)}</p>
+        <p>${product.description}</p>
+
+        <div style="margin-top:20px;">
+          <label>Quantity:</label>
+          <input id="qty" type="number" value="1" min="1" style="width:60px;">
+        </div>
+
+        <button id="addBtn" class="button-primary" style="margin-top:20px;">
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("addBtn").addEventListener("click", () => {
+    const qty = parseInt(document.getElementById("qty").value) || 1;
+    addToCart(product.id, qty);
+    alert("Added to cart");
+  });
 }
 
-function getCartCount() {
-  const cart = getCart();
-  return cart.reduce((total, item) => total + item.quantity, 0);
-}
-
-function updateCartCountDisplay() {
-  const count = getCartCount();
-  const span = document.getElementById("cart-count");
-  if (span) span.innerText = count;
-      }
+// INIT
+document.addEventListener("DOMContentLoaded", () => {
+  renderProduct();
+  updateCartCount();
+});
