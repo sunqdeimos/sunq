@@ -1,45 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product</title>
+<title>Product | SUNQ</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<nav class="navbar">
-  <div class="nav-container">
-    <a class="logo" href="index.html">SUNQ</a>
-    <div class="nav-links">
-      <a href="shop.html">Shop</a>
-      <a href="about.html">About</a>
-      <a href="cart.html">Cart</a>
-    </div>
-  </div>
-</nav>
+<header>
+  <a href="index.html" class="logo">SUNQ</a>
 
-<div class="hero">
-  <div class="hero-title" id="name">Loading...</div>
-  <p id="price"></p>
-</div>
+  <div>
+    <a href="shop.html" class="navlink">Shop</a>
+    <a href="about.html" class="navlink">About</a>
+    <a href="cart.html" class="navlink">Cart (<span id="cart-count">0</span>)</a>
+  </div>
+</header>
+
+<div class="product-grid" id="product-container"></div>
 
 <script>
-const items={
-  "1":{name:"SUNQS A",price:10},
-  "2":{name:"SUNQS B",price:15},
-  "3":{name:"SUNQS C",price:20},
-  "4":{name:"SUNQS D",price:25},
-  "5":{name:"SUNQS E",price:30}
+window.onload=()=>document.body.classList.add("loaded");
+
+const items = {
+  "sunqs-0": {name:"SUNQS ITEM 1",price:10,img:"https://placehold.co/600x600",desc:["Entry-level marketplace listing","Clean digital product slot","Instant access item"]},
+  "sunqs-1": {name:"SUNQS ITEM 2",price:15,img:"https://placehold.co/600x600",desc:["Mid-tier listing","Improved visibility placement","Balanced value item"]},
+  "jets-0": {name:"JETS ITEM 1",price:15,img:"https://placehold.co/600x600",desc:["Starter JETS product","Secondary collection item","Budget-friendly listing"]}
 };
 
-let id = new URLSearchParams(location.search).get("item");
-
-if(items[id]){
-  document.getElementById("name").innerText = items[id].name;
-  document.getElementById("price").innerText = "$"+items[id].price;
+function getCart(){
+  return JSON.parse(localStorage.getItem("sunqCart"))||[];
 }
+
+function saveCart(cart){
+  localStorage.setItem("sunqCart",JSON.stringify(cart));
+}
+
+function addToCart(id){
+  let cart=getCart();
+  let item=cart.find(i=>i.id===id);
+
+  if(item) item.quantity++;
+  else cart.push({id,quantity:1});
+
+  saveCart(cart);
+  updateCartCount();
+}
+
+function updateCartCount(){
+  let cart=getCart();
+  let total=cart.reduce((a,b)=>a+b.quantity,0);
+  document.getElementById("cart-count").innerText=total;
+}
+
+function loadProduct(){
+  const id=new URLSearchParams(location.search).get("item");
+  const p=items[id];
+
+  const container=document.getElementById("product-container");
+
+  if(!p){
+    container.innerHTML=`
+      <div class="card">
+        <h2>Item not found</h2>
+        <a href="shop.html" class="button-primary">Back to Shop</a>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML=`
+    <div class="card">
+      <img src="${p.img}" style="width:100%; border-radius:18px;">
+    </div>
+
+    <div class="card">
+      <h1>${p.name}</h1>
+      <h2>$${p.price}</h2>
+
+      <ul style="margin-top:20px; line-height:1.8; font-size:18px;">
+        ${p.desc.map(d=>`<li>• ${d}</li>`).join("")}
+      </ul>
+
+      <div style="margin-top:25px; display:flex; gap:12px; flex-wrap:wrap;">
+        <button onclick="addToCart('${id}')">Add to Cart</button>
+        <a href="shop.html" class="button-primary" style="text-decoration:none;">Back to Shop</a>
+      </div>
+    </div>
+  `;
+}
+
+loadProduct();
+updateCartCount();
 </script>
 
 </body>
