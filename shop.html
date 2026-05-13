@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SUNQS MARKET | Shop</title>
+
+<style>
+  body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#070707;
+    color:#fff;
+  }
+
+  header{
+    padding:20px;
+    border-bottom:1px solid rgba(255,204,51,0.3);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .logo{
+    color:#ffcc33;
+    font-weight:bold;
+    letter-spacing:2px;
+  }
+
+  a{
+    color:#ffcc33;
+    text-decoration:none;
+    margin-left:15px;
+  }
+
+  a:hover{
+    opacity:0.8;
+  }
+
+  .title{
+    padding:20px;
+    color:#ffcc33;
+    font-size:18px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    padding:20px;
+  }
+
+  .card{
+    background:#171717;
+    border:1px solid rgba(255,204,51,0.2);
+    padding:15px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.2s;
+    text-decoration:none;
+    color:white;
+  }
+
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:#ffcc33;
+  }
+
+  .price{
+    color:#ffcc33;
+    font-weight:bold;
+    margin-top:5px;
+  }
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">SUNQS MARKET</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+  </nav>
+</header>
+
+<div class="title">All Listings</div>
+
+<div class="grid">
+
+  <a class="card" href="product.html?item=1">
+    Item One
+    <div class="price">$10</div>
+  </a>
+
+  <a class="card" href="product.html?item=2">
+    Item Two
+    <div class="price">$15</div>
+  </a>
+
+  <a class="card" href="product.html?item=3">
+    Item Three
+    <div class="price">$20</div>
+  </a>
+
+  <a class="card" href="product.html?item=4">
+    Item Four
+    <div class="price">$25</div>
+  </a>
+
+</div>
+
+</body>
+</html>
