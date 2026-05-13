@@ -6,12 +6,59 @@
 <title>SUNQS MARKET | Home</title>
 
 <style>
-body{margin:0;font-family:Arial;background:#070707;color:#fff;}
-header{padding:20px;border-bottom:1px solid #333;}
-a{color:#ffcc33;text-decoration:none;margin-right:15px;}
-.hero{text-align:center;padding:80px 20px;}
-h1{color:#ffcc33;letter-spacing:3px;}
-button{padding:10px 15px;background:#111;border:1px solid #ffcc33;color:#ffcc33;cursor:pointer;}
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:Arial;
+  background:
+    radial-gradient(circle at top, rgba(255,204,51,0.08), transparent 40%),
+    #070707;
+  color:#fff;
+  animation:fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(6px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+header{
+  padding:20px;
+  border-bottom:1px solid rgba(255,204,51,0.15);
+  background:rgba(10,10,10,0.8);
+  backdrop-filter:blur(10px);
+}
+
+a{
+  color:#ffcc33;
+  text-decoration:none;
+  margin-right:15px;
+}
+
+.hero{
+  text-align:center;
+  padding:90px 20px;
+}
+
+h1{
+  color:#ffcc33;
+  letter-spacing:2px;
+}
+
+button{
+  padding:12px 16px;
+  background:#111;
+  border:1px solid #ffcc33;
+  color:#ffcc33;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+button:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 20px rgba(255,204,51,0.15);
+}
 </style>
 </head>
 
@@ -24,7 +71,7 @@ button{padding:10px 15px;background:#111;border:1px solid #ffcc33;color:#ffcc33;
 
 <div class="hero">
   <h1>SUNQS MARKET</h1>
-  <p>simple digital marketplace</p>
+  <p style="color:#aaa;">minimal digital storefront</p>
   <a href="shop.html"><button>Enter Shop</button></a>
 </div>
 
