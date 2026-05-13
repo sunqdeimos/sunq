@@ -1,106 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUNQ | Marketplace</title>
-    <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css">
+<script defer src="app.js"></script>
 </head>
+
 <body>
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">SUNQ</a>
-            <div class="nav-links">
-                <a href="shop.html">Shop</a>
-                <a href="about.html">About</a>
-                <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-            </div>
-        </div>
-    </nav>
+<header>
+  <a class="navlink" href="index.html">Home</a>
+  <a class="navlink" href="shop.html">Shop</a>
+  <a class="navlink" href="about.html">About</a>
+  <a class="navlink" href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+</header>
 
-    <main>
-        <section class="hero">
-            <h1 class="hero-title">SUNQ Marketplace</h1>
-            <p class="hero-subtitle">Curated items from independent sellers</p>
-            <a href="shop.html" class="button-primary">Browse Items</a>
-        </section>
-    </main>
+<div class="page">
+  <h1>SUNQS MARKET</h1>
+  <button onclick="location.href='shop.html'">Enter Shop</button>
+</div>
 
-    <script>
-        function getCart() {
-            const stored = localStorage.getItem('sunqCart');
-            return stored ? JSON.parse(stored) : [];
-        }
+<script>
+updateCartUI();
+</script>
 
-        function updateCartCountDisplay() {
-            const cart = getCart();
-            let total = 0;
-            cart.forEach(item => { total += item.quantity; });
-            const countSpan = document.getElementById('cart-count');
-            if (countSpan) countSpan.innerText = total;
-        }
-        updateCartCountDisplay();
-        window.addEventListener('storage', updateCartCountDisplay);
-    </script>
-
-    <style>
-        .hero {
-            text-align: center;
-            padding: 8rem 2rem;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-        }
-        .hero-title {
-            font-size: 4rem;
-            color: var(--gold, #D4AF37);
-            margin-bottom: 1rem;
-        }
-        .hero-subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
-        .button-primary {
-            background: var(--gold, #D4AF37);
-            color: #0a0a0a;
-            padding: 0.8rem 2rem;
-            border-radius: 2rem;
-            text-decoration: none;
-            font-weight: bold;
-            display: inline-block;
-            transition: background 0.2s;
-        }
-        .button-primary:hover {
-            background: #c5a028;
-        }
-        /* navbar styling (fallback in case styles.css missing) */
-        .navbar {
-            background: rgba(10,10,10,0.8);
-            backdrop-filter: blur(12px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--gold, #D4AF37);
-            text-decoration: none;
-        }
-        .nav-links a {
-            color: white;
-            margin-left: 2rem;
-            text-decoration: none;
-        }
-        .nav-links a:hover {
-            color: var(--gold, #D4AF37);
-        }
-    </style>
 </body>
 </html>
