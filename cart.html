@@ -6,6 +6,7 @@
 <title>Cart</title>
 <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
 <nav class="navbar">
@@ -14,29 +15,15 @@
     <div class="nav-links">
       <a href="shop.html">Shop</a>
       <a href="about.html">About</a>
-      <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+      <a href="cart.html">Cart</a>
     </div>
   </div>
 </nav>
 
-<div class="cart-page" id="cart"></div>
-
-<script>
-function getCart(){
-  return JSON.parse(localStorage.getItem("sunqCart"))||[];
-}
-
-function render(){
-  let cart=getCart();
-  let html="";
-  cart.forEach(i=>{
-    html+=`<p>${i.id} x ${i.quantity}</p>`;
-  });
-  document.getElementById("cart").innerHTML=html || "Empty cart";
-}
-
-render();
-</script>
+<div class="hero">
+  <div class="hero-title">Cart</div>
+  <p class="hero-subtitle">WIP</p>
+</div>
 
 </body>
 </html>
