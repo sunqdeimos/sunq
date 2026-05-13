@@ -1,42 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About | SUNQ</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | SUNQ</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<header>
-  <a href="index.html" class="logo">SUNQ</a>
-  <div>
-    <a href="shop.html" class="navlink">Shop</a>
-    <a href="about.html" class="navlink">About</a>
-    <a href="cart.html" class="navlink">Cart</a>
-  </div>
-</header>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">SUNQ</a>
 
-<div class="about-page">
-  <h1>About SUNQ</h1>
+      <div class="nav-links">
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+      </div>
+    </div>
+  </nav>
 
-  <p>
-    W.I.P online marketplace built as a structured storefront experiment focused on clean UI, product browsing, and scalable marketplace design.
-  </p>
+  <main class="shop">
+    <h1 class="page-title">About SUNQ</h1>
 
-  <p>
-    This project is actively evolving into a full marketplace system with collections, product pages, and cart functionality.
-  </p>
+    <div class="card" style="max-width: 700px; margin: 0 auto; text-align: left;">
+      <p style="margin-bottom: 1rem;">
+        <strong>W.I.P online marketplace</strong> – we're building a place to buy and sell unique items.
+        Currently in active development. More features coming soon.
+      </p>
 
-  <p>
-    crimsonsobased@gmail.com
-  </p>
-</div>
+      <p style="margin-bottom: 1rem;">
+        SUNQ is focused on a clean, minimal marketplace experience where products feel curated rather than cluttered.
+      </p>
 
-<script>
-window.onload=()=>document.body.classList.add("loaded");
-</script>
+      <p>
+        For early access or questions: <strong>studio@sunq.com</strong>
+      </p>
+    </div>
+  </main>
+
+  <script>
+    function getCart() {
+      return JSON.parse(localStorage.getItem("sunqCart")) || [];
+    }
+
+    function updateCartCount() {
+      const cart = getCart();
+      const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const el = document.getElementById("cart-count");
+      if (el) el.textContent = total;
+    }
+
+    updateCartCount();
+    window.addEventListener("storage", updateCartCount);
+  </script>
 
 </body>
 </html>
