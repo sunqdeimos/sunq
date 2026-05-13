@@ -8,37 +8,32 @@
 </head>
 <body>
 
-    <!-- Sticky Navigation Bar -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">SUNQ</a>
             <div class="nav-links">
                 <a href="shop.html">Shop</a>
                 <a href="about.html">About</a>
-                <a href="cart.html" id="cart-link">Cart (<span id="cart-count">0</span>)</a>
+                <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
             </div>
         </div>
     </nav>
 
     <main class="product-page">
         <div class="product-container" id="product-container">
-            <!-- Dynamic content will be injected here -->
             <div class="loading">Loading product...</div>
         </div>
     </main>
 
     <script>
-        // -------------------------------
-        // PRODUCT DATABASE
-        // -------------------------------
+        // ---------- PRODUCT DATABASE ----------
         const items = {
-            // SUNQS Collection
             "sunqs-a": {
                 id: "sunqs-a",
                 name: "SUNQ Alpha Hoodie",
                 collection: "SUNQS",
                 price: 89.00,
-                description: "Premium heavyweight hoodie with embroidered SUNQ logo. Relaxed fit, soft cotton blend.",
+                description: "Premium heavyweight hoodie with embroidered SUNQ logo.",
                 image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+A",
                 category: "sunqs"
             },
@@ -47,7 +42,7 @@
                 name: "SUNQ Essential Tee",
                 collection: "SUNQS",
                 price: 39.00,
-                description: "Classic crewneck t-shirt, garment-dyed for a soft feel. Screen printed graphic on chest.",
+                description: "Classic crewneck t-shirt, garment-dyed soft feel.",
                 image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+B",
                 category: "sunqs"
             },
@@ -56,17 +51,16 @@
                 name: "SUNQ Cargo Pants",
                 collection: "SUNQS",
                 price: 129.00,
-                description: "Oversized cargo pants with multiple pockets and adjustable cuffs. 100% cotton ripstop.",
+                description: "Oversized cargo pants with multiple pockets.",
                 image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+C",
                 category: "sunqs"
             },
-            // JETS Collection
             "jets-a": {
                 id: "jets-a",
                 name: "JETS Varsity Jacket",
                 collection: "JETS",
                 price: 199.00,
-                description: "Wool-blend varsity jacket with leather sleeves. Embroidered patches on front and back.",
+                description: "Wool-blend varsity jacket with leather sleeves.",
                 image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+A",
                 category: "jets"
             },
@@ -75,7 +69,7 @@
                 name: "JETS Cap",
                 collection: "JETS",
                 price: 35.00,
-                description: "Structured 6-panel cap with curved brim. Adjustable strap, embroidered JETS logo.",
+                description: "Structured 6-panel cap with curved brim.",
                 image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+B",
                 category: "jets"
             },
@@ -84,76 +78,19 @@
                 name: "JETS Technical Trousers",
                 collection: "JETS",
                 price: 149.00,
-                description: "Slim-fit trousers with water-repellent finish. Taped seams and zippered pockets.",
+                description: "Slim-fit trousers with water-repellent finish.",
                 image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+C",
                 category: "jets"
             }
         };
 
-        // -------------------------------
-        // HELPER: Get URL parameter
-        // -------------------------------
+        // Helper: get URL parameter
         function getParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
 
-        // -------------------------------
-        // DISPLAY PRODUCT
-        // -------------------------------
-        function displayProduct(productId) {
-            const container = document.getElementById('product-container');
-            const product = items[productId];
-
-            if (!product) {
-                container.innerHTML = `
-                    <div class="product-error">
-                        <h2>Product not found</h2>
-                        <p>Sorry, the item you're looking for doesn't exist.</p>
-                        <a href="shop.html" class="button-primary">Return to Shop</a>
-                    </div>
-                `;
-                return;
-            }
-
-            // Build product HTML
-            container.innerHTML = `
-                <div class="product-grid">
-                    <div class="product-image">
-                        <img src="${product.image}" alt="${product.name}">
-                    </div>
-                    <div class="product-details">
-                        <div class="product-collection">${product.collection}</div>
-                        <h1 class="product-title">${product.name}</h1>
-                        <div class="product-price">$${product.price.toFixed(2)}</div>
-                        <div class="product-description">${product.description}</div>
-                        <div class="product-actions">
-                            <label for="quantity">Quantity:</label>
-                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="10">
-                            <button id="add-to-cart-btn" class="button-primary">Add to Cart</button>
-                        </div>
-                        <div id="cart-message" class="cart-message"></div>
-                    </div>
-                </div>
-            `;
-
-            // Attach event listener to the add-to-cart button
-            const addButton = document.getElementById('add-to-cart-btn');
-            const quantityInput = document.getElementById('quantity');
-            const messageDiv = document.getElementById('cart-message');
-
-            addButton.addEventListener('click', () => {
-                let quantity = parseInt(quantityInput.value);
-                if (isNaN(quantity) || quantity < 1) quantity = 1;
-                addToCart(product.id, quantity);
-                showMessage(`${product.name} added to cart!`, 'success');
-                updateCartCountDisplay();   // update nav cart count
-            });
-        }
-
-        // -------------------------------
-        // SHOPPING CART (localStorage)
-        // -------------------------------
+        // Cart functions (using sunqCart key)
         function getCart() {
             const stored = localStorage.getItem('sunqCart');
             return stored ? JSON.parse(stored) : [];
@@ -166,7 +103,6 @@
         function addToCart(productId, quantity) {
             let cart = getCart();
             const existingIndex = cart.findIndex(item => item.id === productId);
-            
             if (existingIndex !== -1) {
                 cart[existingIndex].quantity += quantity;
             } else {
@@ -175,7 +111,6 @@
             saveCart(cart);
         }
 
-        // Update the cart counter in the navigation bar
         function updateCartCountDisplay() {
             const cart = getCart();
             let totalItems = 0;
@@ -196,9 +131,55 @@
             }
         }
 
-        // -------------------------------
-        // INITIALIZE PAGE
-        // -------------------------------
+        // Display product
+        function displayProduct(productId) {
+            const container = document.getElementById('product-container');
+            const product = items[productId];
+
+            if (!product) {
+                container.innerHTML = `
+                    <div class="product-error">
+                        <h2>Product not found</h2>
+                        <p>Sorry, the item you're looking for doesn't exist.</p>
+                        <a href="shop.html" class="button-primary">Return to Shop</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="product-grid">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-collection">${product.collection}</div>
+                        <h1 class="product-title">${product.name}</h1>
+                        <div class="product-price">$${product.price.toFixed(2)}</div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-actions">
+                            <label for="quantity">Quantity:</label>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="10">
+                            <button id="add-to-cart-btn" class="button-primary">Add to Cart</button>
+                        </div>
+                        <div id="cart-message" class="cart-message"></div>
+                    </div>
+                </div>
+            `;
+
+            const addButton = document.getElementById('add-to-cart-btn');
+            const quantityInput = document.getElementById('quantity');
+            
+            addButton.addEventListener('click', () => {
+                let quantity = parseInt(quantityInput.value);
+                if (isNaN(quantity) || quantity < 1) quantity = 1;
+                addToCart(product.id, quantity);
+                showMessage(`${product.name} added to cart!`, 'success');
+                updateCartCountDisplay();
+            });
+        }
+
+        // Initialize page
         function init() {
             const itemId = getParam('item');
             if (itemId) {
@@ -218,9 +199,7 @@
         init();
     </script>
 
-    <!-- Optional: extra style for product page and cart message (if not already in styles.css) -->
     <style>
-        /* These styles work with your existing CSS. Add anything missing here */
         .product-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -262,9 +241,6 @@
             gap: 1rem;
             margin: 1rem 0;
         }
-        .product-actions label {
-            font-weight: bold;
-        }
         .product-actions input {
             width: 70px;
             padding: 0.5rem;
@@ -282,11 +258,6 @@
             border-radius: 2rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .button-primary:hover {
-            background: #c5a028;
-            transform: scale(1.02);
         }
         .cart-message {
             margin-top: 1rem;
@@ -307,7 +278,6 @@
                 gap: 1.5rem;
             }
         }
-        /* ensure nav bar matches your existing styles */
         .navbar {
             background: rgba(10,10,10,0.8);
             backdrop-filter: blur(12px);
