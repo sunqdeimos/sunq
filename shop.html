@@ -18,16 +18,16 @@
   </div>
 </nav>
 
-<div style="padding:40px;text-align:center;">
-  <button onclick="filter('all')" class="button-primary">ALL</button>
-  <button onclick="filter('sunqs')" class="button-primary">SUNQS</button>
-  <button onclick="filter('jets')" class="button-primary">JETS</button>
+<div class="filters">
+  <button onclick="filter('all')" class="active">ALL</button>
+  <button onclick="filter('sunqs')">SUNQS</button>
+  <button onclick="filter('jets')">JETS</button>
 </div>
 
 <div class="grid" id="grid"></div>
 
 <script>
-const products = [
+const products=[
   {id:"a1",name:"SUNQS A",price:10,img:"images/sunqs-a.jpg",tag:"sunqs"},
   {id:"a2",name:"SUNQS B",price:15,img:"images/sunqs-b.jpg",tag:"sunqs"},
   {id:"a3",name:"SUNQS C",price:20,img:"images/sunqs-c.jpg",tag:"sunqs"},
@@ -42,24 +42,23 @@ const products = [
 ];
 
 function render(list){
-  const grid=document.getElementById("grid");
-  grid.innerHTML=list.map(p=>`
-    <div class="product-card" onclick="openProduct('${p.id}')">
-      <img src="${p.img}">
-      <div class="product-info">
-        <div style="font-weight:900">${p.name}</div>
-        <div>$${p.price}</div>
+  document.getElementById("grid").innerHTML =
+    list.map(p=>`
+      <div class="product-card" onclick="openP('${p.id}')">
+        <img src="${p.img}">
+        <div class="product-info">
+          <div style="font-weight:900">${p.name}</div>
+          <div>$${p.price}</div>
+        </div>
       </div>
-    </div>
-  `).join("");
+    `).join("");
 }
 
-function filter(type){
-  if(type==="all") return render(products);
-  render(products.filter(p=>p.tag===type));
+function filter(t){
+  render(t==="all"?products:products.filter(p=>p.tag===t));
 }
 
-function openProduct(id){
+function openP(id){
   window.location.href="product.html?id="+id;
 }
 
