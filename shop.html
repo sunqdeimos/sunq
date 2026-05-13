@@ -27,97 +27,48 @@
 
     <h1 class="page-title">Shop</h1>
 
+    <!-- FILTERS -->
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="showCollection('all')">All</button>
+      <button class="filter-btn" onclick="showCollection('sunq')">SUNQ</button>
+      <button class="filter-btn" onclick="showCollection('jet')">JET</button>
+    </div>
+
     <!-- ================= SUNQ ================= -->
-    <section class="collection">
+    <section class="collection sunq-collection">
+
       <h2 class="collection-title">SUNQ Collection</h2>
 
       <div class="grid">
 
-        <div class="card">
-          <div class="card-image"></div>
-          <h3>SUNQ / 01</h3>
-          <p>$9.99</p>
-          <a class="button-primary" href="product.html?id=s1">View</a>
-        </div>
-
-        <div class="card">
-          <div class="card-image"></div>
-          <h3>SUNQ / 02</h3>
-          <p>$19.99</p>
-          <a class="button-primary" href="product.html?id=s2">View</a>
-        </div>
-
-        <div class="card">
-          <div class="card-image"></div>
-          <h3>SUNQ / 03</h3>
-          <p>$29.99</p>
-          <a class="button-primary" href="product.html?id=s3">View</a>
-        </div>
-
-        <div class="card">
-          <div class="card-image"></div>
-          <h3>SUNQ / 04</h3>
-          <p>$39.99</p>
-          <a class="button-primary" href="product.html?id=s4">View</a>
-        </div>
-
-        <div class="card">
-          <div class="card-image"></div>
-          <h3>SUNQ / 05</h3>
-          <p>$49.99</p>
-          <a class="button-primary" href="product.html?id=s5">View</a>
-        </div>
+        <div class="card"><div class="card-image"></div><h3>SUNQ / 01</h3><p>$9.99</p><a class="button-primary" href="product.html?id=s1">View</a></div>
+        <div class="card"><div class="card-image"></div><h3>SUNQ / 02</h3><p>$19.99</p><a class="button-primary" href="product.html?id=s2">View</a></div>
+        <div class="card"><div class="card-image"></div><h3>SUNQ / 03</h3><p>$29.99</p><a class="button-primary" href="product.html?id=s3">View</a></div>
+        <div class="card"><div class="card-image"></div><h3>SUNQ / 04</h3><p>$39.99</p><a class="button-primary" href="product.html?id=s4">View</a></div>
+        <div class="card"><div class="card-image"></div><h3>SUNQ / 05</h3><p>$49.99</p><a class="button-primary" href="product.html?id=s5">View</a></div>
 
       </div>
     </section>
 
     <!-- ================= JET ================= -->
-    <section class="collection">
+    <section class="collection jet-collection">
 
       <h2 class="collection-title">JET Collection</h2>
 
       <div class="grid">
 
-        <div class="card">
-          <div class="card-image"></div>
-          <h3>JET / A1</h3>
-          <p>$9.99</p>
-          <a class="button-primary" href="product.html?id=j1">View</a>
-        </div>
-
-        <div class="card">
-          <div class="card-image"></div>
-          <h3>JET / A2</h3>
-          <p>$19.99</p>
-          <a class="button-primary" href="product.html?id=j2">View</a>
-        </div>
-
-        <div class="card">
-          <div class="card-image"></div>
-          <h3>JET / A3</h3>
-          <p>$29.99</p>
-          <a class="button-primary" href="product.html?id=j3">View</a>
-        </div>
-
-        <div class="card">
-          <div class="card-image"></div>
-          <h3>JET / A4</h3>
-          <p>$39.99</p>
-          <a class="button-primary" href="product.html?id=j4">View</a>
-        </div>
-
-        <div class="card">
-          <div class="card-image"></div>
-          <h3>JET / A5</h3>
-          <p>$49.99</p>
-          <a class="button-primary" href="product.html?id=j5">View</a>
-        </div>
+        <div class="card"><div class="card-image"></div><h3>JET / A1</h3><p>$9.99</p><a class="button-primary" href="product.html?id=j1">View</a></div>
+        <div class="card"><div class="card-image"></div><h3>JET / A2</h3><p>$19.99</p><a class="button-primary" href="product.html?id=j2">View</a></div>
+        <div class="card"><div class="card-image"></div><h3>JET / A3</h3><p>$29.99</p><a class="button-primary" href="product.html?id=j3">View</a></div>
+        <div class="card"><div class="card-image"></div><h3>JET / A4</h3><p>$39.99</p><a class="button-primary" href="product.html?id=j4">View</a></div>
+        <div class="card"><div class="card-image"></div><h3>JET / A5</h3><p>$49.99</p><a class="button-primary" href="product.html?id=j5">View</a></div>
 
       </div>
     </section>
 
   </main>
 
+  <!-- CART COUNT -->
   <script>
     function getCart() {
       return JSON.parse(localStorage.getItem("sunqCart")) || [];
@@ -132,6 +83,35 @@
 
     updateCartCount();
     window.addEventListener("storage", updateCartCount);
+  </script>
+
+  <!-- FILTER SYSTEM -->
+  <script>
+    function showCollection(type) {
+      const sunq = document.querySelector(".sunq-collection");
+      const jet = document.querySelector(".jet-collection");
+      const buttons = document.querySelectorAll(".filter-btn");
+
+      buttons.forEach(b => b.classList.remove("active"));
+
+      if (type === "all") {
+        sunq.style.display = "block";
+        jet.style.display = "block";
+        buttons[0].classList.add("active");
+      }
+
+      if (type === "sunq") {
+        sunq.style.display = "block";
+        jet.style.display = "none";
+        buttons[1].classList.add("active");
+      }
+
+      if (type === "jet") {
+        sunq.style.display = "none";
+        jet.style.display = "block";
+        buttons[2].classList.add("active");
+      }
+    }
   </script>
 
 </body>
