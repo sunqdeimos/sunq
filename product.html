@@ -6,151 +6,62 @@
 <title>Product - SUNQS MARKET</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+<!-- GLOBAL STYLE SYSTEM -->
+<link rel="stylesheet" href="styles.css">
+
 <style>
-:root{
-  --gold:#ffcc33;
-  --gold2:#ffae00;
-  --gold3:#ffd86a;
-  --dark:#050505;
-  --panel:rgba(5,5,5,0.72);
-  --border:rgba(255,204,51,0.20);
-}
+/* product-specific layout only (NO full redesign CSS here anymore) */
 
-body{
-  margin:0;
-  font-family:Inter, Arial;
-  color:#fff;
-
-  /* image removed */
-  background:
-    linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.95)),
-    #050505;
-
-  background-size:cover;
-  background-position:center;
-  background-attachment:fixed;
-
-  opacity:0;
-  transition:0.6s ease;
-  overflow-x:hidden;
-}
-
-body.loaded{opacity:1;}
-
-header{
-  padding:18px 22px;
-  border-bottom:1px solid rgba(255,204,51,0.15);
-  position:sticky;
-  top:0;
-  background:rgba(0,0,0,0.65);
-  backdrop-filter:blur(14px);
-  z-index:100;
-}
-
-.navlink{
-  color:var(--gold3);
-  text-decoration:none;
-  margin-right:14px;
-  font-weight:600;
-  transition:0.2s ease;
-}
-
-.navlink:hover{
-  color:var(--gold2);
-  text-shadow:0 0 18px rgba(255,204,51,0.5);
-}
-
-.wrap{
-  max-width:1000px;
-  margin:0 auto;
-  padding:70px 20px 80px;
+.product-wrap{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:25px;
+  gap:40px;
+  align-items:start;
 }
 
-@media(max-width:900px){
-  .wrap{grid-template-columns:1fr;}
-}
-
-/* replaced image box with placeholder */
-.imgbox{
-  border-radius:24px;
+.product-img{
+  border-radius:26px;
+  overflow:hidden;
   border:1px solid var(--border);
-  background:rgba(0,0,0,0.55);
-  backdrop-filter:blur(12px);
-  min-height:380px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#777;
-  font-weight:600;
-  text-align:center;
-  padding:20px;
+  background:rgba(0,0,0,0.4);
 }
 
-.details{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:25px;
-  backdrop-filter:blur(12px);
+.product-img img{
+  width:100%;
+  height:520px;
+  object-fit:cover;
+  display:block;
 }
 
-.details h1{
-  margin:0;
-  color:var(--gold3);
-  font-size:34px;
-  letter-spacing:2px;
-  text-shadow:0 0 18px rgba(255,204,51,0.2);
+.product-info h1{
+  font-size:var(--text-xl);
+  margin-bottom:10px;
 }
 
 .price{
-  margin-top:12px;
-  font-size:28px;
+  font-size:26px;
   font-weight:900;
   color:var(--gold3);
+  margin-top:10px;
 }
 
 .desc{
-  margin-top:18px;
+  margin-top:20px;
+  font-size:18px;
   color:#ddd;
   line-height:1.7;
-  font-size:14px;
 }
 
-.btn{
-  margin-top:25px;
-  width:100%;
-  padding:15px;
-  border-radius:16px;
-  border:none;
-  cursor:pointer;
-  font-weight:900;
-  font-size:15px;
-  background:linear-gradient(135deg,var(--gold3),var(--gold2));
-  color:#000;
-  transition:0.25s ease;
-  box-shadow:0 15px 55px rgba(255,204,51,0.18);
-}
+@media (max-width:900px){
+  .product-wrap{
+    grid-template-columns:1fr;
+  }
 
-.btn:hover{
-  transform:translateY(-3px) scale(1.02);
-  box-shadow:0 20px 80px rgba(255,204,51,0.30);
-}
-
-.footer{
-  padding:40px 20px;
-  border-top:1px solid rgba(255,204,51,0.12);
-  text-align:center;
-  color:#ccc;
-  font-size:13px;
-  background:rgba(0,0,0,0.55);
-  backdrop-filter:blur(10px);
+  .product-img img{
+    height:380px;
+  }
 }
 </style>
 </head>
@@ -163,58 +74,55 @@ header{
   <a class="navlink" href="about.html">About</a>
 </header>
 
-<div class="wrap">
-  <div class="imgbox" id="imgbox">
-    No image loaded
+<div class="page">
+
+  <div class="product-wrap">
+
+    <div class="product-img">
+      <img id="img" src="images/sunqs-a.jpg">
+    </div>
+
+    <div class="product-info">
+      <h1 id="name">Product</h1>
+      <div class="price" id="price">$0</div>
+
+      <div class="desc" id="desc">
+        Loading product information...
+      </div>
+
+      <button onclick="fakeCheckout()">Proceed to Checkout</button>
+    </div>
+
   </div>
 
-  <div class="details">
-    <h1 id="name">Product</h1>
-    <div class="price" id="price">$0</div>
-    <div class="desc" id="desc">Loading...</div>
-
-    <button class="btn" onclick="fakeCheckout()">Proceed to Checkout</button>
-  </div>
-</div>
-
-<div class="footer">
-  © SUNQS MARKET • W.I.P online marketplace
 </div>
 
 <script>
-window.onload=()=>document.body.classList.add("loaded");
+const items = {
+  1:{name:"SUNQS A",price:"$10",desc:"Entry-level listing for quick purchase.",img:"images/sunqs-a.jpg"},
+  2:{name:"SUNQS B",price:"$15",desc:"Mid-tier listing with added value.",img:"images/sunqs-b.jpg"},
+  3:{name:"SUNQS C",price:"$20",desc:"Standard product listing.",img:"images/sunqs-c.jpg"},
+  4:{name:"SUNQS D",price:"$25",desc:"Higher-tier digital listing.",img:"images/sunqs-d.jpg"},
+  5:{name:"SUNQS E",price:"$30",desc:"Premium listing category.",img:"images/sunqs-e.jpg"},
 
-function fakeCheckout(){
-  alert("Checkout system is W.I.P");
-}
-
-const items={
-  1:{name:"SUNQS A",price:"$10",desc:"Entry-level listing for quick purchase."},
-  2:{name:"SUNQS B",price:"$15",desc:"Mid-tier listing with added value."},
-  3:{name:"SUNQS C",price:"$20",desc:"Standard premium product listing."},
-  4:{name:"SUNQS D",price:"$25",desc:"Higher-tier digital bundle listing."},
-  5:{name:"SUNQS E",price:"$30",desc:"Exclusive premium listing category."},
-  6:{name:"SUNQS F",price:"$35",desc:"High-demand product listing."},
-  7:{name:"SUNQS G",price:"$40",desc:"Advanced listing with extra perks."},
-  8:{name:"SUNQS H",price:"$45",desc:"Top-tier premium listing slot."},
-
-  101:{name:"JETS A",price:"$12",desc:"Starter listing from the JETS lineup."},
-  102:{name:"JETS B",price:"$18",desc:"Upgraded listing with more features."},
-  103:{name:"JETS C",price:"$22",desc:"Balanced mid-tier JETS product."},
-  104:{name:"JETS D",price:"$28",desc:"Higher tier listing with more demand."},
-  105:{name:"JETS E",price:"$33",desc:"Premium high-tier JETS listing."},
-  106:{name:"JETS F",price:"$40",desc:"Top quality premium digital listing."},
-  107:{name:"JETS G",price:"$48",desc:"Rare listing slot with extra value."},
-  108:{name:"JETS H",price:"$55",desc:"Ultra tier listing reserved for top buyers."}
+  101:{name:"JETS A",price:"$12",desc:"Starter listing from JETS collection.",img:"images/jets-a.jpg"},
+  102:{name:"JETS B",price:"$18",desc:"Upgraded JETS listing.",img:"images/jets-b.jpg"},
+  103:{name:"JETS C",price:"$22",desc:"Balanced mid-tier product.",img:"images/jets-c.jpg"},
+  104:{name:"JETS D",price:"$28",desc:"High demand listing.",img:"images/jets-d.jpg"},
+  105:{name:"JETS E",price:"$33",desc:"Premium JETS listing.",img:"images/jets-e.jpg"}
 };
 
-let id=new URLSearchParams(window.location.search).get("item");
+const id = new URLSearchParams(window.location.search).get("item");
 
 if(items[id]){
-  document.getElementById("name").innerText=items[id].name;
-  document.getElementById("price").innerText=items[id].price;
-  document.getElementById("desc").innerText=items[id].desc;
-  document.getElementById("imgbox").innerText = "Product preview unavailable (images removed)";
+  document.getElementById("name").innerText = items[id].name;
+  document.getElementById("price").innerText = items[id].price;
+  document.getElementById("desc").innerText = items[id].desc;
+  document.getElementById("img").src = items[id].img;
+}
+
+function fakeCheckout(){
+  alert("Checkout system is still W.I.P");
 }
 </script>
 
