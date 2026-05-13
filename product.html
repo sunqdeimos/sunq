@@ -1,27 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Product</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product | SUNQ</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<div id="product"></div>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">SUNQ</a>
 
-<script src="data.js"></script>
+      <div class="nav-links">
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+      </div>
+    </div>
+  </nav>
 
-<script>
-const id = new URLSearchParams(location.search).get("item");
-const p = PRODUCTS[id];
+  <main class="product-page">
+    <div id="product-container"></div>
+  </main>
 
-document.getElementById("product").innerHTML =
-p ? `
-  <h1>${p.name}</h1>
-  <img src="${p.image}" style="width:300px">
-  <p>$${p.price}</p>
-` : "Item not found";
-</script>
+  <script>
+    // CART COUNTER
+    function getCart() {
+      return JSON.parse(localStorage.getItem("sunqCart")) || [];
+    }
+
+    function updateCartCount() {
+      const cart = getCart();
+      const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const el = document.getElementById("cart-count");
+      if (el) el.textContent = total;
+    }
+
+    updateCartCount();
+    window.addEventListener("storage", updateCartCount);
+
+    // PRODUCT DATA (must match shop)
+    const PRODUCTS = {
+      a: { id: "a", name: "Item A", price: 29.99 },
+      b: { id: "b", name: "Item B", price: 49.99 },
+      c: { id: "c", name: "Item C", price: 19.99 },
+      d: { id: "d", name: "Item D", price: 99.99 }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    const product = PRODUCTS[id];
+
+    const container = document.getElementById("product-container");
+
+    if (!product) {
+      container.innerHTML = `
+        <h2>Item not found</h2>
+        <a class="button-primary" href="shop.html">Back to shop</a>
+      `;
+    } else {
+      container.innerHTML = `
+        <div class="product-card">
+          <div class="product-image"></div>
+
+          <h1>${product.name}</h1>
+          <p>$${product.price}</p>
+
+          <button class="button-primary" onclick="addToCart('${product.id}')">
+            Add to cart
+          </button>
+        </div>
+      `;
+    }
+
+    function addToCart(id) {
+      const cart = getCart();
+
+      const existing = cart.find(item => item.id === id);
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ id, quantity: 1 });
+      }
+
+      localStorage.setItem("sunqCart", JSON.stringify(cart));
+      updateCartCount();
+      alert("Added to cart");
+    }
+  </script>
 
 </body>
 </html>
