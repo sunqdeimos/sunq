@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUNQ | Home</title>
+    <title>About | SUNQ</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -19,18 +19,17 @@
         </div>
     </nav>
 
-    <main>
-        <section class="hero">
-            <h1 class="hero-title">SUNQ / JETS</h1>
-            <p class="hero-subtitle">Streetwear & technical apparel</p>
-            <a href="shop.html" class="button-primary">Shop Now</a>
-        </section>
-
-        <!-- You can keep your existing featured content or collections preview here -->
+    <main class="about-page">
+        <h1>About SUNQ</h1>
+        <p>SUNQ was born from the need to merge raw street aesthetics with technical durability. Each piece is designed for movement, comfort, and quiet confidence.</p>
+        <p>Our JETS collection takes it further – functional fabrics, clean lines, and a futuristic edge.</p>
+        <p>Based between NYC and Tokyo, we produce in small batches to minimize waste.</p>
+        <hr>
+        <p><strong>Contact:</strong> studio@sunq.com</p>
     </main>
 
     <script>
-        // Cart counter - keeps the number in nav bar updated
+        // Cart counter - same as other pages
         function updateCartCountDisplay() {
             const cart = JSON.parse(localStorage.getItem('sunqCart')) || [];
             let total = 0;
@@ -39,38 +38,27 @@
             if (countSpan) countSpan.innerText = total;
         }
         updateCartCountDisplay();
-        // Listen for cart changes from other tabs
         window.addEventListener('storage', updateCartCountDisplay);
     </script>
 
-    <!-- Optional: ensure hero styling matches your existing CSS -->
     <style>
-        .hero {
-            text-align: center;
-            padding: 8rem 2rem;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        .about-page {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            line-height: 1.6;
         }
-        .hero-title {
-            font-size: 4rem;
+        .about-page h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
             color: var(--gold, #D4AF37);
-            margin-bottom: 1rem;
         }
-        .hero-subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
+        .about-page p {
+            margin: 1rem 0;
         }
-        .button-primary {
-            background: var(--gold, #D4AF37);
-            color: #0a0a0a;
-            padding: 0.8rem 2rem;
-            border-radius: 2rem;
-            text-decoration: none;
-            font-weight: bold;
-            display: inline-block;
-            transition: background 0.2s;
-        }
-        .button-primary:hover {
-            background: #c5a028;
+        hr {
+            margin: 2rem 0;
+            border-color: #333;
         }
     </style>
 </body>
