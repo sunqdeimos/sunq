@@ -33,6 +33,12 @@
       return JSON.parse(localStorage.getItem("sunqCart")) || [];
     }
 
+    function saveCart(cart) {
+      localStorage.setItem("sunqCart", JSON.stringify(cart));
+      updateCartCount();
+      renderCart();
+    }
+
     function updateCartCount() {
       const cart = getCart();
       const total = cart.reduce((sum, i) => sum + i.quantity, 0);
@@ -40,13 +46,7 @@
       if (el) el.textContent = total;
     }
 
-    function saveCart(cart) {
-      localStorage.setItem("sunqCart", JSON.stringify(cart));
-      updateCartCount();
-      renderCart();
-    }
-
-    // ================= PRODUCT DATABASE (SYNCED) =================
+    // ================= PRODUCTS =================
     const PRODUCTS = {
       s1: { id: "s1", name: "SUNQ A", price: 9.99 },
       s2: { id: "s2", name: "SUNQ B", price: 19.99 },
@@ -61,9 +61,44 @@
       j5: { id: "j5", name: "JET J", price: 49.99 }
     };
 
-    // ================= RENDER CART =================
     const container = document.getElementById("cart-container");
 
+    // ================= CART ACTIONS =================
+    function changeQty(id, delta) {
+      let cart = getCart();
+      const item = cart.find(i => i.id === id);
+
+      if (!item) return;
+
+      item.quantity += delta;
+
+      if (item.quantity <= 0) {
+        cart = cart.filter(i => i.id !== id);
+      }
+
+      saveCart(cart);
+    }
+
+    function clearCart() {
+      localStorage.removeItem("sunqCart");
+      updateCartCount();
+      renderCart();
+    }
+
+    // ================= CHECKOUT (FAKE BUT FUNCTIONAL) =================
+    function checkout() {
+      const cart = getCart();
+
+      if (cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+      }
+
+      alert("Checkout successful (demo). Thanks for your order!");
+      clearCart();
+    }
+
+    // ================= RENDER =================
     function renderCart() {
       const cart = getCart();
 
@@ -78,32 +113,42 @@
 
       let total = 0;
 
-      container.innerHTML = cart.map(item => {
+      const itemsHTML = cart.map(item => {
         const product = PRODUCTS[item.id];
-
-        if (!product) {
-          return `
-            <div class="card">
-              <p>Unknown item (ID: ${item.id})</p>
-            </div>
-          `;
-        }
+        if (!product) return "";
 
         const itemTotal = product.price * item.quantity;
         total += itemTotal;
 
         return `
-          <div class="card">
+          <div class="card" style="margin-bottom:10px;">
             <h3>${product.name}</h3>
-            <p>$${product.price} × ${item.quantity}</p>
+            <p>$${product.price}</p>
+
+            <div style="display:flex; gap:10px; align-items:center;">
+              <button onclick="changeQty('${item.id}', -1)">-</button>
+              <span>${item.quantity}</span>
+              <button onclick="changeQty('${item.id}', 1)">+</button>
+            </div>
+
             <p><strong>$${itemTotal.toFixed(2)}</strong></p>
           </div>
         `;
       }).join("");
 
-      container.innerHTML += `
+      container.innerHTML = `
+        ${itemsHTML}
+
         <div class="card" style="margin-top: 20px;">
           <h2>Total: $${total.toFixed(2)}</h2>
+
+          <button class="button-primary" onclick="checkout()">
+            Checkout
+          </button>
+
+          <button onclick="clearCart()" style="margin-top:10px;">
+            Clear Cart
+          </button>
         </div>
       `;
     }
