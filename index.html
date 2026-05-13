@@ -1,10 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>TEST</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUNQ | Marketplace</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
-<body style="background:white; color:black; font-size:30px;">
-  IF YOU SEE THIS, INDEX IS WORKING
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">SUNQ</a>
+      <div class="nav-links">
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="hero">
+    <h1>SUNQ Marketplace</h1>
+    <p>Curated items from independent sellers</p>
+    <a href="shop.html" class="button-primary">Browse Items</a>
+  </main>
+
+  <script>
+    function getCart() {
+      return JSON.parse(localStorage.getItem("sunqCart")) || [];
+    }
+
+    function updateCartCount() {
+      const cart = getCart();
+      const total = cart.reduce((sum, i) => sum + i.quantity, 0);
+      const el = document.getElementById("cart-count");
+      if (el) el.textContent = total;
+    }
+
+    updateCartCount();
+    window.addEventListener("storage", updateCartCount);
+  </script>
+
 </body>
 </html>
