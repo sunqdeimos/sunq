@@ -1,330 +1,206 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shop - SUNQS MARKET</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-<style>
-:root{
-  --gold:#ffcc33;
-  --gold2:#ffae00;
-  --gold3:#ffd86a;
-  --dark:#050505;
-  --panel:rgba(5,5,5,0.72);
-  --border:rgba(255,204,51,0.20);
-}
-
-body{
-  margin:0;
-  font-family:Inter, Arial;
-  background:linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.95)), #050505;
-  color:#fff;
-  overflow-x:hidden;
-}
-
-/* HEADER (bigger + more padding) */
-header{
-  padding:26px 40px;
-  position:sticky;
-  top:0;
-  background:rgba(0,0,0,0.7);
-  backdrop-filter:blur(16px);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.navlink{
-  color:var(--gold3);
-  text-decoration:none;
-  margin-right:22px;
-  font-weight:700;
-  font-size:18px;
-}
-
-/* TITLE */
-.page-title{
-  max-width:1600px;
-  margin:0 auto;
-  padding:80px 40px 20px;
-}
-
-.page-title h1{
-  margin:0;
-  font-size:58px; /* BIG TITLE */
-  letter-spacing:4px;
-  color:var(--gold3);
-}
-
-.page-title p{
-  margin-top:14px;
-  font-size:20px;
-  color:#ddd;
-}
-
-/* FILTERS */
-.filters{
-  max-width:1600px;
-  margin:30px auto 0;
-  padding:0 40px;
-  display:flex;
-  gap:16px;
-  flex-wrap:wrap;
-}
-
-.filter-btn{
-  padding:14px 22px;
-  border-radius:16px;
-  cursor:pointer;
-  border:1px solid rgba(255,204,51,0.45);
-  background:rgba(0,0,0,0.4);
-  color:var(--gold3);
-  font-weight:900;
-  font-size:16px;
-  transition:0.2s ease;
-}
-
-.filter-btn.active{
-  background:linear-gradient(135deg,var(--gold3),var(--gold2));
-  color:#000;
-  border:none;
-}
-
-/* GRID (BIGGER CARDS) */
-.grid{
-  max-width:1600px;
-  margin:0 auto;
-  padding:50px 40px 120px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(380px,1fr)); /* MUCH bigger cards */
-  gap:34px;
-}
-
-/* SECTION LABEL */
-.section-label{
-  grid-column:1/-1;
-  font-size:26px;
-  font-weight:900;
-  color:var(--gold3);
-  margin-top:30px;
-}
-
-/* CARD */
-.card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:26px;
-  padding:26px;
-  cursor:pointer;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  transition:0.25s ease;
-  min-height:260px; /* BIG CLICK AREA */
-}
-
-.card:hover{
-  transform:translateY(-12px) scale(1.02);
-  border-color:rgba(255,204,51,0.6);
-}
-
-.badge{
-  width:max-content;
-  padding:8px 12px;
-  border-radius:999px;
-  font-size:14px;
-  font-weight:900;
-  color:#000;
-  background:linear-gradient(135deg,var(--gold3),var(--gold2));
-}
-
-.title{
-  font-size:26px;
-  font-weight:900;
-  color:var(--gold3);
-}
-
-.price{
-  font-size:20px;
-  font-weight:900;
-}
-
-.desc{
-  font-size:16px;
-  color:#ccc;
-  line-height:1.6;
-}
-
-/* BIG BUTTON */
-.card button{
-  margin-top:auto;
-  padding:14px;
-  border:none;
-  border-radius:16px;
-  font-weight:900;
-  font-size:16px;
-  background:linear-gradient(135deg,var(--gold3),var(--gold2));
-  cursor:pointer;
-}
-
-/* RESPONSIVE FIX */
-@media (min-width:1800px){
-  .grid{
-    grid-template-columns:repeat(auto-fit,minmax(420px,1fr));
-  }
-
-  .page-title h1{
-    font-size:70px;
-  }
-}
-
-@media (max-width:700px){
-  .grid{
-    grid-template-columns:1fr;
-    padding:30px 20px 80px;
-  }
-
-  .page-title h1{
-    font-size:40px;
-  }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | SUNQ</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-<header>
-  <div>
-    <a class="navlink" href="index.html">Home</a>
-    <a class="navlink" href="shop.html">Market</a>
-    <a class="navlink" href="about.html">Profile</a>
-  </div>
-</header>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">SUNQ</a>
+            <div class="nav-links">
+                <a href="shop.html">Shop</a>
+                <a href="about.html">About</a>
+                <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+            </div>
+        </div>
+    </nav>
 
-<div class="page-title">
-  <h1>SHOP</h1>
-  <p>Browse SUNQS and JETS collections.</p>
-</div>
+    <main>
+        <section class="collection">
+            <h2 class="collection-title">SUNQS</h2>
+            <div class="product-grid" id="sunqs-grid"></div>
+        </section>
 
-<!-- FILTERS -->
-<div class="filters">
-  <button class="filter-btn active" onclick="filter('all', event)">ALL</button>
-  <button class="filter-btn" onclick="filter('sunqs', event)">SUNQS</button>
-  <button class="filter-btn" onclick="filter('jets', event)">JETS</button>
-</div>
+        <section class="collection">
+            <h2 class="collection-title">JETS</h2>
+            <div class="product-grid" id="jets-grid"></div>
+        </section>
+    </main>
 
-<div class="grid">
+    <script>
+        // Same product database as product.html
+        const items = {
+            "sunqs-a": {
+                id: "sunqs-a",
+                name: "SUNQ Alpha Hoodie",
+                price: 89.00,
+                image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+A",
+                category: "sunqs"
+            },
+            "sunqs-b": {
+                id: "sunqs-b",
+                name: "SUNQ Essential Tee",
+                price: 39.00,
+                image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+B",
+                category: "sunqs"
+            },
+            "sunqs-c": {
+                id: "sunqs-c",
+                name: "SUNQ Cargo Pants",
+                price: 129.00,
+                image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+C",
+                category: "sunqs"
+            },
+            "jets-a": {
+                id: "jets-a",
+                name: "JETS Varsity Jacket",
+                price: 199.00,
+                image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+A",
+                category: "jets"
+            },
+            "jets-b": {
+                id: "jets-b",
+                name: "JETS Cap",
+                price: 35.00,
+                image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+B",
+                category: "jets"
+            },
+            "jets-c": {
+                id: "jets-c",
+                name: "JETS Technical Trousers",
+                price: 149.00,
+                image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+C",
+                category: "jets"
+            }
+        };
 
-  <div class="section-label">SUNQS COLLECTION</div>
+        function renderProductGrid(containerId, category) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const products = Object.values(items).filter(p => p.category === category);
+            if (products.length === 0) {
+                container.innerHTML = '<p>No products in this collection yet.</p>';
+                return;
+            }
+            let html = '';
+            products.forEach(p => {
+                html += `
+                    <div class="product-card">
+                        <img src="${p.image}" alt="${p.name}" class="product-img">
+                        <div class="product-info">
+                            <h3>${p.name}</h3>
+                            <p class="price">$${p.price.toFixed(2)}</p>
+                            <a href="product.html?item=${p.id}" class="view-btn">View Product</a>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
 
-  <div class="card sunqs" onclick="go(1)">
-    <div class="badge">SUNQS</div>
-    <div class="title">SUNQS A</div>
-    <div class="price">$10</div>
-    <div class="desc">Entry-level listing for quick purchase.</div>
-    <button>View Product</button>
-  </div>
+        function getCart() {
+            return JSON.parse(localStorage.getItem('sunqCart')) || [];
+        }
 
-  <div class="card sunqs" onclick="go(2)">
-    <div class="badge">SUNQS</div>
-    <div class="title">SUNQS B</div>
-    <div class="price">$15</div>
-    <div class="desc">Mid-tier listing with added value.</div>
-    <button>View Product</button>
-  </div>
+        function updateCartCountDisplay() {
+            const cart = getCart();
+            let total = 0;
+            cart.forEach(item => { total += item.quantity; });
+            const countSpan = document.getElementById('cart-count');
+            if (countSpan) countSpan.innerText = total;
+        }
 
-  <div class="card sunqs" onclick="go(3)">
-    <div class="badge">SUNQS</div>
-    <div class="title">SUNQS C</div>
-    <div class="price">$20</div>
-    <div class="desc">Standard listing.</div>
-    <button>View Product</button>
-  </div>
+        renderProductGrid('sunqs-grid', 'sunqs');
+        renderProductGrid('jets-grid', 'jets');
+        updateCartCountDisplay();
+        window.addEventListener('storage', updateCartCountDisplay);
+    </script>
 
-  <div class="card sunqs" onclick="go(4)">
-    <div class="badge">SUNQS</div>
-    <div class="title">SUNQS D</div>
-    <div class="price">$25</div>
-    <div class="desc">Higher tier listing.</div>
-    <button>View Product</button>
-  </div>
-
-  <div class="card sunqs" onclick="go(5)">
-    <div class="badge">SUNQS</div>
-    <div class="title">SUNQS E</div>
-    <div class="price">$30</div>
-    <div class="desc">Premium listing.</div>
-    <button>View Product</button>
-  </div>
-
-  <div class="section-label">JETS COLLECTION</div>
-
-  <div class="card jets" onclick="go(101)">
-    <div class="badge">JETS</div>
-    <div class="title">JETS A</div>
-    <div class="price">$12</div>
-    <div class="desc">Starter listing.</div>
-    <button>View Product</button>
-  </div>
-
-  <div class="card jets" onclick="go(102)">
-    <div class="badge">JETS</div>
-    <div class="title">JETS B</div>
-    <div class="price">$18</div>
-    <div class="desc">Upgraded listing.</div>
-    <button>View Product</button>
-  </div>
-
-  <div class="card jets" onclick="go(103)">
-    <div class="badge">JETS</div>
-    <div class="title">JETS C</div>
-    <div class="price">$22</div>
-    <div class="desc">Balanced listing.</div>
-    <button>View Product</button>
-  </div>
-
-  <div class="card jets" onclick="go(104)">
-    <div class="badge">JETS</div>
-    <div class="title">JETS D</div>
-    <div class="price">$28</div>
-    <div class="desc">High demand listing.</div>
-    <button>View Product</button>
-  </div>
-
-  <div class="card jets" onclick="go(105)">
-    <div class="badge">JETS</div>
-    <div class="title">JETS E</div>
-    <div class="price">$33</div>
-    <div class="desc">Premium listing.</div>
-    <button>View Product</button>
-  </div>
-
-</div>
-
-<script>
-function go(id){
-  window.location.href = "product.html?item=" + id;
-}
-
-function filter(type, event){
-  const cards = document.querySelectorAll('.card');
-  const buttons = document.querySelectorAll('.filter-btn');
-
-  buttons.forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-
-  cards.forEach(card => {
-    if(type === 'all') card.style.display = 'flex';
-    else if(card.classList.contains(type)) card.style.display = 'flex';
-    else card.style.display = 'none';
-  });
-}
-</script>
-
+    <style>
+        .collection {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .collection-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--gold, #D4AF37);
+            padding-left: 1rem;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .product-card {
+            background: var(--panel, #111);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .product-img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+        .product-info {
+            padding: 1rem;
+        }
+        .product-info h3 {
+            margin: 0 0 0.5rem;
+        }
+        .price {
+            color: var(--gold, #D4AF37);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .view-btn {
+            display: inline-block;
+            margin-top: 0.75rem;
+            background: var(--gold, #D4AF37);
+            color: #0a0a0a;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .navbar {
+            background: rgba(10,10,10,0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--gold, #D4AF37);
+            text-decoration: none;
+        }
+        .nav-links a {
+            color: white;
+            margin-left: 2rem;
+            text-decoration: none;
+        }
+        .nav-links a:hover {
+            color: var(--gold, #D4AF37);
+        }
+    </style>
 </body>
 </html>
