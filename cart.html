@@ -1,172 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart | SUNQ Marketplace</title>
-    <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css">
+<script defer src="app.js"></script>
 </head>
+
 <body>
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">SUNQ</a>
-            <div class="nav-links">
-                <a href="shop.html">Shop</a>
-                <a href="about.html">About</a>
-                <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-            </div>
-        </div>
-    </nav>
+<header>
+  <a class="navlink" href="index.html">Home</a>
+  <a class="navlink" href="shop.html">Shop</a>
+  <a class="navlink" href="about.html">About</a>
+  <a class="navlink" href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+</header>
 
-    <main class="cart-page">
-        <h1>Your Cart</h1>
-        <div id="cart-items-container" class="cart-items"></div>
-        <div id="cart-summary" class="cart-summary"></div>
-        <div id="checkout-section" style="text-align: center; margin-top: 2rem;"></div>
-    </main>
+<div class="page">
+  <h1>Cart</h1>
+  <div id="cart"></div>
+</div>
 
-    <script>
-        // Must match the items in shop.html and product.html
-        const items = {
-            "item-a": { id: "item-a", name: "Placeholder Item A", price: 29.99, image: "https://placehold.co/600x600/1a1a1a/white?text=Item+A" },
-            "item-b": { id: "item-b", name: "Placeholder Item B", price: 49.99, image: "https://placehold.co/600x600/1a1a1a/white?text=Item+B" },
-            "item-c": { id: "item-c", name: "Placeholder Item C", price: 19.99, image: "https://placehold.co/600x600/1a1a1a/white?text=Item+C" },
-            "item-d": { id: "item-d", name: "Placeholder Item D", price: 99.99, image: "https://placehold.co/600x600/1a1a1a/white?text=Item+D" },
-            "item-e": { id: "item-e", name: "Placeholder Item E", price: 14.99, image: "https://placehold.co/600x600/1a1a1a/white?text=Item+E" },
-            "item-f": { id: "item-f", name: "Placeholder Item F", price: 199.99, image: "https://placehold.co/600x600/1a1a1a/white?text=Item+F" }
-        };
+<script>
+function render(){
+  const cart = getCart();
+  const box = document.getElementById("cart");
 
-        function getCart() {
-            return JSON.parse(localStorage.getItem('sunqCart')) || [];
-        }
+  box.innerHTML = cart.map(i=>{
+    const p = items[i.id];
+    return `
+      <div class="card">
+        ${p.name} x ${i.quantity}
+      </div>
+    `;
+  }).join("");
+}
 
-        function saveCart(cart) {
-            localStorage.setItem('sunqCart', JSON.stringify(cart));
-            updateCartCountDisplay();
-            renderCart();
-        }
+render();
+updateCartUI();
+</script>
 
-        function updateCartCountDisplay() {
-            const cart = getCart();
-            let total = 0;
-            cart.forEach(item => { total += item.quantity; });
-            const countSpan = document.getElementById('cart-count');
-            if (countSpan) countSpan.innerText = total;
-        }
-
-        function renderCart() {
-            const cart = getCart();
-            const container = document.getElementById('cart-items-container');
-            const summaryDiv = document.getElementById('cart-summary');
-            const checkoutDiv = document.getElementById('checkout-section');
-
-            if (cart.length === 0) {
-                container.innerHTML = '<p class="empty-cart">Your cart is empty. <a href="shop.html">Continue shopping</a>.</p>';
-                summaryDiv.innerHTML = '';
-                checkoutDiv.innerHTML = '';
-                return;
-            }
-
-            let itemsHtml = '<div class="cart-header"><span>Item</span><span>Price</span><span>Quantity</span><span>Total</span><span></span></div>';
-            let subtotal = 0;
-
-            cart.forEach(cartItem => {
-                const product = items[cartItem.id];
-                if (!product) return;
-                const itemTotal = product.price * cartItem.quantity;
-                subtotal += itemTotal;
-                itemsHtml += `
-                    <div class="cart-row" data-id="${cartItem.id}">
-                        <div class="cart-product">
-                            <img src="${product.image}" alt="${product.name}" class="cart-img">
-                            <span>${product.name}</span>
-                        </div>
-                        <div>$${product.price.toFixed(2)}</div>
-                        <div>
-                            <input type="number" min="1" value="${cartItem.quantity}" class="cart-qty" data-id="${cartItem.id}">
-                        </div>
-                        <div>$${itemTotal.toFixed(2)}</div>
-                        <div><button class="remove-btn" data-id="${cartItem.id}">Remove</button></div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = itemsHtml;
-            summaryDiv.innerHTML = `
-                <div class="summary-line">Subtotal: $${subtotal.toFixed(2)}</div>
-                <div class="summary-line">Shipping: Calculated at next step</div>
-                <div class="summary-total">Total: $${subtotal.toFixed(2)}</div>
-            `;
-            checkoutDiv.innerHTML = '<button id="checkout-btn" class="button-primary">Proceed to Checkout</button>';
-
-            document.querySelectorAll('.cart-qty').forEach(input => {
-                input.addEventListener('change', (e) => {
-                    const id = e.target.getAttribute('data-id');
-                    let newQty = parseInt(e.target.value);
-                    if (isNaN(newQty) || newQty < 1) newQty = 1;
-                    updateQuantity(id, newQty);
-                });
-            });
-            document.querySelectorAll('.remove-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = btn.getAttribute('data-id');
-                    removeFromCart(id);
-                });
-            });
-            document.getElementById('checkout-btn')?.addEventListener('click', () => {
-                alert('Payment integration coming soon! (PayPal / Stripe)');
-            });
-        }
-
-        function updateQuantity(productId, newQuantity) {
-            let cart = getCart();
-            const index = cart.findIndex(item => item.id === productId);
-            if (index !== -1) {
-                if (newQuantity <= 0) {
-                    cart.splice(index, 1);
-                } else {
-                    cart[index].quantity = newQuantity;
-                }
-                saveCart(cart);
-            }
-        }
-
-        function removeFromCart(productId) {
-            let cart = getCart();
-            cart = cart.filter(item => item.id !== productId);
-            saveCart(cart);
-        }
-
-        renderCart();
-        updateCartCountDisplay();
-        window.addEventListener('storage', () => {
-            updateCartCountDisplay();
-            renderCart();
-        });
-    </script>
-
-    <style>
-        /* same styles as before */
-        .cart-page { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-        .cart-header, .cart-row { display: grid; grid-template-columns: 3fr 1fr 1fr 1fr 0.5fr; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #333; }
-        .cart-header { font-weight: bold; color: var(--gold, #D4AF37); }
-        .cart-product { display: flex; align-items: center; gap: 1rem; }
-        .cart-img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; }
-        .cart-qty { width: 70px; padding: 0.3rem; background: #2a2a2a; border: 1px solid #555; color: white; border-radius: 5px; text-align: center; }
-        .remove-btn { background: #a00; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 5px; cursor: pointer; }
-        .remove-btn:hover { background: #c22; }
-        .cart-summary { margin-top: 2rem; text-align: right; font-size: 1.2rem; }
-        .summary-line { margin: 0.5rem 0; }
-        .summary-total { font-size: 1.5rem; font-weight: bold; color: var(--gold, #D4AF37); }
-        .empty-cart { text-align: center; padding: 3rem; font-size: 1.2rem; }
-        .button-primary { background: var(--gold, #D4AF37); color: #0a0a0a; border: none; padding: 0.8rem 2rem; border-radius: 2rem; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
-        .button-primary:hover { background: #c5a028; }
-        .navbar { background: rgba(10,10,10,0.8); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
-        .nav-container { display: flex; justify-content: space-between; padding: 1rem 2rem; max-width: 1400px; margin: 0 auto; }
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--gold, #D4AF37); text-decoration: none; }
-        .nav-links a { color: white; margin-left: 2rem; text-decoration: none; }
-        .nav-links a:hover { color: var(--gold, #D4AF37); }
-    </style>
 </body>
 </html>
