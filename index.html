@@ -25,6 +25,7 @@
   header{
     background:linear-gradient(180deg,#121212,#070707);
     border-bottom:1px solid rgba(255,204,51,0.3);
+    padding-bottom:10px;
   }
 
   .topbar{
@@ -45,35 +46,50 @@
     font-size:26px;
     cursor:pointer;
     color:var(--gold);
-    user-select:none;
   }
 
-  .dropdown{
-    display:none;
-    flex-direction:column;
+  .search{
+    padding:0 20px 15px 20px;
+  }
+
+  .search input{
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    outline:none;
     background:#111;
-    border-top:1px solid rgba(255,204,51,0.25);
+    color:white;
   }
 
-  .dropdown a{
-    padding:12px 20px;
-    text-decoration:none;
+  .filters{
+    display:flex;
+    gap:10px;
+    padding:0 20px 15px 20px;
+    flex-wrap:wrap;
+  }
+
+  .filters button{
+    background:#111;
+    border:1px solid rgba(255,204,51,0.2);
     color:var(--muted);
-    border-bottom:1px solid rgba(255,255,255,0.05);
+    padding:6px 10px;
+    border-radius:6px;
+    cursor:pointer;
   }
 
-  .dropdown a:hover{
-    color:var(--gold-glow);
+  .filters button:hover{
+    color:var(--gold);
+    border-color:var(--gold);
   }
 
   section{
-    padding:30px 20px;
+    padding:25px 20px;
   }
 
-  .section-title{
-    font-size:18px;
-    margin-bottom:15px;
+  .title{
     color:var(--gold);
+    margin-bottom:15px;
   }
 
   .grid{
@@ -86,10 +102,11 @@
     background:var(--panel);
     border:1px solid rgba(255,204,51,0.18);
     border-radius:12px;
-    padding:18px;
-    text-align:center;
+    padding:16px;
     cursor:pointer;
     transition:0.2s;
+    text-decoration:none;
+    color:inherit;
   }
 
   .card:hover{
@@ -99,8 +116,8 @@
   }
 
   .name{
+    margin-bottom:6px;
     font-size:14px;
-    margin-bottom:8px;
   }
 
   .price{
@@ -108,13 +125,24 @@
     font-weight:bold;
   }
 
+  .cart{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#111;
+    border:1px solid rgba(255,204,51,0.3);
+    padding:12px 14px;
+    border-radius:50px;
+    color:var(--gold);
+    cursor:pointer;
+  }
+
   footer{
     text-align:center;
     padding:20px;
-    font-size:12px;
     color:#777;
+    font-size:12px;
     border-top:1px solid rgba(255,204,51,0.2);
-    margin-top:10px;
   }
 </style>
 </head>
@@ -122,92 +150,72 @@
 <body>
 
 <header>
-
   <div class="topbar">
     <div class="logo">SUNQS MARKET</div>
-    <div class="menu" onclick="toggleMenu()">☰</div>
+    <div class="menu">☰</div>
   </div>
 
-  <div id="dropdown" class="dropdown">
-    <a href="#featured">Featured</a>
-    <a href="#new">New Arrivals</a>
-    <a href="#contact">Contact</a>
+  <div class="search">
+    <input type="text" placeholder="Search listings..." />
   </div>
 
+  <div class="filters">
+    <button>All</button>
+    <button>Featured</button>
+    <button>New</button>
+    <button>Popular</button>
+  </div>
 </header>
 
-<section id="featured">
-  <div class="section-title">Featured</div>
+<section>
+  <div class="title">Featured Listings</div>
   <div class="grid">
 
-    <div class="card">
-      <div class="name">Product Placeholder</div>
-      <div class="price">$10.00</div>
-    </div>
+    <a class="card" href="#">
+      <div class="name">Listing One</div>
+      <div class="price">$10</div>
+    </a>
 
-    <div class="card">
-      <div class="name">Product Placeholder</div>
-      <div class="price">$15.00</div>
-    </div>
+    <a class="card" href="#">
+      <div class="name">Listing Two</div>
+      <div class="price">$20</div>
+    </a>
 
-    <div class="card">
-      <div class="name">Product Placeholder</div>
-      <div class="price">$20.00</div>
-    </div>
-
-    <div class="card">
-      <div class="name">Product Placeholder</div>
-      <div class="price">$25.00</div>
-    </div>
+    <a class="card" href="#">
+      <div class="name">Listing Three</div>
+      <div class="price">$30</div>
+    </a>
 
   </div>
 </section>
 
-<section id="new">
-  <div class="section-title">New Arrivals</div>
+<section>
+  <div class="title">New Listings</div>
   <div class="grid">
 
-    <div class="card">
-      <div class="name">Product Placeholder</div>
-      <div class="price">$12.00</div>
-    </div>
+    <a class="card" href="#">
+      <div class="name">New Item A</div>
+      <div class="price">$12</div>
+    </a>
 
-    <div class="card">
-      <div class="name">Product Placeholder</div>
-      <div class="price">$18.00</div>
-    </div>
+    <a class="card" href="#">
+      <div class="name">New Item B</div>
+      <div class="price">$18</div>
+    </a>
 
-    <div class="card">
-      <div class="name">Product Placeholder</div>
-      <div class="price">$22.00</div>
-    </div>
-
-    <div class="card">
-      <div class="name">Product Placeholder</div>
-      <div class="price">$30.00</div>
-    </div>
+    <a class="card" href="#">
+      <div class="name">New Item C</div>
+      <div class="price">$25</div>
+    </a>
 
   </div>
 </section>
 
-<section id="contact">
-  <div class="section-title">Contact</div>
-  <p style="color:#aaa; line-height:1.6;">
-    Email: support@sunq.store<br/>
-    Instagram: @sunqsmarket
-  </p>
-</section>
+<div class="cart">Cart (0)</div>
 
 <footer>
   © 2026 SUNQS MARKET
 </footer>
 
-<script>
-function toggleMenu(){
-  const menu = document.getElementById("dropdown");
-  menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
-}
-</script>
-
 </body>
-</html>
+</html></html>
