@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JETS SIDE</title>
+
+<style>
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:Arial;
+  background:#070707;
+  color:#fff;
+  animation:fade 0.4s ease;
+}
+
+@keyframes fade{
+  from{opacity:0; transform:translateY(8px);}
+  to{opacity:1;}
+}
+
+header{
+  padding:20px;
+  border-bottom:1px solid #333;
+}
+
+a{color:#ffcc33;text-decoration:none;margin-right:10px;}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:15px;
+  padding:20px;
+}
+
+.card{
+  background:#111;
+  border:1px solid rgba(255,204,51,0.25);
+  padding:16px;
+  border-radius:12px;
+  cursor:pointer;
+  transition:0.25s;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 10px 25px rgba(255,204,51,0.12);
+  border-color:#ffcc33;
+}
+
+.price{color:#ffcc33;}
+</style>
+</head>
+
+<body>
+
+<header>
+  <a href="index.html">Home</a>
+  <a href="sunqs.html">SUNQS SIDE</a>
+  <a href="jets.html">JETS SIDE</a>
+</header>
+
+<div class="grid">
+
+<div class="card" onclick="go(101)">JETS Item A<div class="price">$12</div></div>
+<div class="card" onclick="go(102)">JETS Item B<div class="price">$18</div></div>
+<div class="card" onclick="go(103)">JETS Item C<div class="price">$22</div></div>
+<div class="card" onclick="go(104)">JETS Item D<div class="price">$28</div></div>
+<div class="card" onclick="go(105)">JETS Item E<div class="price">$33</div></div>
+<div class="card" onclick="go(106)">JETS Item F<div class="price">$40</div></div>
+
+</div>
+
+<script>
+function go(id){
+  location.href="product.html?item="+id;
+}
+</script>
+
+</body>
+</html>
