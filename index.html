@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SUNQ</title>
-<link rel="stylesheet" href="styles.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <title>SUNQ Marketplace</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
 <nav class="navbar">
@@ -16,16 +12,25 @@
     <div class="nav-links">
       <a href="shop.html">Shop</a>
       <a href="about.html">About</a>
-      <a href="cart.html">Cart</a>
+      <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
     </div>
   </div>
 </nav>
 
-<div class="hero">
-  <h1 class="hero-title">SUNQS MARKET</h1>
-  <p class="hero-subtitle">Clean marketplace interface</p>
-  <a class="button-primary" href="shop.html">Enter Shop</a>
-</div>
+<section class="hero">
+  <h1 class="hero-title">SUNQ Marketplace</h1>
+  <p class="hero-subtitle">Curated independent items</p>
+  <a class="button-primary" href="shop.html">Browse Items</a>
+</section>
+
+<script>
+const getCart=()=>JSON.parse(localStorage.getItem("sunqCart"))||[];
+const update=()=>{
+  document.getElementById("cart-count").innerText=
+    getCart().reduce((a,b)=>a+b.quantity,0);
+};
+update();
+</script>
 
 </body>
 </html>
