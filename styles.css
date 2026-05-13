@@ -294,3 +294,44 @@ body {
   padding-top: 30px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
+/* ================= COLLECTIONS ================= */
+.collection {
+  margin-bottom: 50px;
+}
+
+.collection-title {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: #d4af37;
+}
+
+.collection + .collection {
+  padding-top: 30px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* ================= FILTER BAR ================= */
+.filter-bar {
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  background: #1a1a1d;
+  color: white;
+  border: 1px solid #333;
+  padding: 8px 12px;
+  margin-right: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.filter-btn.active {
+  background: #d4af37;
+  color: #111;
+}
+
+.filter-btn:hover {
+  border-color: #d4af37;
+  color: #d4af37;
+}
