@@ -1,3 +1,84 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BASE */
+body {
+  font-family: Arial, sans-serif;
+  background: #0f0f0f;
+  color: white;
+}
+
+/* NAVBAR */
+.navbar {
+  background: rgba(0,0,0,0.7);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: #D4AF37;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1.5rem;
+}
+
+.nav-links a {
+  color: white;
+  margin-left: 1rem;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.nav-links a:hover {
+  color: #D4AF37;
+}
+
+/* BUTTON */
+.button-primary {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.8rem 1.5rem;
+  background: #D4AF37;
+  color: black;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.button-primary:hover {
+  background: #b9922f;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 6rem 2rem;
+}
+
+.hero h1 {
+  color: #D4AF37;
+  font-size: 3rem;
+}
+
+.hero p {
+  margin-top: 1rem;
+  opacity: 0.8;
+}
+
+/* SHOP PAGE */
 .shop {
   padding: 3rem 1.5rem;
 }
@@ -9,17 +90,24 @@
   margin-bottom: 2rem;
 }
 
+/* GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1.5rem;
 }
 
+/* PRODUCT CARD */
 .card {
   background: #1a1a1a;
   padding: 1rem;
   border-radius: 12px;
   text-align: center;
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
 }
 
 .card-image {
@@ -28,4 +116,28 @@
   background: #333;
   margin-bottom: 1rem;
   border-radius: 8px;
+}
+
+/* PRODUCT PAGE */
+.product-page {
+  padding: 3rem 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.product-card {
+  background: #1a1a1a;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  background: #333;
+  margin-bottom: 1rem;
+  border-radius: 10px;
 }
