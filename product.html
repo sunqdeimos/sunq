@@ -22,15 +22,11 @@
   </nav>
 
   <main class="product-page">
-
     <div id="product-container"></div>
-
   </main>
 
   <script>
-    // =========================
-    // CART SYSTEM
-    // =========================
+    // ================= CART =================
     function getCart() {
       return JSON.parse(localStorage.getItem("sunqCart")) || [];
     }
@@ -47,46 +43,49 @@
       updateCartCount();
     }
 
-    // =========================
-    // PRODUCT DATA (SINGLE SOURCE)
-    // =========================
+    // ================= PRODUCTS (FINAL VERSION) =================
     const PRODUCTS = {
-      a: { id: "a", name: "Item A", price: 29.99 },
-      b: { id: "b", name: "Item B", price: 49.99 },
-      c: { id: "c", name: "Item C", price: 19.99 },
-      d: { id: "d", name: "Item D", price: 99.99 }
+      s1: { id: "s1", name: "SUNQ A", price: 9.99 },
+      s2: { id: "s2", name: "SUNQ B", price: 19.99 },
+      s3: { id: "s3", name: "SUNQ C", price: 29.99 },
+      s4: { id: "s4", name: "SUNQ D", price: 39.99 },
+      s5: { id: "s5", name: "SUNQ E", price: 49.99 },
+
+      j1: { id: "j1", name: "JET F", price: 9.99 },
+      j2: { id: "j2", name: "JET G", price: 19.99 },
+      j3: { id: "j3", name: "JET H", price: 29.99 },
+      j4: { id: "j4", name: "JET I", price: 39.99 },
+      j5: { id: "j5", name: "JET J", price: 49.99 }
     };
 
+    // ================= SAFE ID FIX =================
     const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
+    const id = (params.get("id") || "").trim();
+
+    console.log("RAW ID:", id);
 
     const product = PRODUCTS[id];
+
+    console.log("LOOKUP RESULT:", product);
+
     const container = document.getElementById("product-container");
 
-    // =========================
-    // ADD TO CART
-    // =========================
     function addToCart(id) {
       const cart = getCart();
       const item = cart.find(i => i.id === id);
 
-      if (item) {
-        item.quantity += 1;
-      } else {
-        cart.push({ id, quantity: 1 });
-      }
+      if (item) item.quantity += 1;
+      else cart.push({ id, quantity: 1 });
 
       saveCart(cart);
     }
 
-    // =========================
-    // RENDER PRODUCT
-    // =========================
     function renderProduct() {
       if (!product) {
         container.innerHTML = `
           <div class="product-layout">
             <h2>Item not found</h2>
+            <p style="opacity:0.7;">Check console logs for debug info.</p>
             <a class="button-primary" href="shop.html">Back to shop</a>
           </div>
         `;
@@ -105,7 +104,7 @@
             <p class="price">$${product.price}</p>
 
             <p class="description">
-              A curated item from SUNQS MARKET. Simple, clean, and intentionally minimal.
+              Clean SUNQ / JET marketplace product. Minimal and structured.
             </p>
 
             <button class="button-primary" onclick="addToCart('${product.id}')">
@@ -114,7 +113,7 @@
 
             <div class="meta">
               <p>✔ Secure checkout (demo)</p>
-              <p>✔ Limited availability</p>
+              <p>✔ Fixed tier pricing system</p>
             </div>
           </div>
 
@@ -137,6 +136,7 @@
                 </div>
               `).join("")}
           </div>
+
         </section>
       `;
     }
