@@ -5,7 +5,6 @@
   --dark:#050505;
   --panel:rgba(5,5,5,0.72);
   --border:rgba(255,204,51,0.20);
-
   --max:1200px;
 }
 
@@ -19,6 +18,17 @@ body{
   background:linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.95)), #050505;
   color:white;
   font-size:18px;
+}
+
+/* FORCE ALL LINKS TO NOT TURN BLUE */
+a{
+  color:var(--gold3);
+  text-decoration:none;
+  font-weight:800;
+}
+
+a:hover{
+  color:var(--gold2);
 }
 
 /* NAV */
@@ -39,35 +49,33 @@ header{
 .logo{
   font-size:26px;
   font-weight:900;
-  color:var(--gold3);
-  text-decoration:none;
+  color:var(--gold3) !important;
 }
 
 .logo:hover{
-  color:var(--gold2);
+  color:var(--gold2) !important;
 }
 
 /* NAV LINKS */
-.navlink, .nav-links a{
-  color:var(--gold3);
-  text-decoration:none;
-  font-weight:800;
+.navlink{
   font-size:20px;
   margin-left:20px;
+  color:var(--gold3) !important;
 }
 
-.navlink:hover, .nav-links a:hover{
-  color:var(--gold2);
+.navlink:hover{
+  color:var(--gold2) !important;
 }
 
-/* BUTTONS (NO MORE INVISIBLE PROBLEM) */
+/* BUTTONS (FORCE ALWAYS VISIBLE) */
 button,
-.button-primary{
+.button-primary,
+.filter-btn{
   display:inline-block;
   padding:14px 22px;
   border-radius:14px;
   background:linear-gradient(135deg,var(--gold3),var(--gold2));
-  color:#000;
+  color:#000 !important;
   font-weight:900;
   font-size:18px;
   border:none;
@@ -78,11 +86,24 @@ button,
 }
 
 button:hover,
-.button-primary:hover{
+.button-primary:hover,
+.filter-btn:hover{
   transform:translateY(-3px);
 }
 
-/* LAYOUT WRAPPER */
+/* FILTER BUTTON NORMAL LOOK */
+.filter-btn{
+  background:rgba(0,0,0,0.4);
+  border:1px solid var(--gold);
+  color:var(--gold3) !important;
+}
+
+.filter-btn.active{
+  background:linear-gradient(135deg,var(--gold3),var(--gold2));
+  color:#000 !important;
+}
+
+/* LAYOUT */
 .container{
   max-width:var(--max);
   margin:0 auto;
@@ -101,7 +122,7 @@ button:hover,
   margin:0;
 }
 
-/* GRID SYSTEM */
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
@@ -128,27 +149,6 @@ button:hover,
   justify-content:center;
   gap:12px;
   margin:25px 0;
-}
-
-.filter-btn{
-  padding:14px 20px;
-  border-radius:12px;
-  border:1px solid var(--gold);
-  background:rgba(0,0,0,0.4);
-  color:var(--gold3);
-  font-weight:900;
-  font-size:18px;
-  cursor:pointer;
-  transition:0.2s ease;
-}
-
-.filter-btn:hover{
-  transform:translateY(-3px);
-}
-
-.filter-btn.active{
-  background:linear-gradient(135deg,var(--gold3),var(--gold2));
-  color:#000;
 }
 
 /* PRODUCT PAGE */
