@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUNQS MARKET | Product</title>
+
+<style>
+  body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#070707;
+    color:#fff;
+  }
+
+  header{
+    padding:20px;
+    border-bottom:1px solid rgba(255,204,51,0.3);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .logo{
+    color:#ffcc33;
+    font-weight:bold;
+    letter-spacing:2px;
+  }
+
+  a{
+    color:#ffcc33;
+    text-decoration:none;
+    margin-left:15px;
+  }
+
+  .container{
+    padding:40px 20px;
+    display:flex;
+    justify-content:center;
+  }
+
+  .box{
+    background:#171717;
+    border:1px solid rgba(255,204,51,0.3);
+    padding:25px;
+    border-radius:12px;
+    max-width:500px;
+    width:100%;
+  }
+
+  h1{
+    color:#ffcc33;
+    margin-top:0;
+  }
+
+  .price{
+    color:#ffcc33;
+    font-size:20px;
+    margin:10px 0;
+  }
+
+  .desc{
+    color:#bbb;
+    line-height:1.5;
+    margin-bottom:20px;
+  }
+
+  button{
+    width:100%;
+    padding:12px;
+    background:#000;
+    border:1px solid #ffcc33;
+    color:#ffcc33;
+    cursor:pointer;
+    border-radius:8px;
+  }
+
+  button:hover{
+    background:#111;
+  }
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">SUNQS MARKET</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="box">
+
+    <h1 id="name">Loading...</h1>
+    <div class="price" id="price">$0</div>
+    <div class="desc" id="desc">Loading product details...</div>
+
+    <button onclick="alert('Cart system is UI-only for now')">
+      Add to Cart
+    </button>
+
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const item = params.get("item");
+
+const products = {
+  "1": {
+    name: "Item One",
+    price: "$10",
+    desc: "This is a placeholder product description for Item One."
+  },
+  "2": {
+    name: "Item Two",
+    price: "$15",
+    desc: "This is a placeholder product description for Item Two."
+  },
+  "3": {
+    name: "Item Three",
+    price: "$20",
+    desc: "This is a placeholder product description for Item Three."
+  },
+  "4": {
+    name: "Item Four",
+    price: "$25",
+    desc: "This is a placeholder product description for Item Four."
+  }
+};
+
+if(products[item]){
+  document.getElementById("name").innerText = products[item].name;
+  document.getElementById("price").innerText = products[item].price;
+  document.getElementById("desc").innerText = products[item].desc;
+} else {
+  document.getElementById("name").innerText = "Product not found";
+  document.getElementById("desc").innerText = "This item does not exist.";
+}
+</script>
+
+</body>
+</html>
