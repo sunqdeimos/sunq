@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SUNQ Marketplace</title>
+<title>SUNQ</title>
 <link rel="stylesheet" href="styles.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
 <nav class="navbar">
@@ -15,27 +16,16 @@
     <div class="nav-links">
       <a href="shop.html">Shop</a>
       <a href="about.html">About</a>
-      <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+      <a href="cart.html">Cart</a>
     </div>
   </div>
 </nav>
 
-<section class="hero">
+<div class="hero">
   <h1 class="hero-title">SUNQ MARKET</h1>
-  <p class="hero-subtitle">Clean marketplace system</p>
+  <p class="hero-subtitle">Clean marketplace interface</p>
   <a class="button-primary" href="shop.html">Enter Shop</a>
-</section>
-
-<script>
-function getCart(){
-  return JSON.parse(localStorage.getItem("sunqCart")) || [];
-}
-function updateCart(){
-  let total = getCart().reduce((a,b)=>a+b.quantity,0);
-  document.getElementById("cart-count").innerText = total;
-}
-updateCart();
-</script>
+</div>
 
 </body>
 </html>
