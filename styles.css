@@ -4,58 +4,76 @@
   --gold3:#ffd86a;
   --dark:#050505;
   --panel:rgba(5,5,5,0.72);
-  --border:rgba(255,204,51,0.22);
-
-  --max:1200px;
+  --border:rgba(255,204,51,0.25);
 }
 
+/* BASE */
 body{
   margin:0;
   font-family:Inter, Arial;
   font-size:18px;
   background:#050505;
   color:white;
+  opacity:0;
+  animation:fadeIn 0.6s ease forwards;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(8px);}
+  to{opacity:1; transform:translateY(0);}
 }
 
 /* NAV */
 .navbar{
   position:sticky;
   top:0;
-  background:rgba(0,0,0,0.75);
-  backdrop-filter:blur(14px);
   padding:20px 40px;
   display:flex;
   justify-content:space-between;
   align-items:center;
+  background:rgba(0,0,0,0.75);
+  backdrop-filter:blur(14px);
+  z-index:100;
 }
 
 .logo{
-  font-size:26px;
+  font-size:28px;
   font-weight:900;
   color:var(--gold3);
   text-decoration:none;
+  transition:0.2s;
+}
+
+.logo:hover{
+  transform:scale(1.05);
 }
 
 .nav-links a{
-  font-size:18px;
   margin-left:22px;
+  font-size:18px;
+  font-weight:800;
   color:var(--gold3);
   text-decoration:none;
-  font-weight:700;
+  transition:0.2s;
+}
+
+.nav-links a:hover{
+  color:var(--gold2);
+  transform:translateY(-2px);
 }
 
 /* HERO */
 .hero{
   text-align:center;
   padding:140px 20px;
-  max-width:var(--max);
-  margin:0 auto;
 }
 
 .hero-title{
-  font-size:64px;
+  font-size:72px;
   margin:0;
   color:var(--gold3);
+  text-shadow:0 0 20px rgba(255,204,51,0.2);
+  animation:pop 0.7s ease;
 }
 
 .hero-subtitle{
@@ -64,52 +82,29 @@ body{
   margin-top:10px;
 }
 
-/* BUTTON */
+@keyframes pop{
+  from{transform:scale(0.95); opacity:0;}
+  to{transform:scale(1); opacity:1;}
+}
+
+/* BUTTONS (FIXED = ACTUALLY FEELS GOOD NOW) */
 .button-primary{
   display:inline-block;
-  margin-top:20px;
-  background:linear-gradient(135deg,var(--gold3),var(--gold2));
-  color:#000;
-  padding:14px 26px;
+  margin-top:25px;
+  padding:14px 28px;
   border-radius:16px;
   font-weight:900;
   font-size:16px;
+  color:#000;
+  background:linear-gradient(135deg,var(--gold3),var(--gold2));
   text-decoration:none;
+  transition:0.25s ease;
+  box-shadow:0 10px 30px rgba(255,204,51,0.15);
 }
 
-/* SHOP GRID FIX (NO MORE CRAMPING) */
-.grid{
-  max-width:var(--max);
-  margin:0 auto;
-  padding:40px 20px 80px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:24px;
-}
-
-/* CARDS */
-.product-card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:18px;
-  overflow:hidden;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.product-card:hover{
-  transform:translateY(-8px);
-}
-
-.product-card img{
-  width:100%;
-  height:260px;
-  object-fit:cover;
-}
-
-.product-info{
-  padding:16px;
-  font-size:16px;
+.button-primary:hover{
+  transform:translateY(-4px) scale(1.03);
+  box-shadow:0 18px 60px rgba(255,204,51,0.25);
 }
 
 /* FILTERS */
@@ -117,7 +112,7 @@ body{
   display:flex;
   justify-content:center;
   gap:12px;
-  margin-top:30px;
+  margin:30px 0;
 }
 
 .filters button{
@@ -128,9 +123,57 @@ body{
   color:var(--gold3);
   font-weight:800;
   cursor:pointer;
+  transition:0.2s;
+}
+
+.filters button:hover{
+  transform:translateY(-2px);
 }
 
 .filters button.active{
   background:linear-gradient(135deg,var(--gold3),var(--gold2));
   color:#000;
+}
+
+/* GRID */
+.grid{
+  max-width:1200px;
+  margin:0 auto;
+  padding:40px 20px 80px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:26px;
+}
+
+/* CARDS (BACK WITH LIFE) */
+.product-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:0.25s ease;
+  animation:fadeInUp 0.5s ease both;
+}
+
+@keyframes fadeInUp{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+.product-card:hover{
+  transform:translateY(-10px);
+  border-color:rgba(255,204,51,0.6);
+  box-shadow:0 20px 60px rgba(255,204,51,0.15);
+}
+
+.product-card img{
+  width:100%;
+  height:280px;
+  object-fit:cover;
+}
+
+.product-info{
+  padding:16px;
+  font-size:16px;
 }
