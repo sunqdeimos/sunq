@@ -5,47 +5,106 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About - SUNQS MARKET</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
 body{
   margin:0;
-  font-family:Arial;
-  background:#070707;
+  font-family:Inter, Arial;
+  background:radial-gradient(circle at top,#111 0%, #070707 50%, #050505 100%);
   color:#fff;
   opacity:0;
   transition:0.6s ease;
+  overflow-x:hidden;
 }
 
 body.loaded{opacity:1;}
 
 header{
-  padding:20px;
-  border-bottom:1px solid #333;
+  padding:18px 22px;
+  border-bottom:1px solid rgba(255,204,51,0.15);
+  position:sticky;
+  top:0;
+  background:rgba(5,5,5,0.85);
+  backdrop-filter:blur(10px);
+  z-index:100;
 }
 
-a{
+.navlink{
   color:#ffcc33;
   text-decoration:none;
-  margin-right:12px;
+  margin-right:14px;
+  font-weight:500;
+  transition:0.2s ease;
+}
+
+.navlink:hover{
+  opacity:0.7;
+  transform:translateY(-2px);
 }
 
 .container{
-  max-width:800px;
-  margin:80px auto;
-  padding:20px;
+  max-width:900px;
+  margin:0 auto;
+  padding:70px 20px 80px;
+  position:relative;
+}
+
+.glow{
+  position:absolute;
+  width:520px;
+  height:520px;
+  background:radial-gradient(circle,rgba(255,204,51,0.12),transparent 65%);
+  top:-260px;
+  left:50%;
+  transform:translateX(-50%);
+  filter:blur(25px);
+  z-index:-1;
+  animation:floatGlow 8s ease-in-out infinite;
+}
+
+@keyframes floatGlow{
+  0%{transform:translateX(-50%) translateY(0px);}
+  50%{transform:translateX(-50%) translateY(35px);}
+  100%{transform:translateX(-50%) translateY(0px);}
 }
 
 h1{
-  color:#ffcc33;
+  margin:0;
+  font-size:34px;
   letter-spacing:2px;
+  color:#ffcc33;
+}
+
+.subtitle{
+  margin-top:12px;
+  color:#aaa;
+  line-height:1.6;
 }
 
 .box{
-  margin-top:20px;
-  padding:20px;
-  border:1px solid rgba(255,204,51,0.3);
-  border-radius:14px;
-  background:#111;
-  line-height:1.6;
+  margin-top:30px;
+  padding:22px;
+  border-radius:18px;
+  border:1px solid rgba(255,204,51,0.18);
+  background:linear-gradient(145deg,#111,#090909);
+  color:#bbb;
+  line-height:1.7;
+}
+
+.highlight{
+  color:#ffcc33;
+  font-weight:700;
+}
+
+.footer{
+  padding:40px 20px;
+  border-top:1px solid rgba(255,204,51,0.12);
+  text-align:center;
+  color:#777;
+  font-size:13px;
 }
 </style>
 </head>
@@ -53,21 +112,37 @@ h1{
 <body>
 
 <header>
-  <a href="index.html">Home</a>
-  <a href="shop.html">Shop</a>
-  <a href="about.html">About</a>
+  <a class="navlink" href="index.html">Home</a>
+  <a class="navlink" href="shop.html">Shop</a>
+  <a class="navlink" href="about.html">About</a>
 </header>
 
 <div class="container">
+  <div class="glow"></div>
+
   <h1>About SUNQS MARKET</h1>
+  <div class="subtitle">
+    A premium W.I.P marketplace project focused on design, layout, and digital storefront structure.
+  </div>
 
   <div class="box">
-    SUNQS MARKET is a W.I.P online marketplace selling multiple accounts across many games and platforms.  
+    <span class="highlight">SUNQS MARKET</span> is an experimental online marketplace project built to explore modern storefront UI design.  
     <br><br>
-    This will soon become a working online marketplace.  
+    This site is designed to grow into a structured ecommerce-style platform with product listings, collections, and interactive browsing.
     <br><br>
- 
+    The long-term goal is to build a marketplace experience that feels clean, smooth, and professional.
   </div>
+
+  <div class="box">
+    <span class="highlight">Collections:</span><br><br>
+    • SUNQS Collection (main inventory)<br>
+    • JETS Collection (secondary inventory)<br><br>
+    More sections and features will be added as the project evolves.
+  </div>
+</div>
+
+<div class="footer">
+  © SUNQS MARKET • W.I.P online marketplace
 </div>
 
 <script>
