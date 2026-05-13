@@ -1,15 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a class="logo" href="index.html">SUNQ</a>
+    <div class="nav-links">
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+    </div>
+  </div>
+</nav>
+
+<div class="product-page" id="page"></div>
+
 <script>
 const items={
-  a:{name:"SUNQS A",price:10,desc:"Item A"},
-  b:{name:"SUNQS B",price:15,desc:"Item B"},
-  c:{name:"SUNQS C",price:20,desc:"Item C"},
-  d:{name:"SUNQS D",price:25,desc:"Item D"},
-  e:{name:"SUNQS E",price:30,desc:"Item E"},
-  f:{name:"JETS A",price:12,desc:"Item F"},
-  g:{name:"JETS B",price:18,desc:"Item G"},
-  h:{name:"JETS C",price:22,desc:"Item H"},
-  i:{name:"JETS D",price:28,desc:"Item I"},
-  j:{name:"JETS E",price:35,desc:"Item J"},
+  a:{name:"SUNQS A",price:10,desc:"Basic SUNQS item."},
+  b:{name:"SUNQS B",price:15,desc:"Standard SUNQS item."},
+  c:{name:"SUNQS C",price:20,desc:"Upgraded SUNQS item."},
+  d:{name:"SUNQS D",price:25,desc:"Premium SUNQS item."},
+  e:{name:"SUNQS E",price:30,desc:"Elite SUNQS item."},
+
+  f:{name:"JETS A",price:12,desc:"Basic JETS item."},
+  g:{name:"JETS B",price:18,desc:"Standard JETS item."},
+  h:{name:"JETS C",price:22,desc:"Upgraded JETS item."},
+  i:{name:"JETS D",price:28,desc:"Premium JETS item."},
+  j:{name:"JETS E",price:35,desc:"Elite JETS item."},
 };
 
 let id=new URLSearchParams(location.search).get("id");
@@ -21,10 +45,11 @@ document.getElementById("page").innerHTML = p ? `
     <h1>${p.name}</h1>
     <p>$${p.price}</p>
     <p>${p.desc}</p>
+
     <button onclick="addToCart()">Add to Cart</button>
   </div>
 </div>
-` : "Not found";
+` : "<h2>Item not found</h2>";
 
 function getCart(){
   return JSON.parse(localStorage.getItem("sunqCart")) || [];
@@ -37,14 +62,19 @@ function saveCart(c){
 function addToCart(){
   let cart=getCart();
 
-  let item=cart.find(x=>x.id===id);
+  let existing=cart.find(x=>x.id===id);
 
-  if(item){
-    item.quantity++;
+  if(existing){
+    existing.quantity++;
   }else{
     cart.push({id:id,quantity:1});
   }
 
   saveCart(cart);
+
+  alert("Added to cart");
 }
 </script>
+
+</body>
+</html>
