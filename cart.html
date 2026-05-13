@@ -27,7 +27,7 @@
     </main>
 
     <script>
-        // Same product database as before (copy from shop.html or product.html)
+        // Product database (same as shop.html and product.html)
         const items = {
             "sunqs-a": { id: "sunqs-a", name: "SUNQ Alpha Hoodie", price: 89.00, image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+A" },
             "sunqs-b": { id: "sunqs-b", name: "SUNQ Essential Tee", price: 39.00, image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+B" },
@@ -44,7 +44,7 @@
         function saveCart(cart) {
             localStorage.setItem('sunqCart', JSON.stringify(cart));
             updateCartCountDisplay();
-            renderCart(); // re-render the cart page
+            renderCart();
         }
 
         function updateCartCountDisplay() {
@@ -100,7 +100,7 @@
             `;
             checkoutDiv.innerHTML = '<button id="checkout-btn" class="button-primary">Proceed to Checkout</button>';
 
-            // Attach event listeners for quantity changes and remove buttons
+            // Attach event listeners
             document.querySelectorAll('.cart-qty').forEach(input => {
                 input.addEventListener('change', (e) => {
                     const id = e.target.getAttribute('data-id');
@@ -116,8 +116,7 @@
                 });
             });
             document.getElementById('checkout-btn')?.addEventListener('click', () => {
-                alert('Checkout will be integrated with PayPal/Stripe next. Ready to add?');
-                // You can replace this with real payment integration later
+                alert('Payment integration coming soon! (PayPal / Stripe)');
             });
         }
 
@@ -140,11 +139,8 @@
             saveCart(cart);
         }
 
-        // Initial render
         renderCart();
         updateCartCountDisplay();
-
-        // Sync cart count across tabs
         window.addEventListener('storage', () => {
             updateCartCountDisplay();
             renderCart();
@@ -231,7 +227,35 @@
         .button-primary:hover {
             background: #c5a028;
         }
-        /* navbar styles already included */
+        /* navbar styles */
+        .navbar {
+            background: rgba(10,10,10,0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--gold, #D4AF37);
+            text-decoration: none;
+        }
+        .nav-links a {
+            color: white;
+            margin-left: 2rem;
+            text-decoration: none;
+        }
+        .nav-links a:hover {
+            color: var(--gold, #D4AF37);
+        }
     </style>
 </body>
 </html>
