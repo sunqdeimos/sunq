@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUNQ MARKET</title>
 <link rel="stylesheet" href="styles.css">
-<script defer src="app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<header>
-  <a class="navlink" href="index.html">Home</a>
-  <a class="navlink" href="shop.html">Shop</a>
-  <a class="navlink" href="about.html">About</a>
-  <a class="navlink" href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-</header>
+<nav class="navbar">
+  <a class="logo" href="index.html">SUNQ</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="about.html">About</a>
+    <a href="cart.html">Cart</a>
+  </div>
+</nav>
 
-<div class="page">
-  <h1>SUNQS MARKET</h1>
-  <button onclick="location.href='shop.html'">Enter Shop</button>
+<div style="text-align:center;padding:140px 20px;">
+  <h1 class="hero-title">SUNQ MARKET</h1>
+  <p class="hero-subtitle">Clean marketplace. No chaos. Just products.</p>
+  <a class="button-primary" href="shop.html">Enter Shop</a>
 </div>
-
-<script>
-updateCartUI();
-</script>
 
 </body>
 </html>
