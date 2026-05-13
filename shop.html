@@ -1,206 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop | SUNQ Marketplace</title>
-    <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css">
+<script defer src="app.js"></script>
 </head>
+
 <body>
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">SUNQ</a>
-            <div class="nav-links">
-                <a href="shop.html">Shop</a>
-                <a href="about.html">About</a>
-                <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-            </div>
-        </div>
-    </nav>
+<header>
+  <a class="navlink" href="index.html">Home</a>
+  <a class="navlink" href="shop.html">Shop</a>
+  <a class="navlink" href="about.html">About</a>
+  <a class="navlink" href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+</header>
 
-    <main>
-        <section class="collection">
-            <h2 class="collection-title">Collection One</h2>
-            <div class="product-grid" id="collection1-grid"></div>
-        </section>
+<div class="page">
+  <h1>Shop</h1>
+  <div id="grid"></div>
+</div>
 
-        <section class="collection">
-            <h2 class="collection-title">Collection Two</h2>
-            <div class="product-grid" id="collection2-grid"></div>
-        </section>
-    </main>
+<script>
+const grid = document.getElementById("grid");
 
-    <script>
-        // Generic placeholder items (not clothing)
-        const items = {
-            "item-a": {
-                id: "item-a",
-                name: "Placeholder Item A",
-                price: 29.99,
-                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+A",
-                category: "collection1"
-            },
-            "item-b": {
-                id: "item-b",
-                name: "Placeholder Item B",
-                price: 49.99,
-                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+B",
-                category: "collection1"
-            },
-            "item-c": {
-                id: "item-c",
-                name: "Placeholder Item C",
-                price: 19.99,
-                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+C",
-                category: "collection1"
-            },
-            "item-d": {
-                id: "item-d",
-                name: "Placeholder Item D",
-                price: 99.99,
-                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+D",
-                category: "collection2"
-            },
-            "item-e": {
-                id: "item-e",
-                name: "Placeholder Item E",
-                price: 14.99,
-                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+E",
-                category: "collection2"
-            },
-            "item-f": {
-                id: "item-f",
-                name: "Placeholder Item F",
-                price: 199.99,
-                image: "https://placehold.co/600x600/1a1a1a/white?text=Item+F",
-                category: "collection2"
-            }
-        };
+Object.values(items).forEach(p=>{
+  grid.innerHTML += `
+    <div class="card" onclick="location.href='product.html?id=${p.id}'">
+      <img src="${p.image}" style="width:100%">
+      <h3>${p.name}</h3>
+      <p>$${p.price}</p>
+    </div>
+  `;
+});
 
-        function renderProductGrid(containerId, category) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            const products = Object.values(items).filter(p => p.category === category);
-            if (products.length === 0) {
-                container.innerHTML = '<p>No items in this collection yet.</p>';
-                return;
-            }
-            let html = '';
-            products.forEach(p => {
-                html += `
-                    <div class="product-card">
-                        <img src="${p.image}" alt="${p.name}" class="product-img">
-                        <div class="product-info">
-                            <h3>${p.name}</h3>
-                            <p class="price">$${p.price.toFixed(2)}</p>
-                            <a href="product.html?item=${p.id}" class="view-btn">View Item</a>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
+updateCartUI();
+</script>
 
-        function getCart() {
-            return JSON.parse(localStorage.getItem('sunqCart')) || [];
-        }
-
-        function updateCartCountDisplay() {
-            const cart = getCart();
-            let total = 0;
-            cart.forEach(item => { total += item.quantity; });
-            const countSpan = document.getElementById('cart-count');
-            if (countSpan) countSpan.innerText = total;
-        }
-
-        renderProductGrid('collection1-grid', 'collection1');
-        renderProductGrid('collection2-grid', 'collection2');
-        updateCartCountDisplay();
-        window.addEventListener('storage', updateCartCountDisplay);
-    </script>
-
-    <style>
-        .collection {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .collection-title {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid var(--gold, #D4AF37);
-            padding-left: 1rem;
-        }
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-        .product-card {
-            background: var(--panel, #111);
-            border-radius: 1rem;
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-        .product-img {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-        }
-        .product-info {
-            padding: 1rem;
-        }
-        .product-info h3 {
-            margin: 0 0 0.5rem;
-        }
-        .price {
-            color: var(--gold, #D4AF37);
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        .view-btn {
-            display: inline-block;
-            margin-top: 0.75rem;
-            background: var(--gold, #D4AF37);
-            color: #0a0a0a;
-            padding: 0.4rem 1rem;
-            border-radius: 2rem;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .navbar {
-            background: rgba(10,10,10,0.8);
-            backdrop-filter: blur(12px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--gold, #D4AF37);
-            text-decoration: none;
-        }
-        .nav-links a {
-            color: white;
-            margin-left: 2rem;
-            text-decoration: none;
-        }
-        .nav-links a:hover {
-            color: var(--gold, #D4AF37);
-        }
-    </style>
 </body>
 </html>
