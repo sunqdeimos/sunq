@@ -1,103 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product | SUNQ</title>
-
-<link rel="stylesheet" href="styles.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product | SUNQ</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<header>
-  <a href="index.html" class="logo">SUNQ</a>
-
-  <div class="nav-right">
-    <a class="navlink" href="index.html">Home</a>
-    <a class="navlink" href="shop.html">Shop</a>
-    <a class="navlink" href="about.html">About</a>
-    <a class="navlink" href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-  </div>
-</header>
-
-<div class="product-wrap" id="wrap">
-  Loading...
-</div>
-
-<script src="products.js"></script>
-
-<script>
-window.onload=()=>{
-  document.body.classList.add("loaded");
-  updateCartCountDisplay();
-};
-
-const params=new URLSearchParams(window.location.search);
-const id=params.get("item");
-
-const product=getProductById(id);
-const wrap=document.getElementById("wrap");
-
-if(!product){
-  wrap.innerHTML=`
-    <div class="product-details">
-      <h1>Item not found</h1>
-      <p class="product-desc">This product does not exist.</p>
-      <a class="button-primary" href="shop.html">Return to Shop</a>
-    </div>
-  `;
-}else{
-  wrap.innerHTML=`
-    <div class="product-grid">
-      <div class="product-img">
-        <img src="${product.img}">
-      </div>
-
-      <div class="product-details">
-        <div class="badge">${product.category}</div>
-        <h1>${product.name}</h1>
-
-        <div class="price">$${product.price}</div>
-
-        <div class="product-desc">${product.desc}</div>
-
-        <div class="product-meta">
-          <b>Includes:</b>
-          <ul>
-            <li>Premium listing access</li>
-            <li>Fast delivery system (W.I.P)</li>
-            <li>Secure checkout placeholder</li>
-          </ul>
-        </div>
-
-        <div class="qty-row">
-          <input id="qty" type="number" value="1" min="1" max="10">
-          <button id="add">Add to Cart</button>
-        </div>
-
-        <div class="notice" id="msg"></div>
-
-        <br>
-        <a class="button-secondary" href="shop.html">← Back to Shop</a>
+  <!-- NAV (so your site doesn't feel like a blank void) -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">SUNQ</a>
+      <div class="nav-links">
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
       </div>
     </div>
-  `;
+  </nav>
 
-  document.getElementById("add").onclick=()=>{
-    let qty=parseInt(document.getElementById("qty").value);
-    if(isNaN(qty) || qty<1) qty=1;
+  <!-- PRODUCT CONTENT GOES HERE -->
+  <main>
+    <div id="product-container" style="padding:40px;"></div>
+  </main>
 
-    addToCart(product.id, qty);
-    updateCartCountDisplay();
-
-    const msg=document.getElementById("msg");
-    msg.innerText="Added to cart!";
-    setTimeout(()=>msg.innerText="", 2000);
-  };
-}
-</script>
+  <!-- JS MUST BE AT BOTTOM -->
+  <script src="product.js"></script>
 
 </body>
 </html>
