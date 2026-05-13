@@ -1,61 +1,41 @@
-:root{
-  --gold:#ffcc33;
-  --gold2:#ffae00;
-  --gold3:#ffd86a;
-  --dark:#050505;
-  --panel:rgba(5,5,5,0.72);
-  --border:rgba(255,204,51,0.20);
-
-  --text-hero:64px;
-  --text-xl:42px;
-  --text-lg:28px;
-  --text-md:20px;
-}
-
 body{
-  margin:0;
-  font-family:Inter, Arial;
-  font-size:var(--text-md);
-  background:linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.95)), #050505;
-  color:#fff;
-  overflow-x:hidden;
-}
-
-header{
-  padding:28px 50px;
-  position:sticky;
-  top:0;
-  background:rgba(0,0,0,0.75);
-  backdrop-filter:blur(16px);
-  display:flex;
-  gap:24px;
-}
-
-.navlink{
-  color:var(--gold3);
-  font-weight:800;
-  text-decoration:none;
   font-size:20px;
 }
 
-.navlink:hover{
-  color:var(--gold2);
+h1{
+  font-size:64px;
+}
+
+h2{
+  font-size:42px;
 }
 
 .page{
-  max-width:1400px;
+  max-width:1600px;
   margin:0 auto;
-  padding:70px 50px;
+  padding:90px 60px;
 }
 
-h1{ font-size:var(--text-hero); color:var(--gold3); }
-
 button{
-  font-size:18px;
-  font-weight:900;
-  padding:14px 20px;
-  border-radius:16px;
-  border:none;
-  cursor:pointer;
-  background:linear-gradient(135deg,var(--gold3),var(--gold2));
+  font-size:20px;
+  padding:18px 26px;
+  border-radius:18px;
+}
+
+.navlink{
+  font-size:22px;
+  margin-right:28px;
+}
+
+/* MAKE CARDS BIGGER */
+.card{
+  padding:26px;
+  border-radius:26px;
+}
+
+/* SHOP GRID BIGGER */
+#grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(380px,1fr));
+  gap:30px;
 }
