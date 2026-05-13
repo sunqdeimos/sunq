@@ -9,7 +9,7 @@
 
 <body>
 
-  <!-- NAV (so your site doesn't feel like a blank void) -->
+  <!-- NAV -->
   <nav class="navbar">
     <div class="nav-container">
       <a href="index.html" class="logo">SUNQ</a>
@@ -21,22 +21,25 @@
     </div>
   </nav>
 
-  <!-- PRODUCT CONTENT GOES HERE -->
+  <!-- PRODUCT CONTENT -->
   <main>
     <div id="product-container" style="padding:40px;"></div>
   </main>
 
-  <!-- JS MUST BE AT BOTTOM -->
+  <!-- YOUR PRODUCT SCRIPT -->
   <script src="product.js"></script>
-<script>
-  window.onerror = function(msg, src, line, col, err) {
-    document.body.innerHTML =
-      "<pre style='color:white;padding:20px;'>" +
-      "ERROR: " + msg + "\n" +
-      "Line: " + line + "\n" +
-      "Column: " + col +
-      "</pre>";
-  };
-</script>
+
+  <!-- DEBUG ERROR CATCHER (THIS IS WHAT SHOWS WHAT'S BROKEN) -->
+  <script>
+    window.onerror = function(msg, src, line, col, err) {
+      document.body.innerHTML =
+        "<pre style='color:white;padding:20px;font-size:14px;'>" +
+        "ERROR: " + msg + "\n" +
+        "Line: " + line + "\n" +
+        "Column: " + col +
+        "</pre>";
+    };
+  </script>
+
 </body>
 </html>
