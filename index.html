@@ -25,7 +25,6 @@
   header{
     background:linear-gradient(180deg,#121212,#070707);
     border-bottom:1px solid rgba(255,204,51,0.3);
-    padding-bottom:10px;
   }
 
   .topbar{
@@ -46,6 +45,25 @@
     font-size:26px;
     cursor:pointer;
     color:var(--gold);
+    user-select:none;
+  }
+
+  .dropdown{
+    display:none;
+    flex-direction:column;
+    background:#111;
+    border-top:1px solid rgba(255,204,51,0.25);
+  }
+
+  .dropdown a{
+    padding:12px 20px;
+    text-decoration:none;
+    color:var(--muted);
+    border-bottom:1px solid rgba(255,255,255,0.05);
+  }
+
+  .dropdown a:hover{
+    color:var(--gold-glow);
   }
 
   .search{
@@ -62,34 +80,14 @@
     color:white;
   }
 
-  .filters{
-    display:flex;
-    gap:10px;
-    padding:0 20px 15px 20px;
-    flex-wrap:wrap;
-  }
-
-  .filters button{
-    background:#111;
-    border:1px solid rgba(255,204,51,0.2);
-    color:var(--muted);
-    padding:6px 10px;
-    border-radius:6px;
-    cursor:pointer;
-  }
-
-  .filters button:hover{
-    color:var(--gold);
-    border-color:var(--gold);
-  }
-
   section{
-    padding:25px 20px;
+    padding:30px 20px;
   }
 
-  .title{
-    color:var(--gold);
+  .section-title{
+    font-size:18px;
     margin-bottom:15px;
+    color:var(--gold);
   }
 
   .grid{
@@ -102,11 +100,10 @@
     background:var(--panel);
     border:1px solid rgba(255,204,51,0.18);
     border-radius:12px;
-    padding:16px;
+    padding:18px;
+    text-align:center;
     cursor:pointer;
     transition:0.2s;
-    text-decoration:none;
-    color:inherit;
   }
 
   .card:hover{
@@ -116,8 +113,8 @@
   }
 
   .name{
-    margin-bottom:6px;
     font-size:14px;
+    margin-bottom:8px;
   }
 
   .price{
@@ -140,8 +137,8 @@
   footer{
     text-align:center;
     padding:20px;
-    color:#777;
     font-size:12px;
+    color:#777;
     border-top:1px solid rgba(255,204,51,0.2);
   }
 </style>
@@ -150,72 +147,121 @@
 <body>
 
 <header>
+
   <div class="topbar">
     <div class="logo">SUNQS MARKET</div>
-    <div class="menu">☰</div>
+    <div class="menu" onclick="toggleMenu()">☰</div>
+  </div>
+
+  <div id="dropdown" class="dropdown">
+    <a href="#featured">Featured</a>
+    <a href="#new">New Arrivals</a>
+    <a href="#contact">Contact</a>
   </div>
 
   <div class="search">
-    <input type="text" placeholder="Search listings..." />
+    <input type="text" id="search" onkeyup="searchItems()" placeholder="Search listings..." />
   </div>
 
-  <div class="filters">
-    <button>All</button>
-    <button>Featured</button>
-    <button>New</button>
-    <button>Popular</button>
-  </div>
 </header>
 
-<section>
-  <div class="title">Featured Listings</div>
+<section id="featured">
+  <div class="section-title">Featured</div>
   <div class="grid">
 
-    <a class="card" href="#">
-      <div class="name">Listing One</div>
-      <div class="price">$10</div>
-    </a>
+    <div class="card" onclick="openItem('Featured Item 1',10)">
+      <div class="name">Featured Item 1</div>
+      <div class="price">$10.00</div>
+    </div>
 
-    <a class="card" href="#">
-      <div class="name">Listing Two</div>
-      <div class="price">$20</div>
-    </a>
+    <div class="card" onclick="openItem('Featured Item 2',15)">
+      <div class="name">Featured Item 2</div>
+      <div class="price">$15.00</div>
+    </div>
 
-    <a class="card" href="#">
-      <div class="name">Listing Three</div>
-      <div class="price">$30</div>
-    </a>
+    <div class="card" onclick="openItem('Featured Item 3',20)">
+      <div class="name">Featured Item 3</div>
+      <div class="price">$20.00</div>
+    </div>
+
+    <div class="card" onclick="openItem('Featured Item 4',25)">
+      <div class="name">Featured Item 4</div>
+      <div class="price">$25.00</div>
+    </div>
 
   </div>
 </section>
 
-<section>
-  <div class="title">New Listings</div>
+<section id="new">
+  <div class="section-title">New Arrivals</div>
   <div class="grid">
 
-    <a class="card" href="#">
+    <div class="card" onclick="openItem('New Item A',12)">
       <div class="name">New Item A</div>
-      <div class="price">$12</div>
-    </a>
+      <div class="price">$12.00</div>
+    </div>
 
-    <a class="card" href="#">
+    <div class="card" onclick="openItem('New Item B',18)">
       <div class="name">New Item B</div>
-      <div class="price">$18</div>
-    </a>
+      <div class="price">$18.00</div>
+    </div>
 
-    <a class="card" href="#">
+    <div class="card" onclick="openItem('New Item C',22)">
       <div class="name">New Item C</div>
-      <div class="price">$25</div>
-    </a>
+      <div class="price">$22.00</div>
+    </div>
+
+    <div class="card" onclick="openItem('New Item D',30)">
+      <div class="name">New Item D</div>
+      <div class="price">$30.00</div>
+    </div>
 
   </div>
 </section>
 
-<div class="cart">Cart (0)</div>
+<section id="contact">
+  <div class="section-title">Contact</div>
+  <p style="color:#aaa; line-height:1.6;">
+    Email: support@sunq.store<br/>
+    Instagram: @sunqsmarket
+  </p>
+</section>
+
+<div class="cart" onclick="alert('Cart system is UI-only for now')">
+  Cart (<span id="cartCount">0</span>)
+</div>
 
 <footer>
   © 2026 SUNQS MARKET
 </footer>
 
+<script>
+
+let cartCount = 0;
+
+function toggleMenu(){
+  const menu = document.getElementById("dropdown");
+  menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+}
+
+function searchItems(){
+  let input = document.getElementById("search").value.toLowerCase();
+  let cards = document.querySelectorAll(".card");
+
+  cards.forEach(card => {
+    let text = card.innerText.toLowerCase();
+    card.style.display = text.includes(input) ? "block" : "none";
+  });
+}
+
+function openItem(name, price){
+  cartCount++;
+  document.getElementById("cartCount").innerText = cartCount;
+
+  alert(name + "\nPrice: $" + price);
+}
+
+</script>
+
 </body>
-</html></html>
+</html>
