@@ -6,6 +6,7 @@
 <title>Product</title>
 <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
 <nav class="navbar">
@@ -14,65 +15,30 @@
     <div class="nav-links">
       <a href="shop.html">Shop</a>
       <a href="about.html">About</a>
-      <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+      <a href="cart.html">Cart</a>
     </div>
   </div>
 </nav>
 
-<div class="product-page" id="page"></div>
+<div class="hero">
+  <div class="hero-title" id="name">Loading...</div>
+  <p id="price"></p>
+</div>
 
 <script>
 const items={
-  a:{name:"SUNQS A",price:10,desc:"Basic SUNQS item."},
-  b:{name:"SUNQS B",price:15,desc:"Standard SUNQS item."},
-  c:{name:"SUNQS C",price:20,desc:"Upgraded SUNQS item."},
-  d:{name:"SUNQS D",price:25,desc:"Premium SUNQS item."},
-  e:{name:"SUNQS E",price:30,desc:"Elite SUNQS item."},
-
-  f:{name:"JETS A",price:12,desc:"Basic JETS item."},
-  g:{name:"JETS B",price:18,desc:"Standard JETS item."},
-  h:{name:"JETS C",price:22,desc:"Upgraded JETS item."},
-  i:{name:"JETS D",price:28,desc:"Premium JETS item."},
-  j:{name:"JETS E",price:35,desc:"Elite JETS item."},
+  "1":{name:"SUNQS A",price:10},
+  "2":{name:"SUNQS B",price:15},
+  "3":{name:"SUNQS C",price:20},
+  "4":{name:"SUNQS D",price:25},
+  "5":{name:"SUNQS E",price:30}
 };
 
-let id=new URLSearchParams(location.search).get("id");
-let p=items[id];
+let id = new URLSearchParams(location.search).get("item");
 
-document.getElementById("page").innerHTML = p ? `
-<div class="product-container">
-  <div>
-    <h1>${p.name}</h1>
-    <p>$${p.price}</p>
-    <p>${p.desc}</p>
-
-    <button onclick="addToCart()">Add to Cart</button>
-  </div>
-</div>
-` : "<h2>Item not found</h2>";
-
-function getCart(){
-  return JSON.parse(localStorage.getItem("sunqCart")) || [];
-}
-
-function saveCart(c){
-  localStorage.setItem("sunqCart", JSON.stringify(c));
-}
-
-function addToCart(){
-  let cart=getCart();
-
-  let existing=cart.find(x=>x.id===id);
-
-  if(existing){
-    existing.quantity++;
-  }else{
-    cart.push({id:id,quantity:1});
-  }
-
-  saveCart(cart);
-
-  alert("Added to cart");
+if(items[id]){
+  document.getElementById("name").innerText = items[id].name;
+  document.getElementById("price").innerText = "$"+items[id].price;
 }
 </script>
 
