@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About | SUNQ</title>
+    <title>SUNQ | Marketplace</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -19,17 +19,22 @@
         </div>
     </nav>
 
-    <main class="about-page">
-        <h1>About SUNQ</h1>
-        <p>A W.I.P online marketplace</p>
-        <hr>
-        <p><strong>Contact:</strong> studio@sunq.com</p>
+    <main>
+        <section class="hero">
+            <h1 class="hero-title">SUNQ Marketplace</h1>
+            <p class="hero-subtitle">Curated items from independent sellers</p>
+            <a href="shop.html" class="button-primary">Browse Items</a>
+        </section>
     </main>
 
     <script>
-        // Cart counter - same as other pages
+        function getCart() {
+            const stored = localStorage.getItem('sunqCart');
+            return stored ? JSON.parse(stored) : [];
+        }
+
         function updateCartCountDisplay() {
-            const cart = JSON.parse(localStorage.getItem('sunqCart')) || [];
+            const cart = getCart();
             let total = 0;
             cart.forEach(item => { total += item.quantity; });
             const countSpan = document.getElementById('cart-count');
@@ -40,23 +45,61 @@
     </script>
 
     <style>
-        .about-page {
-            max-width: 800px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-            line-height: 1.6;
+        .hero {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
         }
-        .about-page h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
+        .hero-title {
+            font-size: 4rem;
             color: var(--gold, #D4AF37);
+            margin-bottom: 1rem;
         }
-        .about-page p {
-            margin: 1rem 0;
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
         }
-        hr {
-            margin: 2rem 0;
-            border-color: #333;
+        .button-primary {
+            background: var(--gold, #D4AF37);
+            color: #0a0a0a;
+            padding: 0.8rem 2rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: background 0.2s;
+        }
+        .button-primary:hover {
+            background: #c5a028;
+        }
+        /* navbar styling (fallback in case styles.css missing) */
+        .navbar {
+            background: rgba(10,10,10,0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--gold, #D4AF37);
+            text-decoration: none;
+        }
+        .nav-links a {
+            color: white;
+            margin-left: 2rem;
+            text-decoration: none;
+        }
+        .nav-links a:hover {
+            color: var(--gold, #D4AF37);
         }
     </style>
 </body>
