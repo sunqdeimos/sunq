@@ -278,3 +278,19 @@ body {
   display: inline-block;
   margin-top: 10px;
 }
+/* ================= COLLECTION SYSTEM ================= */
+.collection {
+  margin-bottom: 50px;
+}
+
+.collection-title {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: #d4af37;
+  letter-spacing: 1px;
+}
+
+.collection + .collection {
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
