@@ -21,15 +21,18 @@
 
     <main class="about-page">
         <h1>About SUNQ</h1>
-        <p>Place holder</p>
-        <hr>
-        <p><strong>Contact:</strong> studio@sunq.com</p>
+        <p><strong>W.I.P online marketplace</strong> – we're building a place to buy and sell unique items. Currently in active development. More features coming soon.</p>
+        <p>For early access or questions: <strong>studio@sunq.com</strong></p>
     </main>
 
     <script>
-        // Cart counter - same as other pages
+        function getCart() {
+            const stored = localStorage.getItem('sunqCart');
+            return stored ? JSON.parse(stored) : [];
+        }
+
         function updateCartCountDisplay() {
-            const cart = JSON.parse(localStorage.getItem('sunqCart')) || [];
+            const cart = getCart();
             let total = 0;
             cart.forEach(item => { total += item.quantity; });
             const countSpan = document.getElementById('cart-count');
@@ -52,11 +55,36 @@
             color: var(--gold, #D4AF37);
         }
         .about-page p {
-            margin: 1rem 0;
+            font-size: 1.1rem;
         }
-        hr {
-            margin: 2rem 0;
-            border-color: #333;
+        /* navbar styling */
+        .navbar {
+            background: rgba(10,10,10,0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--gold, #D4AF37);
+            text-decoration: none;
+        }
+        .nav-links a {
+            color: white;
+            margin-left: 2rem;
+            text-decoration: none;
+        }
+        .nav-links a:hover {
+            color: var(--gold, #D4AF37);
         }
     </style>
 </body>
