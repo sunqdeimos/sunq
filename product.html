@@ -7,27 +7,21 @@
 
 <body>
 
-  <div id="product-container"></div>
+<div id="product"></div>
 
-  <script src="data.js"></script>
+<script src="data.js"></script>
 
-  <script>
-    const id = new URLSearchParams(location.search).get("item");
-    const p = PRODUCTS[id];
+<script>
+const id = new URLSearchParams(location.search).get("item");
+const p = PRODUCTS[id];
 
-    const box = document.getElementById("product-container");
-
-    if (!p) {
-      box.innerHTML = "<h2>Item not found</h2>";
-    } else {
-      box.innerHTML = `
-        <h1>${p.name}</h1>
-        <img src="${p.image}" style="width:300px">
-        <p>$${p.price}</p>
-        <p>${p.description}</p>
-      `;
-    }
-  </script>
+document.getElementById("product").innerHTML =
+p ? `
+  <h1>${p.name}</h1>
+  <img src="${p.image}" style="width:300px">
+  <p>$${p.price}</p>
+` : "Item not found";
+</script>
 
 </body>
 </html>
