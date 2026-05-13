@@ -22,27 +22,17 @@
 body{
   margin:0;
   font-family:Inter, Arial;
+  background:linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.95)), #050505;
   color:#fff;
-
-  background:
-    linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.95)),
-    #050505;
-
-  opacity:0;
-  transition:0.6s ease;
   overflow-x:hidden;
 }
 
-body.loaded{opacity:1;}
-
 header{
   padding:18px 22px;
-  border-bottom:1px solid rgba(255,204,51,0.15);
   position:sticky;
   top:0;
   background:rgba(0,0,0,0.65);
   backdrop-filter:blur(14px);
-  z-index:100;
   display:flex;
   justify-content:space-between;
   align-items:center;
@@ -53,32 +43,40 @@ header{
   text-decoration:none;
   margin-right:14px;
   font-weight:600;
+}
+
+/* FILTER BAR */
+.filters{
+  max-width:1100px;
+  margin:20px auto 0;
+  padding:0 20px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.filter-btn{
+  padding:10px 14px;
+  border-radius:14px;
+  cursor:pointer;
+  border:1px solid rgba(255,204,51,0.45);
+  background:rgba(0,0,0,0.4);
+  color:var(--gold3);
+  font-weight:800;
   transition:0.2s ease;
 }
 
-.navlink:hover{
-  color:var(--gold2);
-  text-shadow:0 0 18px rgba(255,204,51,0.5);
+.filter-btn:hover{
+  transform:translateY(-2px);
 }
 
-.page-title{
-  max-width:1100px;
-  margin:0 auto;
-  padding:50px 20px 10px;
+.filter-btn.active{
+  background:linear-gradient(135deg,var(--gold3),var(--gold2));
+  color:#000;
+  border:none;
 }
 
-.page-title h1{
-  margin:0;
-  font-size:32px;
-  color:var(--gold3);
-  letter-spacing:3px;
-}
-
-.page-title p{
-  margin-top:10px;
-  color:#ddd;
-}
-
+/* GRID */
 .grid{
   max-width:1100px;
   margin:0 auto;
@@ -88,11 +86,10 @@ header{
   gap:22px;
 }
 
-/* section label */
 .section-label{
   grid-column:1/-1;
   font-size:18px;
-  font-weight:800;
+  font-weight:900;
   color:var(--gold3);
   margin-top:10px;
 }
@@ -101,13 +98,12 @@ header{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:22px;
-  cursor:pointer;
-  transition:0.25s ease;
   padding:18px;
+  cursor:pointer;
   display:flex;
   flex-direction:column;
   gap:8px;
-  backdrop-filter:blur(12px);
+  transition:0.25s ease;
 }
 
 .card:hover{
@@ -116,14 +112,13 @@ header{
 }
 
 .badge{
-  display:inline-block;
+  width:max-content;
   padding:6px 10px;
   border-radius:999px;
   font-size:12px;
   font-weight:900;
   color:#000;
   background:linear-gradient(135deg,var(--gold3),var(--gold2));
-  width:max-content;
 }
 
 .title{
@@ -132,25 +127,17 @@ header{
   color:var(--gold3);
 }
 
-.price{
-  font-weight:900;
-}
-
-.desc{
-  font-size:13px;
-  color:#ccc;
-  line-height:1.5;
-}
+.price{font-weight:900;}
+.desc{font-size:13px;color:#ccc;}
 
 .card button{
   margin-top:auto;
   padding:10px;
-  border-radius:14px;
   border:none;
+  border-radius:14px;
   font-weight:800;
-  cursor:pointer;
   background:linear-gradient(135deg,var(--gold3),var(--gold2));
-  color:#000;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -165,104 +152,123 @@ header{
   </div>
 </header>
 
-<div class="page-title">
-  <h1>SHOP</h1>
-  <p>Browse SUNQS and JETS collections.</p>
+<!-- FILTER BUTTONS -->
+<div class="filters">
+  <button class="filter-btn active" onclick="filter('all')">ALL</button>
+  <button class="filter-btn" onclick="filter('sunqs')">SUNQS</button>
+  <button class="filter-btn" onclick="filter('jets')">JETS</button>
 </div>
 
 <div class="grid">
 
   <div class="section-label">SUNQS COLLECTION</div>
 
-  <div class="card" onclick="go(1)">
+  <div class="card sunqs" onclick="go(1)">
     <div class="badge">SUNQS</div>
     <div class="title">SUNQS A</div>
     <div class="price">$10</div>
-    <div class="desc">Entry-level listing for quick purchase.</div>
-    <button>View Product</button>
+    <div class="desc">Entry-level listing.</div>
+    <button>View</button>
   </div>
 
-  <div class="card" onclick="go(2)">
+  <div class="card sunqs" onclick="go(2)">
     <div class="badge">SUNQS</div>
     <div class="title">SUNQS B</div>
     <div class="price">$15</div>
-    <div class="desc">Mid-tier listing with added value.</div>
-    <button>View Product</button>
+    <div class="desc">Mid-tier listing.</div>
+    <button>View</button>
   </div>
 
-  <div class="card" onclick="go(3)">
+  <div class="card sunqs" onclick="go(3)">
     <div class="badge">SUNQS</div>
     <div class="title">SUNQS C</div>
     <div class="price">$20</div>
-    <div class="desc">Standard premium listing.</div>
-    <button>View Product</button>
+    <div class="desc">Standard listing.</div>
+    <button>View</button>
   </div>
 
-  <div class="card" onclick="go(4)">
+  <div class="card sunqs" onclick="go(4)">
     <div class="badge">SUNQS</div>
     <div class="title">SUNQS D</div>
     <div class="price">$25</div>
-    <div class="desc">Higher-tier listing.</div>
-    <button>View Product</button>
+    <div class="desc">Higher tier listing.</div>
+    <button>View</button>
   </div>
 
-  <div class="card" onclick="go(5)">
+  <div class="card sunqs" onclick="go(5)">
     <div class="badge">SUNQS</div>
     <div class="title">SUNQS E</div>
     <div class="price">$30</div>
-    <div class="desc">Exclusive premium listing.</div>
-    <button>View Product</button>
+    <div class="desc">Premium listing.</div>
+    <button>View</button>
   </div>
 
   <div class="section-label">JETS COLLECTION</div>
 
-  <div class="card" onclick="go(101)">
+  <div class="card jets" onclick="go(101)">
     <div class="badge">JETS</div>
     <div class="title">JETS A</div>
     <div class="price">$12</div>
-    <div class="desc">Starter JETS listing.</div>
-    <button>View Product</button>
+    <div class="desc">Starter listing.</div>
+    <button>View</button>
   </div>
 
-  <div class="card" onclick="go(102)">
+  <div class="card jets" onclick="go(102)">
     <div class="badge">JETS</div>
     <div class="title">JETS B</div>
     <div class="price">$18</div>
     <div class="desc">Upgraded listing.</div>
-    <button>View Product</button>
+    <button>View</button>
   </div>
 
-  <div class="card" onclick="go(103)">
+  <div class="card jets" onclick="go(103)">
     <div class="badge">JETS</div>
     <div class="title">JETS C</div>
     <div class="price">$22</div>
-    <div class="desc">Balanced mid-tier listing.</div>
-    <button>View Product</button>
+    <div class="desc">Balanced listing.</div>
+    <button>View</button>
   </div>
 
-  <div class="card" onclick="go(104)">
+  <div class="card jets" onclick="go(104)">
     <div class="badge">JETS</div>
     <div class="title">JETS D</div>
     <div class="price">$28</div>
-    <div class="desc">Higher demand listing.</div>
-    <button>View Product</button>
+    <div class="desc">High demand listing.</div>
+    <button>View</button>
   </div>
 
-  <div class="card" onclick="go(105)">
+  <div class="card jets" onclick="go(105)">
     <div class="badge">JETS</div>
     <div class="title">JETS E</div>
     <div class="price">$33</div>
-    <div class="desc">Premium JETS listing.</div>
-    <button>View Product</button>
+    <div class="desc">Premium listing.</div>
+    <button>View</button>
   </div>
 
 </div>
 
 <script>
-window.onload=()=>document.body.classList.add("loaded");
-
 function go(id){
   window.location.href = "product.html?item=" + id;
+}
+
+function filter(type){
+  const cards = document.querySelectorAll('.card');
+  const buttons = document.querySelectorAll('.filter-btn');
+
+  buttons.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+
+  cards.forEach(card => {
+    if(type === 'all'){
+      card.style.display = 'flex';
+    }
+    else if(card.classList.contains(type)){
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
 }
 </script>
 
