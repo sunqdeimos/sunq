@@ -3,40 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SUNQS MARKET | Shop</title>
+<title>SUNQS SIDE</title>
 
 <style>
 *{box-sizing:border-box;}
-
 body{
   margin:0;
   font-family:Arial;
-  background:
-    radial-gradient(circle at top, rgba(255,204,51,0.08), transparent 40%),
-    #070707;
+  background:#070707;
   color:#fff;
-  animation:fadeIn 0.4s ease;
+  animation:fade 0.4s ease;
 }
 
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(6px);}
-  to{opacity:1; transform:translateY(0);}
+@keyframes fade{
+  from{opacity:0; transform:translateY(8px);}
+  to{opacity:1;}
 }
 
 header{
   padding:20px;
-  border-bottom:1px solid rgba(255,204,51,0.15);
-  background:rgba(10,10,10,0.8);
-  backdrop-filter:blur(10px);
-  display:flex;
-  justify-content:space-between;
+  border-bottom:1px solid #333;
 }
 
-a{
-  color:#ffcc33;
-  text-decoration:none;
-  margin-right:10px;
-}
+a{color:#ffcc33;text-decoration:none;margin-right:10px;}
 
 .grid{
   display:grid;
@@ -47,7 +36,7 @@ a{
 
 .card{
   background:#111;
-  border:1px solid rgba(255,204,51,0.2);
+  border:1px solid rgba(255,204,51,0.25);
   padding:16px;
   border-radius:12px;
   cursor:pointer;
@@ -56,73 +45,34 @@ a{
 
 .card:hover{
   transform:translateY(-6px);
-  border-color:#ffcc33;
   box-shadow:0 10px 25px rgba(255,204,51,0.12);
+  border-color:#ffcc33;
 }
 
 .price{color:#ffcc33;}
-
-.cart{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:#111;
-  border:1px solid #ffcc33;
-  padding:10px 15px;
-  border-radius:20px;
-  color:#ffcc33;
-  cursor:pointer;
-}
 </style>
 </head>
 
 <body>
 
 <header>
-  <div>
-    <a href="index.html">Home</a>
-    <a href="shop.html">Shop</a>
-  </div>
+  <a href="index.html">Home</a>
+  <a href="sunqs.html">SUNQS SIDE</a>
+  <a href="jets.html">JETS SIDE</a>
 </header>
 
 <div class="grid">
 
-  <div class="card" onclick="addToCart('Item One','$10');go(1)">
-    Item One <div class="price">$10</div>
-  </div>
+<div class="card" onclick="go(1)">SUNQS Item A<div class="price">$10</div></div>
+<div class="card" onclick="go(2)">SUNQS Item B<div class="price">$15</div></div>
+<div class="card" onclick="go(3)">SUNQS Item C<div class="price">$20</div></div>
+<div class="card" onclick="go(4)">SUNQS Item D<div class="price">$25</div></div>
+<div class="card" onclick="go(5)">SUNQS Item E<div class="price">$30</div></div>
+<div class="card" onclick="go(6)">SUNQS Item F<div class="price">$35</div></div>
 
-  <div class="card" onclick="addToCart('Item Two','$15');go(2)">
-    Item Two <div class="price">$15</div>
-  </div>
-
-  <div class="card" onclick="addToCart('Item Three','$20');go(3)">
-    Item Three <div class="price">$20</div>
-  </div>
-
-</div>
-
-<div class="cart" onclick="viewCart()">
-Cart (<span id="count"></span>)
 </div>
 
 <script>
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-function addToCart(name,price){
-  cart.push({name,price});
-  localStorage.setItem("cart",JSON.stringify(cart));
-  update();
-}
-
-function update(){
-  document.getElementById("count").innerText = cart.length;
-}
-update();
-
-function viewCart(){
-  alert(cart.map(i=>i.name+" "+i.price).join("\n") || "Empty cart");
-}
-
 function go(id){
   location.href="product.html?item="+id;
 }
