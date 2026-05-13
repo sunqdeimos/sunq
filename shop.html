@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SUNQS MARKET</title>
+  <title>Shop | SUNQ</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
+  <!-- NAV -->
   <nav class="navbar">
     <div class="nav-container">
       <a href="index.html" class="logo">SUNQ</a>
@@ -21,22 +22,103 @@
     </div>
   </nav>
 
+  <!-- SHOP -->
   <main class="shop">
 
-    <h1 class="page-title">SUNQS MARKET</h1>
+    <h1 class="page-title">Shop</h1>
 
-    <div class="filter-bar">
-      <button class="filter-btn active" onclick="setFilter('all')">All</button>
-      <button class="filter-btn" onclick="setFilter('sunq')">SUNQ</button>
-      <button class="filter-btn" onclick="setFilter('jet')">JET</button>
-    </div>
+    <!-- ================= SUNQ ================= -->
+    <section class="collection">
+      <h2 class="collection-title">SUNQ Collection</h2>
 
-    <div id="product-grid" class="grid"></div>
+      <div class="grid">
+
+        <div class="card">
+          <div class="card-image"></div>
+          <h3>SUNQ / 01</h3>
+          <p>$9.99</p>
+          <a class="button-primary" href="product.html?id=s1">View</a>
+        </div>
+
+        <div class="card">
+          <div class="card-image"></div>
+          <h3>SUNQ / 02</h3>
+          <p>$19.99</p>
+          <a class="button-primary" href="product.html?id=s2">View</a>
+        </div>
+
+        <div class="card">
+          <div class="card-image"></div>
+          <h3>SUNQ / 03</h3>
+          <p>$29.99</p>
+          <a class="button-primary" href="product.html?id=s3">View</a>
+        </div>
+
+        <div class="card">
+          <div class="card-image"></div>
+          <h3>SUNQ / 04</h3>
+          <p>$39.99</p>
+          <a class="button-primary" href="product.html?id=s4">View</a>
+        </div>
+
+        <div class="card">
+          <div class="card-image"></div>
+          <h3>SUNQ / 05</h3>
+          <p>$49.99</p>
+          <a class="button-primary" href="product.html?id=s5">View</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= JET ================= -->
+    <section class="collection">
+
+      <h2 class="collection-title">JET Collection</h2>
+
+      <div class="grid">
+
+        <div class="card">
+          <div class="card-image"></div>
+          <h3>JET / A1</h3>
+          <p>$9.99</p>
+          <a class="button-primary" href="product.html?id=j1">View</a>
+        </div>
+
+        <div class="card">
+          <div class="card-image"></div>
+          <h3>JET / A2</h3>
+          <p>$19.99</p>
+          <a class="button-primary" href="product.html?id=j2">View</a>
+        </div>
+
+        <div class="card">
+          <div class="card-image"></div>
+          <h3>JET / A3</h3>
+          <p>$29.99</p>
+          <a class="button-primary" href="product.html?id=j3">View</a>
+        </div>
+
+        <div class="card">
+          <div class="card-image"></div>
+          <h3>JET / A4</h3>
+          <p>$39.99</p>
+          <a class="button-primary" href="product.html?id=j4">View</a>
+        </div>
+
+        <div class="card">
+          <div class="card-image"></div>
+          <h3>JET / A5</h3>
+          <p>$49.99</p>
+          <a class="button-primary" href="product.html?id=j5">View</a>
+        </div>
+
+      </div>
+    </section>
 
   </main>
 
   <script>
-    // ================= CART =================
     function getCart() {
       return JSON.parse(localStorage.getItem("sunqCart")) || [];
     }
@@ -49,59 +131,7 @@
     }
 
     updateCartCount();
-
-    // ================= PRODUCTS (FINAL VERSION) =================
-    const PRODUCTS = [
-      // SUNQ
-      { id: "s1", name: "SUNQ A", price: 9.99, category: "sunq" },
-      { id: "s2", name: "SUNQ B", price: 19.99, category: "sunq" },
-      { id: "s3", name: "SUNQ C", price: 29.99, category: "sunq" },
-      { id: "s4", name: "SUNQ D", price: 39.99, category: "sunq" },
-      { id: "s5", name: "SUNQ E", price: 49.99, category: "sunq" },
-
-      // JET
-      { id: "j1", name: "JET F", price: 9.99, category: "jet" },
-      { id: "j2", name: "JET G", price: 19.99, category: "jet" },
-      { id: "j3", name: "JET H", price: 29.99, category: "jet" },
-      { id: "j4", name: "JET I", price: 39.99, category: "jet" },
-      { id: "j5", name: "JET J", price: 49.99, category: "jet" }
-    ];
-
-    let currentFilter = "all";
-    const grid = document.getElementById("product-grid");
-
-    function renderProducts() {
-      let filtered = PRODUCTS;
-
-      if (currentFilter !== "all") {
-        filtered = PRODUCTS.filter(p => p.category === currentFilter);
-      }
-
-      grid.innerHTML = filtered.map(p => `
-        <div class="card fade">
-          <div class="card-image"></div>
-          <h3>${p.name}</h3>
-          <p>$${p.price}</p>
-          <a class="button-primary" href="product.html?id=${p.id}">
-            View
-          </a>
-        </div>
-      `).join("");
-    }
-
-    function setFilter(filter) {
-      currentFilter = filter;
-
-      document.querySelectorAll(".filter-btn").forEach(btn => {
-        btn.classList.remove("active");
-      });
-
-      event.target.classList.add("active");
-
-      renderProducts();
-    }
-
-    renderProducts();
+    window.addEventListener("storage", updateCartCount);
   </script>
 
 </body>
