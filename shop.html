@@ -23,30 +23,21 @@
 
   <main class="shop">
 
-    <h1 class="page-title">Shop</h1>
+    <h1 class="page-title">SUNQS MARKET</h1>
 
-    <!-- PRODUCTS GRID -->
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="setFilter('all')">All</button>
+      <button class="filter-btn" onclick="setFilter('a')">Item A</button>
+      <button class="filter-btn" onclick="setFilter('b')">Item B</button>
+      <button class="filter-btn" onclick="setFilter('c')">Item C</button>
+      <button class="filter-btn" onclick="setFilter('d')">Item D</button>
+    </div>
+
     <div id="product-grid" class="grid"></div>
 
   </main>
 
   <script>
-    // CART COUNTER
-    function getCart() {
-      return JSON.parse(localStorage.getItem("sunqCart")) || [];
-    }
-
-    function updateCartCount() {
-      const cart = getCart();
-      const total = cart.reduce((sum, item) => sum + item.quantity, 0);
-      const el = document.getElementById("cart-count");
-      if (el) el.textContent = total;
-    }
-
-    updateCartCount();
-    window.addEventListener("storage", updateCartCount);
-
-    // PRODUCT DATA (temporary safe version)
     const PRODUCTS = [
       { id: "a", name: "Item A", price: 29.99 },
       { id: "b", name: "Item B", price: 49.99 },
@@ -54,18 +45,42 @@
       { id: "d", name: "Item D", price: 99.99 }
     ];
 
+    let currentFilter = "all";
+
     const grid = document.getElementById("product-grid");
 
-    grid.innerHTML = PRODUCTS.map(p => `
-      <div class="card">
-        <div class="card-image"></div>
-        <h3>${p.name}</h3>
-        <p>$${p.price}</p>
-        <a class="button-primary" href="product.html?id=${p.id}">
-          View
-        </a>
-      </div>
-    `).join("");
+    function renderProducts() {
+      let filtered = PRODUCTS;
+
+      if (currentFilter !== "all") {
+        filtered = PRODUCTS.filter(p => p.id === currentFilter);
+      }
+
+      grid.innerHTML = filtered.map(p => `
+        <div class="card fade">
+          <div class="card-image"></div>
+          <h3>${p.name}</h3>
+          <p>$${p.price}</p>
+          <a class="button-primary" href="product.html?id=${p.id}">
+            View
+          </a>
+        </div>
+      `).join("");
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.classList.remove("active");
+      });
+
+      event.target.classList.add("active");
+
+      renderProducts();
+    }
+
+    renderProducts();
   </script>
 
 </body>
