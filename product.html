@@ -1,130 +1,341 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product - SUNQS MARKET</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-<!-- GLOBAL STYLE SYSTEM -->
-<link rel="stylesheet" href="styles.css">
-
-<style>
-/* product-specific layout only (NO full redesign CSS here anymore) */
-
-.product-wrap{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:40px;
-  align-items:start;
-}
-
-.product-img{
-  border-radius:26px;
-  overflow:hidden;
-  border:1px solid var(--border);
-  background:rgba(0,0,0,0.4);
-}
-
-.product-img img{
-  width:100%;
-  height:520px;
-  object-fit:cover;
-  display:block;
-}
-
-.product-info h1{
-  font-size:var(--text-xl);
-  margin-bottom:10px;
-}
-
-.price{
-  font-size:26px;
-  font-weight:900;
-  color:var(--gold3);
-  margin-top:10px;
-}
-
-.desc{
-  margin-top:20px;
-  font-size:18px;
-  color:#ddd;
-  line-height:1.7;
-}
-
-@media (max-width:900px){
-  .product-wrap{
-    grid-template-columns:1fr;
-  }
-
-  .product-img img{
-    height:380px;
-  }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product | SUNQ</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-<header>
-  <a class="navlink" href="index.html">Home</a>
-  <a class="navlink" href="shop.html">Shop</a>
-  <a class="navlink" href="about.html">About</a>
-</header>
+    <!-- Sticky Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">SUNQ</a>
+            <div class="nav-links">
+                <a href="shop.html">Shop</a>
+                <a href="about.html">About</a>
+                <a href="cart.html" id="cart-link">Cart (<span id="cart-count">0</span>)</a>
+            </div>
+        </div>
+    </nav>
 
-<div class="page">
+    <main class="product-page">
+        <div class="product-container" id="product-container">
+            <!-- Dynamic content will be injected here -->
+            <div class="loading">Loading product...</div>
+        </div>
+    </main>
 
-  <div class="product-wrap">
+    <script>
+        // -------------------------------
+        // PRODUCT DATABASE
+        // -------------------------------
+        const items = {
+            // SUNQS Collection
+            "sunqs-a": {
+                id: "sunqs-a",
+                name: "SUNQ Alpha Hoodie",
+                collection: "SUNQS",
+                price: 89.00,
+                description: "Premium heavyweight hoodie with embroidered SUNQ logo. Relaxed fit, soft cotton blend.",
+                image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+A",
+                category: "sunqs"
+            },
+            "sunqs-b": {
+                id: "sunqs-b",
+                name: "SUNQ Essential Tee",
+                collection: "SUNQS",
+                price: 39.00,
+                description: "Classic crewneck t-shirt, garment-dyed for a soft feel. Screen printed graphic on chest.",
+                image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+B",
+                category: "sunqs"
+            },
+            "sunqs-c": {
+                id: "sunqs-c",
+                name: "SUNQ Cargo Pants",
+                collection: "SUNQS",
+                price: 129.00,
+                description: "Oversized cargo pants with multiple pockets and adjustable cuffs. 100% cotton ripstop.",
+                image: "https://placehold.co/600x600/1a1a1a/gold?text=SUNQ+C",
+                category: "sunqs"
+            },
+            // JETS Collection
+            "jets-a": {
+                id: "jets-a",
+                name: "JETS Varsity Jacket",
+                collection: "JETS",
+                price: 199.00,
+                description: "Wool-blend varsity jacket with leather sleeves. Embroidered patches on front and back.",
+                image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+A",
+                category: "jets"
+            },
+            "jets-b": {
+                id: "jets-b",
+                name: "JETS Cap",
+                collection: "JETS",
+                price: 35.00,
+                description: "Structured 6-panel cap with curved brim. Adjustable strap, embroidered JETS logo.",
+                image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+B",
+                category: "jets"
+            },
+            "jets-c": {
+                id: "jets-c",
+                name: "JETS Technical Trousers",
+                collection: "JETS",
+                price: 149.00,
+                description: "Slim-fit trousers with water-repellent finish. Taped seams and zippered pockets.",
+                image: "https://placehold.co/600x600/1a1a1a/gold?text=JETS+C",
+                category: "jets"
+            }
+        };
 
-    <div class="product-img">
-      <img id="img" src="images/sunqs-a.jpg">
-    </div>
+        // -------------------------------
+        // HELPER: Get URL parameter
+        // -------------------------------
+        function getParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
 
-    <div class="product-info">
-      <h1 id="name">Product</h1>
-      <div class="price" id="price">$0</div>
+        // -------------------------------
+        // DISPLAY PRODUCT
+        // -------------------------------
+        function displayProduct(productId) {
+            const container = document.getElementById('product-container');
+            const product = items[productId];
 
-      <div class="desc" id="desc">
-        Loading product information...
-      </div>
+            if (!product) {
+                container.innerHTML = `
+                    <div class="product-error">
+                        <h2>Product not found</h2>
+                        <p>Sorry, the item you're looking for doesn't exist.</p>
+                        <a href="shop.html" class="button-primary">Return to Shop</a>
+                    </div>
+                `;
+                return;
+            }
 
-      <button onclick="fakeCheckout()">Proceed to Checkout</button>
-    </div>
+            // Build product HTML
+            container.innerHTML = `
+                <div class="product-grid">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-collection">${product.collection}</div>
+                        <h1 class="product-title">${product.name}</h1>
+                        <div class="product-price">$${product.price.toFixed(2)}</div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-actions">
+                            <label for="quantity">Quantity:</label>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="10">
+                            <button id="add-to-cart-btn" class="button-primary">Add to Cart</button>
+                        </div>
+                        <div id="cart-message" class="cart-message"></div>
+                    </div>
+                </div>
+            `;
 
-  </div>
+            // Attach event listener to the add-to-cart button
+            const addButton = document.getElementById('add-to-cart-btn');
+            const quantityInput = document.getElementById('quantity');
+            const messageDiv = document.getElementById('cart-message');
 
-</div>
+            addButton.addEventListener('click', () => {
+                let quantity = parseInt(quantityInput.value);
+                if (isNaN(quantity) || quantity < 1) quantity = 1;
+                addToCart(product.id, quantity);
+                showMessage(`${product.name} added to cart!`, 'success');
+                updateCartCountDisplay();   // update nav cart count
+            });
+        }
 
-<script>
-const items = {
-  1:{name:"SUNQS A",price:"$10",desc:"Entry-level listing for quick purchase.",img:"images/sunqs-a.jpg"},
-  2:{name:"SUNQS B",price:"$15",desc:"Mid-tier listing with added value.",img:"images/sunqs-b.jpg"},
-  3:{name:"SUNQS C",price:"$20",desc:"Standard product listing.",img:"images/sunqs-c.jpg"},
-  4:{name:"SUNQS D",price:"$25",desc:"Higher-tier digital listing.",img:"images/sunqs-d.jpg"},
-  5:{name:"SUNQS E",price:"$30",desc:"Premium listing category.",img:"images/sunqs-e.jpg"},
+        // -------------------------------
+        // SHOPPING CART (localStorage)
+        // -------------------------------
+        function getCart() {
+            const stored = localStorage.getItem('sunqCart');
+            return stored ? JSON.parse(stored) : [];
+        }
 
-  101:{name:"JETS A",price:"$12",desc:"Starter listing from JETS collection.",img:"images/jets-a.jpg"},
-  102:{name:"JETS B",price:"$18",desc:"Upgraded JETS listing.",img:"images/jets-b.jpg"},
-  103:{name:"JETS C",price:"$22",desc:"Balanced mid-tier product.",img:"images/jets-c.jpg"},
-  104:{name:"JETS D",price:"$28",desc:"High demand listing.",img:"images/jets-d.jpg"},
-  105:{name:"JETS E",price:"$33",desc:"Premium JETS listing.",img:"images/jets-e.jpg"}
-};
+        function saveCart(cart) {
+            localStorage.setItem('sunqCart', JSON.stringify(cart));
+        }
 
-const id = new URLSearchParams(window.location.search).get("item");
+        function addToCart(productId, quantity) {
+            let cart = getCart();
+            const existingIndex = cart.findIndex(item => item.id === productId);
+            
+            if (existingIndex !== -1) {
+                cart[existingIndex].quantity += quantity;
+            } else {
+                cart.push({ id: productId, quantity: quantity });
+            }
+            saveCart(cart);
+        }
 
-if(items[id]){
-  document.getElementById("name").innerText = items[id].name;
-  document.getElementById("price").innerText = items[id].price;
-  document.getElementById("desc").innerText = items[id].desc;
-  document.getElementById("img").src = items[id].img;
-}
+        // Update the cart counter in the navigation bar
+        function updateCartCountDisplay() {
+            const cart = getCart();
+            let totalItems = 0;
+            cart.forEach(item => { totalItems += item.quantity; });
+            const countSpan = document.getElementById('cart-count');
+            if (countSpan) countSpan.innerText = totalItems;
+        }
 
-function fakeCheckout(){
-  alert("Checkout system is still W.I.P");
-}
-</script>
+        function showMessage(msg, type) {
+            const msgDiv = document.getElementById('cart-message');
+            if (msgDiv) {
+                msgDiv.innerText = msg;
+                msgDiv.className = `cart-message ${type}`;
+                setTimeout(() => {
+                    msgDiv.innerText = '';
+                    msgDiv.className = 'cart-message';
+                }, 3000);
+            }
+        }
 
+        // -------------------------------
+        // INITIALIZE PAGE
+        // -------------------------------
+        function init() {
+            const itemId = getParam('item');
+            if (itemId) {
+                displayProduct(itemId);
+            } else {
+                document.getElementById('product-container').innerHTML = `
+                    <div class="product-error">
+                        <h2>No product selected</h2>
+                        <p>Please go to the shop and choose an item.</p>
+                        <a href="shop.html" class="button-primary">Visit Shop</a>
+                    </div>
+                `;
+            }
+            updateCartCountDisplay();
+        }
+
+        init();
+    </script>
+
+    <!-- Optional: extra style for product page and cart message (if not already in styles.css) -->
+    <style>
+        /* These styles work with your existing CSS. Add anything missing here */
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .product-image img {
+            width: 100%;
+            border-radius: 1rem;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.5);
+        }
+        .product-collection {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold, #D4AF37);
+            margin-bottom: 0.5rem;
+        }
+        .product-title {
+            font-size: 2.5rem;
+            margin: 0.5rem 0;
+        }
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            color: var(--gold, #D4AF37);
+        }
+        .product-description {
+            line-height: 1.6;
+            margin: 1rem 0 2rem 0;
+            color: #ccc;
+        }
+        .product-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .product-actions label {
+            font-weight: bold;
+        }
+        .product-actions input {
+            width: 70px;
+            padding: 0.5rem;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+        .button-primary {
+            background: var(--gold, #D4AF37);
+            color: #0a0a0a;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .button-primary:hover {
+            background: #c5a028;
+            transform: scale(1.02);
+        }
+        .cart-message {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
+        .cart-message.success {
+            background: #2c5e2c;
+            color: #cdffcd;
+        }
+        .product-error {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+        /* ensure nav bar matches your existing styles */
+        .navbar {
+            background: rgba(10,10,10,0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--gold, #D4AF37);
+            text-decoration: none;
+        }
+        .nav-links a {
+            color: white;
+            margin-left: 2rem;
+            text-decoration: none;
+        }
+        .nav-links a:hover {
+            color: var(--gold, #D4AF37);
+        }
+    </style>
 </body>
 </html>
