@@ -7,7 +7,7 @@
   --border:rgba(255,204,51,0.20);
 }
 
-/* GLOBAL RESET */
+/* GLOBAL */
 *{
   box-sizing:border-box;
 }
@@ -15,9 +15,14 @@
 body{
   margin:0;
   font-family:Inter, Arial;
-  color:#fff;
+  color:var(--gold3);
   background:linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.95)), #050505;
   font-size:18px;
+}
+
+/* FORCE EVERYTHING WHITE → GOLD */
+h1,h2,h3,h4,h5,h6,p,span,div,a,label{
+  color:var(--gold3);
 }
 
 /* NAV */
@@ -46,15 +51,15 @@ body{
 }
 
 .nav-links a{
-  color:#fff;
+  color:var(--gold3);
   margin-left:20px;
   text-decoration:none;
-  font-weight:700;
+  font-weight:800;
   font-size:18px;
 }
 
 .nav-links a:hover{
-  color:var(--gold3);
+  color:var(--gold2);
 }
 
 /* HERO */
@@ -65,25 +70,52 @@ body{
 
 .hero-title{
   font-size:64px;
-  color:var(--gold3);
   margin:0;
 }
 
 .hero-subtitle{
   font-size:20px;
   margin-top:10px;
-  opacity:0.8;
+  opacity:0.9;
 }
 
+/* BUTTONS (GLOBAL FIX) */
+button,
 .button-primary{
-  margin-top:25px;
-  display:inline-block;
-  padding:14px 28px;
-  border-radius:30px;
   background:linear-gradient(135deg,var(--gold3),var(--gold2));
-  color:#000;
+  color:#000 !important;
+  border:none;
   font-weight:900;
-  text-decoration:none;
+  cursor:pointer;
+  transition:0.2s ease;
+  border-radius:18px;
+}
+
+button{
+  padding:16px 26px;
+  font-size:18px;
+}
+
+button:hover,
+.button-primary:hover{
+  transform:translateY(-3px);
+}
+
+/* FILTER BUTTONS (BIG FIX) */
+.filter-btn{
+  padding:14px 24px;
+  font-size:18px;
+  font-weight:900;
+  border-radius:14px;
+  border:1px solid var(--gold3);
+  background:rgba(0,0,0,0.4);
+  color:var(--gold3);
+  margin:6px;
+}
+
+.filter-btn:hover{
+  transform:translateY(-2px);
+  border-color:var(--gold2);
 }
 
 /* GRID */
@@ -100,6 +132,12 @@ body{
   border:1px solid var(--border);
   border-radius:20px;
   padding:20px;
+  transition:0.2s ease;
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  border-color:var(--gold2);
 }
 
 /* PRODUCT PAGE */
