@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SUNQS MARKET</title>
+  <title>SUNQ</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
+  <!-- NAV -->
   <nav class="navbar">
     <div class="nav-container">
       <a href="index.html" class="logo">SUNQ</a>
@@ -21,12 +22,49 @@
     </div>
   </nav>
 
-  <main class="hero">
-    <h1>SUNQS MARKET</h1>
-    <p>Curated items from independent sellers</p>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Minimal marketplace. Maximum intent.</h1>
+      <p>Curated drops from SUNQ & JET.</p>
+      <a href="shop.html" class="button-primary">Enter Shop</a>
+    </div>
+  </header>
 
-    <a class="button-primary" href="shop.html">Browse Items</a>
-  </main>
+  <!-- FEATURED -->
+  <section class="shop">
+    <h2 class="page-title">Featured Drops</h2>
+
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-image"></div>
+        <h3>SUNQ A</h3>
+        <p>$9.99</p>
+        <a class="button-primary" href="product.html?id=s1">View</a>
+      </div>
+
+      <div class="card">
+        <div class="card-image"></div>
+        <h3>SUNQ C</h3>
+        <p>$29.99</p>
+        <a class="button-primary" href="product.html?id=s3">View</a>
+      </div>
+
+      <div class="card">
+        <div class="card-image"></div>
+        <h3>JET F</h3>
+        <p>$9.99</p>
+        <a class="button-primary" href="product.html?id=j1">View</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="padding:40px; text-align:center; color:#666;">
+    SUNQ — W.I.P marketplace
+  </footer>
 
   <script>
     function getCart() {
@@ -35,7 +73,7 @@
 
     function updateCartCount() {
       const cart = getCart();
-      const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const total = cart.reduce((sum, i) => sum + i.quantity, 0);
       const el = document.getElementById("cart-count");
       if (el) el.textContent = total;
     }
