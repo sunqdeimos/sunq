@@ -24,13 +24,10 @@ body{
   font-family:Inter, Arial;
   color:#fff;
 
+  /* removed image dependency */
   background:
-    linear-gradient(to bottom, rgba(0,0,0,0.75), rgba(0,0,0,0.93)),
-    url("images/gold-bg.jpg");
-
-  background-size:cover;
-  background-position:center;
-  background-attachment:fixed;
+    linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.95)),
+    #050505;
 
   opacity:0;
   transition:0.6s ease;
@@ -119,7 +116,7 @@ header{
   margin:0 auto;
   padding:30px 20px 80px;
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:22px;
 }
 
@@ -127,40 +124,19 @@ header{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:22px;
-  overflow:hidden;
   cursor:pointer;
   transition:0.25s ease;
-  min-height:390px;
+  min-height:180px;
   display:flex;
   flex-direction:column;
   backdrop-filter:blur(12px);
+  padding:18px;
 }
 
 .card:hover{
-  transform:translateY(-12px) scale(1.02);
+  transform:translateY(-10px) scale(1.02);
   border-color:rgba(255,204,51,0.6);
   box-shadow:0 22px 70px rgba(255,204,51,0.20);
-}
-
-.img{
-  height:200px;
-  background:#000;
-  border-bottom:1px solid rgba(255,204,51,0.12);
-}
-
-.img img{
-  width:100%;
-  height:200px;
-  object-fit:cover;
-  display:block;
-}
-
-.content{
-  padding:18px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  flex:1;
 }
 
 .badge{
@@ -175,4 +151,93 @@ header{
 }
 
 .title{
-  font
+  margin-top:10px;
+  font-size:18px;
+  font-weight:800;
+  color:var(--gold3);
+}
+
+.price{
+  margin-top:6px;
+  font-weight:900;
+  color:#fff;
+}
+
+.desc{
+  margin-top:10px;
+  color:#ccc;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.card button{
+  margin-top:auto;
+  padding:10px;
+  border-radius:14px;
+  border:none;
+  font-weight:800;
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--gold3),var(--gold2));
+  color:#000;
+  transition:0.2s ease;
+}
+
+.card button:hover{
+  transform:scale(1.03);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <a class="navlink" href="index.html">Home</a>
+    <a class="navlink" href="shop.html">Shop</a>
+    <a class="navlink" href="about.html">About</a>
+  </div>
+</header>
+
+<div class="page-title">
+  <h1>SHOP</h1>
+  <p>Browse available SUNQS and JETS listings.</p>
+</div>
+
+<div class="grid">
+
+  <div class="card" onclick="go(1)">
+    <div class="badge">SUNQS</div>
+    <div class="title">SUNQS A</div>
+    <div class="price">$10</div>
+    <div class="desc">Entry-level listing for quick purchase.</div>
+    <button>View Product</button>
+  </div>
+
+  <div class="card" onclick="go(2)">
+    <div class="badge">SUNQS</div>
+    <div class="title">SUNQS B</div>
+    <div class="price">$15</div>
+    <div class="desc">Mid-tier listing with added value.</div>
+    <button>View Product</button>
+  </div>
+
+  <div class="card" onclick="go(101)">
+    <div class="badge">JETS</div>
+    <div class="title">JETS A</div>
+    <div class="price">$12</div>
+    <div class="desc">Starter listing from the JETS lineup.</div>
+    <button>View Product</button>
+  </div>
+
+</div>
+
+<script>
+window.onload=()=>document.body.classList.add("loaded");
+
+function go(id){
+  window.location.href = "product.html?item=" + id;
+}
+</script>
+
+</body>
+</html>
