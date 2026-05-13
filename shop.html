@@ -27,6 +27,7 @@ body{
   overflow-x:hidden;
 }
 
+/* HEADER */
 header{
   padding:18px 22px;
   position:sticky;
@@ -45,18 +46,18 @@ header{
   font-weight:600;
 }
 
-/* FILTER BAR */
+/* FILTERS */
 .filters{
-  max-width:1100px;
-  margin:20px auto 0;
+  max-width:1400px;
+  margin:25px auto 0;
   padding:0 20px;
   display:flex;
-  gap:10px;
+  gap:12px;
   flex-wrap:wrap;
 }
 
 .filter-btn{
-  padding:10px 14px;
+  padding:10px 16px;
   border-radius:14px;
   cursor:pointer;
   border:1px solid rgba(255,204,51,0.45);
@@ -66,44 +67,62 @@ header{
   transition:0.2s ease;
 }
 
-.filter-btn:hover{
-  transform:translateY(-2px);
-}
-
 .filter-btn.active{
   background:linear-gradient(135deg,var(--gold3),var(--gold2));
   color:#000;
   border:none;
 }
 
+/* PAGE TITLE */
+.page-title{
+  max-width:1400px;
+  margin:0 auto;
+  padding:60px 20px 10px;
+}
+
+.page-title h1{
+  margin:0;
+  font-size:42px; /* bigger for desktop */
+  letter-spacing:3px;
+  color:var(--gold3);
+}
+
+.page-title p{
+  margin-top:10px;
+  color:#ddd;
+}
+
 /* GRID */
 .grid{
-  max-width:1100px;
+  max-width:1400px;   /* expanded from 1100 */
   margin:0 auto;
-  padding:30px 20px 80px;
+  padding:40px 20px 100px;
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:22px;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); /* bigger cards */
+  gap:26px;
 }
 
+/* SECTION LABEL */
 .section-label{
   grid-column:1/-1;
-  font-size:18px;
+  font-size:20px;
   font-weight:900;
   color:var(--gold3);
-  margin-top:10px;
+  margin-top:20px;
 }
 
+/* CARD */
 .card{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:22px;
-  padding:18px;
+  padding:20px;
   cursor:pointer;
   display:flex;
   flex-direction:column;
-  gap:8px;
+  gap:10px;
   transition:0.25s ease;
+  min-height:220px;
 }
 
 .card:hover{
@@ -122,13 +141,21 @@ header{
 }
 
 .title{
-  font-size:18px;
+  font-size:20px;
   font-weight:800;
   color:var(--gold3);
 }
 
-.price{font-weight:900;}
-.desc{font-size:13px;color:#ccc;}
+.price{
+  font-weight:900;
+  font-size:16px;
+}
+
+.desc{
+  font-size:13px;
+  color:#ccc;
+  line-height:1.5;
+}
 
 .card button{
   margin-top:auto;
@@ -138,6 +165,27 @@ header{
   font-weight:800;
   background:linear-gradient(135deg,var(--gold3),var(--gold2));
   cursor:pointer;
+}
+
+/* RESPONSIVE FIX */
+@media (min-width:1600px){
+  .grid{
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+  }
+
+  .page-title h1{
+    font-size:48px;
+  }
+}
+
+@media (max-width:600px){
+  .page-title h1{
+    font-size:32px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -152,11 +200,16 @@ header{
   </div>
 </header>
 
-<!-- FILTER BUTTONS -->
+<div class="page-title">
+  <h1>SHOP</h1>
+  <p>Browse SUNQS and JETS collections.</p>
+</div>
+
+<!-- FILTERS -->
 <div class="filters">
-  <button class="filter-btn active" onclick="filter('all')">ALL</button>
-  <button class="filter-btn" onclick="filter('sunqs')">SUNQS</button>
-  <button class="filter-btn" onclick="filter('jets')">JETS</button>
+  <button class="filter-btn active" onclick="filter('all', event)">ALL</button>
+  <button class="filter-btn" onclick="filter('sunqs', event)">SUNQS</button>
+  <button class="filter-btn" onclick="filter('jets', event)">JETS</button>
 </div>
 
 <div class="grid">
@@ -167,16 +220,16 @@ header{
     <div class="badge">SUNQS</div>
     <div class="title">SUNQS A</div>
     <div class="price">$10</div>
-    <div class="desc">Entry-level listing.</div>
-    <button>View</button>
+    <div class="desc">Entry-level listing for quick purchase.</div>
+    <button>View Product</button>
   </div>
 
   <div class="card sunqs" onclick="go(2)">
     <div class="badge">SUNQS</div>
     <div class="title">SUNQS B</div>
     <div class="price">$15</div>
-    <div class="desc">Mid-tier listing.</div>
-    <button>View</button>
+    <div class="desc">Mid-tier listing with added value.</div>
+    <button>View Product</button>
   </div>
 
   <div class="card sunqs" onclick="go(3)">
@@ -184,7 +237,7 @@ header{
     <div class="title">SUNQS C</div>
     <div class="price">$20</div>
     <div class="desc">Standard listing.</div>
-    <button>View</button>
+    <button>View Product</button>
   </div>
 
   <div class="card sunqs" onclick="go(4)">
@@ -192,7 +245,7 @@ header{
     <div class="title">SUNQS D</div>
     <div class="price">$25</div>
     <div class="desc">Higher tier listing.</div>
-    <button>View</button>
+    <button>View Product</button>
   </div>
 
   <div class="card sunqs" onclick="go(5)">
@@ -200,7 +253,7 @@ header{
     <div class="title">SUNQS E</div>
     <div class="price">$30</div>
     <div class="desc">Premium listing.</div>
-    <button>View</button>
+    <button>View Product</button>
   </div>
 
   <div class="section-label">JETS COLLECTION</div>
@@ -210,7 +263,7 @@ header{
     <div class="title">JETS A</div>
     <div class="price">$12</div>
     <div class="desc">Starter listing.</div>
-    <button>View</button>
+    <button>View Product</button>
   </div>
 
   <div class="card jets" onclick="go(102)">
@@ -218,7 +271,7 @@ header{
     <div class="title">JETS B</div>
     <div class="price">$18</div>
     <div class="desc">Upgraded listing.</div>
-    <button>View</button>
+    <button>View Product</button>
   </div>
 
   <div class="card jets" onclick="go(103)">
@@ -226,7 +279,7 @@ header{
     <div class="title">JETS C</div>
     <div class="price">$22</div>
     <div class="desc">Balanced listing.</div>
-    <button>View</button>
+    <button>View Product</button>
   </div>
 
   <div class="card jets" onclick="go(104)">
@@ -234,7 +287,7 @@ header{
     <div class="title">JETS D</div>
     <div class="price">$28</div>
     <div class="desc">High demand listing.</div>
-    <button>View</button>
+    <button>View Product</button>
   </div>
 
   <div class="card jets" onclick="go(105)">
@@ -242,7 +295,7 @@ header{
     <div class="title">JETS E</div>
     <div class="price">$33</div>
     <div class="desc">Premium listing.</div>
-    <button>View</button>
+    <button>View Product</button>
   </div>
 
 </div>
@@ -252,7 +305,7 @@ function go(id){
   window.location.href = "product.html?item=" + id;
 }
 
-function filter(type){
+function filter(type, event){
   const cards = document.querySelectorAll('.card');
   const buttons = document.querySelectorAll('.filter-btn');
 
@@ -260,14 +313,9 @@ function filter(type){
   event.target.classList.add('active');
 
   cards.forEach(card => {
-    if(type === 'all'){
-      card.style.display = 'flex';
-    }
-    else if(card.classList.contains(type)){
-      card.style.display = 'flex';
-    } else {
-      card.style.display = 'none';
-    }
+    if(type === 'all') card.style.display = 'flex';
+    else if(card.classList.contains(type)) card.style.display = 'flex';
+    else card.style.display = 'none';
   });
 }
 </script>
