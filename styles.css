@@ -35,36 +35,50 @@ header{
   border-bottom:1px solid rgba(255,204,51,0.15);
 }
 
+/* LOGO */
+.logo{
+  font-size:26px;
+  font-weight:900;
+  color:var(--gold3);
+  text-decoration:none;
+}
+
+.logo:hover{
+  color:var(--gold2);
+}
+
+/* NAV LINKS */
 .navlink, .nav-links a{
-  color:var(--gold3) !important;
+  color:var(--gold3);
   text-decoration:none;
   font-weight:800;
   font-size:20px;
-  margin-right:20px;
+  margin-left:20px;
 }
 
 .navlink:hover, .nav-links a:hover{
-  color:var(--gold2) !important;
+  color:var(--gold2);
 }
 
-/* FORCE ALL BUTTONS GOLD (fixes your blue issue) */
+/* BUTTONS (NO MORE INVISIBLE PROBLEM) */
 button,
-a.button-primary,
 .button-primary{
-  all:unset;
   display:inline-block;
   padding:14px 22px;
   border-radius:14px;
   background:linear-gradient(135deg,var(--gold3),var(--gold2));
-  color:#000 !important;
+  color:#000;
   font-weight:900;
+  font-size:18px;
+  border:none;
   cursor:pointer;
+  text-decoration:none;
   text-align:center;
   transition:0.2s ease;
 }
 
 button:hover,
-a.button-primary:hover{
+.button-primary:hover{
   transform:translateY(-3px);
 }
 
@@ -84,6 +98,7 @@ a.button-primary:hover{
 .hero h1{
   font-size:64px;
   color:var(--gold3);
+  margin:0;
 }
 
 /* GRID SYSTEM */
@@ -119,10 +134,16 @@ a.button-primary:hover{
   padding:14px 20px;
   border-radius:12px;
   border:1px solid var(--gold);
-  background:transparent;
+  background:rgba(0,0,0,0.4);
   color:var(--gold3);
-  font-weight:800;
+  font-weight:900;
+  font-size:18px;
   cursor:pointer;
+  transition:0.2s ease;
+}
+
+.filter-btn:hover{
+  transform:translateY(-3px);
 }
 
 .filter-btn.active{
