@@ -7,7 +7,7 @@
 }
 
 body {
-  background: #0b0b0d;
+  background: #0b0b0d url("https://raw.githubusercontent.com/sunqdeimos/sunq/main/gold-bg.jpg") center/cover no-repeat;
   color: #fff;
   overflow-x: hidden;
 }
