@@ -116,12 +116,11 @@ h1, h2, h3,
   border: 1px solid rgba(255,255,255,0.07);
   backdrop-filter: blur(12px);
 
-  padding: 18px;
+  padding: 0;
   border-radius: 18px;
 
   display: flex;
   flex-direction: column;
-  gap: 10px;
 
   transition: transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease;
   position: relative;
@@ -141,11 +140,14 @@ h1, h2, h3,
   font-size: 15px;
   letter-spacing: 0.8px;
   font-weight: 600;
+  padding: 0 18px;
+  margin-top: 14px;
 }
 
 .card p {
   color: rgba(255,255,255,0.72);
   font-size: 13px;
+  padding: 0 18px 18px;
 }
 
 /* subtle luxury highlight */
@@ -159,21 +161,26 @@ h1, h2, h3,
   background: radial-gradient(circle, rgba(212,175,55,0.18), transparent 70%);
   opacity: 0;
   transition: 0.3s ease;
-  .card::after {
+
+  /* FIX: this prevents breaking cart buttons */
   pointer-events: none;
-  }
 }
 
 .card:hover::after {
   opacity: 1;
 }
 
-/* ================= IMAGE ================= */
+/* ================= IMAGE (EDGE TO EDGE + THIN OUTLINE) ================= */
 .card-image {
-  height: 130px;
-  border-radius: 14px;
+  height: 160px;
+  width: 100%;
+
   background: rgba(0,0,0,0.25);
-  border: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+
   pointer-events: none;
 }
 
@@ -192,6 +199,8 @@ h1, h2, h3,
   letter-spacing: 1px;
   text-transform: uppercase;
   z-index: 2;
+
+  pointer-events: none;
 }
 
 /* ================= BUTTONS ================= */
@@ -206,6 +215,8 @@ h1, h2, h3,
   transition: 0.2s ease;
   text-decoration: none;
   font-weight: 600;
+
+  margin: 0 18px 18px;
 }
 
 .button-primary:hover {
@@ -296,9 +307,17 @@ h1, h2, h3,
 
 /* ================= CART ================= */
 #cart-container .card {
-  display: flex;
-  flex-direction: column;
+  padding: 18px;
   gap: 10px;
+}
+
+#cart-container .card h3 {
+  padding: 0;
+  margin-top: 0;
+}
+
+#cart-container .card p {
+  padding: 0;
 }
 
 .qty-row {
@@ -365,6 +384,6 @@ h1, h2, h3,
   }
 
   .card-image {
-    height: 140px;
+    height: 180px;
   }
 }
