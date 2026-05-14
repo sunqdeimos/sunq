@@ -335,3 +335,58 @@ body {
   border-color: #d4af37;
   color: #d4af37;
 }
+/* ================= DETAIL UPGRADES ================= */
+
+/* better card image */
+.card-image {
+  background: radial-gradient(circle at top, rgba(212,175,55,0.25), rgba(0,0,0,0.7));
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* premium card border + hover */
+.card {
+  border: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(212,175,55,0.12), transparent);
+  opacity: 0;
+  transition: 0.25s ease;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* product title refinement */
+.card h3 {
+  font-size: 16px;
+  letter-spacing: 0.5px;
+}
+
+/* price style */
+.card p {
+  color: rgba(255,255,255,0.75);
+  font-size: 14px;
+}
+
+/* badge */
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(0,0,0,0.65);
+  border: 1px solid rgba(212,175,55,0.35);
+  color: #d4af37;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
