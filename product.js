@@ -25,8 +25,9 @@
     <div id="product-container"></div>
   </main>
 
+  <script src="data.js"></script>
+
   <script>
-    // ================= CART =================
     function getCart() {
       return JSON.parse(localStorage.getItem("sunqCart")) || [];
     }
@@ -43,34 +44,12 @@
       updateCartCount();
     }
 
-    // ================= PRODUCT DATA =================
-    const PRODUCTS = [
-  // ================= SUNQ =================
-  { id: "s1", name: "SUNQ A", price: 9.99, category: "sunq" },
-  { id: "s2", name: "SUNQ B", price: 19.99, category: "sunq" },
-  { id: "s3", name: "SUNQ C", price: 29.99, category: "sunq" },
-  { id: "s4", name: "SUNQ D", price: 39.99, category: "sunq" },
-  { id: "s5", name: "SUNQ E", price: 49.99, category: "sunq" },
-
-  // ================= JET =================
-  { id: "j1", name: "JET F", price: 9.99, category: "jet" },
-  { id: "j2", name: "JET G", price: 19.99, category: "jet" },
-  { id: "j3", name: "JET H", price: 29.99, category: "jet" },
-  { id: "j4", name: "JET I", price: 39.99, category: "jet" },
-  { id: "j5", name: "JET J", price: 49.99, category: "jet" }
-    };
-
-    // ================= GET PRODUCT ID =================
     const params = new URLSearchParams(window.location.search);
-    const id = params.get("id")?.trim();
+    const id = params.get("id");
 
     const product = PRODUCTS[id];
     const container = document.getElementById("product-container");
 
-    console.log("Requested ID:", id);
-    console.log("Available products:", Object.keys(PRODUCTS));
-
-    // ================= ADD TO CART =================
     function addToCart(id) {
       const cart = getCart();
       const item = cart.find(i => i.id === id);
@@ -81,14 +60,11 @@
       saveCart(cart);
     }
 
-    // ================= RENDER =================
     function renderProduct() {
-
       if (!product) {
         container.innerHTML = `
           <div class="product-layout">
             <h2>Item not found</h2>
-            <p style="opacity:0.7;">This product does not exist or the link is incorrect.</p>
             <a class="button-primary" href="shop.html">Back to shop</a>
           </div>
         `;
@@ -99,7 +75,7 @@
         <div class="product-layout">
 
           <div class="product-media">
-            <div class="product-image-large"></div>
+            <img class="product-image-large" src="${product.image}" alt="${product.name}">
           </div>
 
           <div class="product-info">
@@ -107,7 +83,7 @@
             <p class="price">$${product.price}</p>
 
             <p class="description">
-              A curated product from SUNQS MARKET. Clean, minimal, and intentionally designed.
+              A curated product from SUNQ. Clean, minimal, intentional design.
             </p>
 
             <button class="button-primary" onclick="addToCart('${product.id}')">
