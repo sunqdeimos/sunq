@@ -4,7 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product | SUNQ</title>
+
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="styles.css">
+
+  <!-- PRODUCT DATA -->
+  <script src="data.js"></script>
 </head>
 
 <body>
@@ -21,11 +30,9 @@
     </div>
   </nav>
 
-  <main class="product-page">
+  <main class="shop">
     <div id="product-container"></div>
   </main>
-
-  <script src="data.js"></script>
 
   <script>
     function getCart() {
@@ -44,12 +51,6 @@
       updateCartCount();
     }
 
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
-
-    const product = PRODUCTS[id];
-    const container = document.getElementById("product-container");
-
     function addToCart(id) {
       const cart = getCart();
       const item = cart.find(i => i.id === id);
@@ -60,11 +61,18 @@
       saveCart(cart);
     }
 
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    const product = PRODUCTS[id];
+    const container = document.getElementById("product-container");
+
     function renderProduct() {
       if (!product) {
         container.innerHTML = `
-          <div class="product-layout">
+          <div class="card" style="text-align:center;">
             <h2>Item not found</h2>
+            <p style="opacity:0.7;">This product does not exist or the link is incorrect.</p>
             <a class="button-primary" href="shop.html">Back to shop</a>
           </div>
         `;
@@ -74,23 +82,21 @@
       container.innerHTML = `
         <div class="product-layout">
 
-          <div class="product-media">
-            <img class="product-image-large" src="${product.image}" alt="${product.name}">
-          </div>
+          <img class="product-image-large" src="${product.image}" alt="${product.name}">
 
           <div class="product-info">
             <h1>${product.name}</h1>
             <p class="price">$${product.price}</p>
 
             <p class="description">
-              A curated product from SUNQ. Clean, minimal, intentional design.
+              A curated product from SUNQ. Clean, minimal, and intentionally designed.
             </p>
 
             <button class="button-primary" onclick="addToCart('${product.id}')">
               Add to cart
             </button>
 
-            <div class="meta">
+            <div class="meta" style="opacity:0.8;">
               <p>✔ Secure checkout (demo)</p>
               <p>✔ Limited availability</p>
             </div>
@@ -98,24 +104,20 @@
 
         </div>
 
-        <section class="recommendations">
-          <h2>You may also like</h2>
+        <section class="collection" style="margin-top:40px;">
+          <h2 class="collection-title">You may also like</h2>
 
-          <div class="grid small">
+          <div class="grid">
             ${Object.values(PRODUCTS)
               .filter(p => p.id !== product.id)
               .map(p => `
-                <div class="card fade">
+                <a class="card fade" href="product.html?id=${p.id}">
                   <div class="card-image"></div>
                   <h3>${p.name}</h3>
                   <p>$${p.price}</p>
-                  <a class="button-primary" href="product.html?id=${p.id}">
-                    View
-                  </a>
-                </div>
+                </a>
               `).join("")}
           </div>
-
         </section>
       `;
     }
