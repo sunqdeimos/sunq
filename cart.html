@@ -5,15 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cart | SUNQ</title>
 
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="styles.css">
 
-  <!-- IMPORTANT: load shared product data FIRST -->
+  <!-- PRODUCT DATA -->
   <script src="data.js"></script>
 </head>
 
 <body>
 
-  <!-- ================= NAV ================= -->
   <nav class="navbar">
     <div class="nav-container">
       <a href="index.html" class="logo">SUNQ</a>
@@ -26,7 +30,6 @@
     </div>
   </nav>
 
-  <!-- ================= CART UI ================= -->
   <main class="shop">
     <h1 class="page-title">Your Cart</h1>
 
@@ -34,7 +37,6 @@
   </main>
 
   <script>
-    // ================= CART STORAGE =================
     function getCart() {
       return JSON.parse(localStorage.getItem("sunqCart")) || [];
     }
@@ -52,7 +54,6 @@
       if (el) el.textContent = total;
     }
 
-    // ================= CART ACTIONS =================
     function changeQty(id, delta) {
       let cart = getCart();
       const item = cart.find(i => i.id === id);
@@ -86,7 +87,6 @@
       clearCart();
     }
 
-    // ================= RENDER CART =================
     function renderCart() {
       const container = document.getElementById("cart-container");
       const cart = getCart();
@@ -118,7 +118,6 @@
 
         return `
           <div class="card">
-
             <h3>${product.name}</h3>
             <p>$${product.price}</p>
 
@@ -129,7 +128,6 @@
             </div>
 
             <p><strong>$${itemTotal.toFixed(2)}</strong></p>
-
           </div>
         `;
       }).join("");
@@ -151,7 +149,6 @@
       `;
     }
 
-    // ================= INIT =================
     updateCartCount();
     renderCart();
   </script>
