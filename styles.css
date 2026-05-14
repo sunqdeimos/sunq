@@ -1,184 +1,359 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop | SUNQ</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
+/* ================= RESET ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
 
-<body>
+body {
+  background: #0b0b0d;
+  color: #fff;
+  overflow-x: hidden;
+}
 
-  <!-- NAV -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="index.html" class="logo">SUNQ</a>
+/* ================= NAVBAR ================= */
+.navbar {
+  background: rgba(15, 15, 18, 0.95);
+  padding: 15px 20px;
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
 
-      <div class="nav-links">
-        <a href="shop.html">Shop</a>
-        <a href="about.html">About</a>
-        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-      </div>
-    </div>
-  </nav>
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  <!-- SHOP -->
-  <main class="shop">
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: #d4af37;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
 
-    <h1 class="page-title">Shop</h1>
+.nav-links a {
+  margin-left: 15px;
+  color: #fff;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
 
-    <!-- FILTERS -->
-    <div class="filter-bar">
-      <button class="filter-btn active" onclick="showCollection('all')">All</button>
-      <button class="filter-btn" onclick="showCollection('sunq')">SUNQ</button>
-      <button class="filter-btn" onclick="showCollection('jet')">JET</button>
-    </div>
+.nav-links a:hover {
+  color: #d4af37;
+}
 
-    <!-- ================= SUNQ ================= -->
-    <section class="collection sunq-collection">
-      <h2 class="collection-title">SUNQ Collection</h2>
+/* ================= PAGE ================= */
+.shop {
+  padding: 40px;
+}
 
-      <div class="grid">
+.page-title {
+  margin-bottom: 25px;
+  font-size: 28px;
+  color: #d4af37;
+}
 
-        <div class="card fade">
-          <span class="badge">SUNQ</span>
-          <div class="card-image"></div>
-          <h3>SUNQ / 01</h3>
-          <p>$9.99</p>
-          <a class="button-primary" href="product.html?id=s1">View</a>
-        </div>
+/* ================= HERO ================= */
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 80px 20px;
+}
 
-        <div class="card fade">
-          <span class="badge">SUNQ</span>
-          <div class="card-image"></div>
-          <h3>SUNQ / 02</h3>
-          <p>$19.99</p>
-          <a class="button-primary" href="product.html?id=s2">View</a>
-        </div>
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  max-width: 700px;
+  margin: 0 auto;
+}
 
-        <div class="card fade">
-          <span class="badge">SUNQ</span>
-          <div class="card-image"></div>
-          <h3>SUNQ / 03</h3>
-          <p>$29.99</p>
-          <a class="button-primary" href="product.html?id=s3">View</a>
-        </div>
+.hero .button-primary {
+  display: inline-block;
+  margin-top: 10px;
+}
 
-        <div class="card fade">
-          <span class="badge">SUNQ</span>
-          <div class="card-image"></div>
-          <h3>SUNQ / 04</h3>
-          <p>$39.99</p>
-          <a class="button-primary" href="product.html?id=s4">View</a>
-        </div>
+/* ================= GRID ================= */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+}
 
-        <div class="card fade">
-          <span class="badge">SUNQ</span>
-          <div class="card-image"></div>
-          <h3>SUNQ / 05</h3>
-          <p>$49.99</p>
-          <a class="button-primary" href="product.html?id=s5">View</a>
-        </div>
+/* ================= CARD ================= */
+.card {
+  background: linear-gradient(145deg, #151518, #101012);
+  padding: 15px;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  overflow: hidden;
+}
 
-      </div>
-    </section>
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);
+}
 
-    <!-- ================= JET ================= -->
-    <section class="collection jet-collection">
-      <h2 class="collection-title">JET Collection</h2>
+/* overlay glow */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(212,175,55,0.12), transparent);
+  opacity: 0;
+  transition: 0.25s ease;
+}
 
-      <div class="grid">
+.card:hover::before {
+  opacity: 1;
+}
 
-        <div class="card fade">
-          <span class="badge">JET</span>
-          <div class="card-image"></div>
-          <h3>JET / A1</h3>
-          <p>$9.99</p>
-          <a class="button-primary" href="product.html?id=j1">View</a>
-        </div>
+.card h3 {
+  font-size: 16px;
+  letter-spacing: 0.5px;
+}
 
-        <div class="card fade">
-          <span class="badge">JET</span>
-          <div class="card-image"></div>
-          <h3>JET / A2</h3>
-          <p>$19.99</p>
-          <a class="button-primary" href="product.html?id=j2">View</a>
-        </div>
+.card p {
+  color: rgba(255,255,255,0.75);
+  font-size: 14px;
+}
 
-        <div class="card fade">
-          <span class="badge">JET</span>
-          <div class="card-image"></div>
-          <h3>JET / A3</h3>
-          <p>$29.99</p>
-          <a class="button-primary" href="product.html?id=j3">View</a>
-        </div>
+/* ================= IMAGE ================= */
+.card-image {
+  height: 120px;
+  border-radius: 10px;
+  background: radial-gradient(circle at top, rgba(212,175,55,0.25), rgba(0,0,0,0.7));
+  border: 1px solid rgba(255,255,255,0.06);
+}
 
-        <div class="card fade">
-          <span class="badge">JET</span>
-          <div class="card-image"></div>
-          <h3>JET / A4</h3>
-          <p>$39.99</p>
-          <a class="button-primary" href="product.html?id=j4">View</a>
-        </div>
+/* ================= BADGE ================= */
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(0,0,0,0.65);
+  border: 1px solid rgba(212,175,55,0.35);
+  color: #d4af37;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  z-index: 2;
+}
 
-        <div class="card fade">
-          <span class="badge">JET</span>
-          <div class="card-image"></div>
-          <h3>JET / A5</h3>
-          <p>$49.99</p>
-          <a class="button-primary" href="product.html?id=j5">View</a>
-        </div>
+/* ================= BUTTONS ================= */
+.button-primary {
+  background: linear-gradient(90deg, #d4af37, #f1d77a);
+  color: #111;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s ease;
+  text-decoration: none;
+}
 
-      </div>
-    </section>
+.button-primary:hover {
+  transform: scale(1.05);
+  opacity: 0.95;
+}
 
-  </main>
+/* ================= FILTERS ================= */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+  width: fit-content;
+  margin-bottom: 20px;
+}
 
-  <!-- CART COUNT -->
-  <script>
-    function getCart() {
-      return JSON.parse(localStorage.getItem("sunqCart")) || [];
-    }
+.filter-btn {
+  background: #1a1a1d;
+  color: #fff;
+  border: 1px solid #333;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
 
-    function updateCartCount() {
-      const cart = getCart();
-      const total = cart.reduce((sum, i) => sum + i.quantity, 0);
-      const el = document.getElementById("cart-count");
-      if (el) el.textContent = total;
-    }
+.filter-btn:hover {
+  border-color: #d4af37;
+  color: #d4af37;
+}
 
-    updateCartCount();
-    window.addEventListener("storage", updateCartCount);
-  </script>
+.filter-btn.active {
+  background: #d4af37;
+  color: #111;
+}
 
-  <!-- FILTER SYSTEM -->
-  <script>
-    function showCollection(type) {
-      const sunq = document.querySelector(".sunq-collection");
-      const jet = document.querySelector(".jet-collection");
-      const buttons = document.querySelectorAll(".filter-btn");
+/* ================= COLLECTIONS ================= */
+.collection {
+  margin-bottom: 50px;
+}
 
-      buttons.forEach(b => b.classList.remove("active"));
+.collection-title {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: #d4af37;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-      if (type === "all") {
-        sunq.style.display = "block";
-        jet.style.display = "block";
-        buttons[0].classList.add("active");
-      }
+.collection-title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+}
 
-      if (type === "sunq") {
-        sunq.style.display = "block";
-        jet.style.display = "none";
-        buttons[1].classList.add("active");
-      }
+.collection + .collection {
+  padding-top: 30px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
 
-      if (type === "jet") {
-        sunq.style.display = "none";
-        jet.style.display = "block";
-        buttons[2].classList.add("active");
-      }
-    }
-  </script>
+/* ================= PRODUCT PAGE ================= */
+.product-layout {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+}
 
-</body>
-</html>
+.product-image-large {
+  width: 320px;
+  height: 320px;
+  background: #222;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.price {
+  font-size: 22px;
+  color: #d4af37;
+}
+
+/* ================= CART ================= */
+#cart-container .card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.qty-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qty-row button {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #d4af37;
+  color: #111;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.15s ease;
+}
+
+.qty-row button:hover {
+  transform: scale(1.1);
+}
+
+#cart-container .button-primary {
+  width: 100%;
+  margin-top: 10px;
+}
+
+#cart-container button[onclick*="clearCart"] {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 10px;
+}
+
+#cart-container button[onclick*="checkout"] {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  background: #111;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 10px;
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade {
+  animation: fadeIn 0.45s ease;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 600px) {
+  .product-layout {
+    flex-direction: column;
+  }
+
+  .shop {
+    padding: 20px;
+  }
+
+  .qty-row button {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+  }
+
+  .filter-bar {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
