@@ -4,7 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cart | SUNQ</title>
+
   <link rel="stylesheet" href="styles.css">
+
+  <!-- IMPORTANT: load shared product data FIRST -->
+  <script src="data.js"></script>
 </head>
 
 <body>
@@ -48,23 +52,6 @@
       if (el) el.textContent = total;
     }
 
-    // ================= PRODUCTS (SINGLE SOURCE OF TRUTH) =================
-    const PRODUCTS = {
-      s1: { id: "s1", name: "SUNQ A", price: 9.99 },
-      s2: { id: "s2", name: "SUNQ B", price: 19.99 },
-      s3: { id: "s3", name: "SUNQ C", price: 29.99 },
-      s4: { id: "s4", name: "SUNQ D", price: 39.99 },
-      s5: { id: "s5", name: "SUNQ E", price: 49.99 },
-
-      j1: { id: "j1", name: "JET F", price: 9.99 },
-      j2: { id: "j2", name: "JET G", price: 19.99 },
-      j3: { id: "j3", name: "JET H", price: 29.99 },
-      j4: { id: "j4", name: "JET I", price: 39.99 },
-      j5: { id: "j5", name: "JET J", price: 49.99 }
-    };
-
-    const container = document.getElementById("cart-container");
-
     // ================= CART ACTIONS =================
     function changeQty(id, delta) {
       let cart = getCart();
@@ -101,6 +88,7 @@
 
     // ================= RENDER CART =================
     function renderCart() {
+      const container = document.getElementById("cart-container");
       const cart = getCart();
 
       if (cart.length === 0) {
@@ -152,7 +140,7 @@
         <div class="card" style="margin-top: 20px;">
           <h2>Total: $${total.toFixed(2)}</h2>
 
-          <button onclick="checkout()" class="button-primary">
+          <button class="button-primary" onclick="checkout()">
             Checkout
           </button>
 
@@ -163,6 +151,7 @@
       `;
     }
 
+    // ================= INIT =================
     updateCartCount();
     renderCart();
   </script>
