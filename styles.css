@@ -98,27 +98,22 @@ body {
   gap: 10px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   border: 1px solid rgba(255,255,255,0.06);
+
   position: relative;
   overflow: hidden;
+
+  text-decoration: none;
+  color: inherit;
+}
+
+/* FIX: prevent invisible layer blocking clicks */
+.card::before {
+  display: none;
 }
 
 .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);
-}
-
-/* overlay glow */
-.card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg, rgba(212,175,55,0.12), transparent);
-  opacity: 0;
-  transition: 0.25s ease;
-}
-
-.card:hover::before {
-  opacity: 1;
 }
 
 .card h3 {
@@ -137,6 +132,7 @@ body {
   border-radius: 10px;
   background: radial-gradient(circle at top, rgba(212,175,55,0.25), rgba(0,0,0,0.7));
   border: 1px solid rgba(255,255,255,0.06);
+  pointer-events: none;
 }
 
 /* ================= BADGE ================= */
@@ -196,7 +192,6 @@ body {
   cursor: pointer;
   transition: 0.2s ease;
   font-weight: 600;
-  letter-spacing: 0.5px;
 }
 
 .filter-btn:hover {
@@ -218,7 +213,6 @@ body {
   font-size: 22px;
   margin-bottom: 15px;
   color: #d4af37;
-  letter-spacing: 1px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -231,11 +225,6 @@ body {
   background: rgba(255,255,255,0.08);
 }
 
-.collection + .collection {
-  padding-top: 30px;
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-
 /* ================= PRODUCT PAGE ================= */
 .product-layout {
   display: flex;
@@ -246,8 +235,8 @@ body {
 .product-image-large {
   width: 320px;
   height: 320px;
-  background: #222;
   border-radius: 16px;
+  object-fit: cover;
   border: 1px solid rgba(255,255,255,0.06);
 }
 
@@ -284,19 +273,6 @@ body {
   font-weight: bold;
   border: none;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.15s ease;
-}
-
-.qty-row button:hover {
-  transform: scale(1.1);
-}
-
-#cart-container .button-primary {
-  width: 100%;
-  margin-top: 10px;
 }
 
 #cart-container button[onclick*="clearCart"] {
@@ -321,14 +297,8 @@ body {
 
 /* ================= ANIMATIONS ================= */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .fade {
@@ -343,17 +313,5 @@ body {
 
   .shop {
     padding: 20px;
-  }
-
-  .qty-row button {
-    width: 48px;
-    height: 48px;
-    font-size: 18px;
-  }
-
-  .filter-bar {
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
   }
 }
