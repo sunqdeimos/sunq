@@ -6,6 +6,11 @@
   font-family: "Inter", sans-serif;
 }
 
+/* FIX: force black background everywhere (stops grey scrolling on mobile) */
+html {
+  background: #000;
+}
+
 /* FIX: ensure background fills mobile screens */
 html, body {
   height: 100%;
@@ -13,7 +18,12 @@ html, body {
 }
 
 body {
-  background: #0b0b0d url("https://raw.githubusercontent.com/sunqdeimos/sunq/main/gold-bg.jpg") center/cover no-repeat;
+  background-color: #000;
+  background-image: url("https://raw.githubusercontent.com/sunqdeimos/sunq/main/gold-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
   color: #fff;
   overflow-x: hidden;
   min-height: 100vh;
@@ -268,6 +278,9 @@ h1, h2, h3,
   display: flex;
   gap: 40px;
   padding: 40px;
+
+  /* FIX: centers layout properly */
+  align-items: center;
 }
 
 .product-image-large {
@@ -275,7 +288,18 @@ h1, h2, h3,
   height: 360px;
   border-radius: 18px;
   object-fit: cover;
+  object-position: center;
   border: 1px solid rgba(255,255,255,0.06);
+
+  /* FIX: prevents weird alignment */
+  display: block;
+}
+
+/* FIX: keeps image container aligned */
+.product-media {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .product-info {
@@ -372,6 +396,8 @@ h1, h2, h3,
   .product-layout {
     flex-direction: column;
     padding: 20px;
+    align-items: center;
+    text-align: center;
   }
 
   .shop {
@@ -384,5 +410,12 @@ h1, h2, h3,
 
   .card-image {
     height: 240px;
+  }
+
+  .product-image-large {
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    aspect-ratio: 1 / 1;
   }
 }
