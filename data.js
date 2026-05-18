@@ -6,7 +6,7 @@ const PRODUCTS = [
     name: "SUNQ / 01",
     price: 9.99,
     stock: 14,
-    image: "https://raw.githubusercontent.com/sunqdeimos/sunq/main/images/sunq01.jpg",
+    image: "https://github.com/sunqdeimos/sunq/raw/main/sunq01.jpg",
     collection: "diamond"
   },
   {
