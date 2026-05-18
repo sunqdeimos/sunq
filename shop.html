@@ -4,7 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shop | SUNQ</title>
+
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="styles.css">
+
+  <!-- PRODUCTS -->
+  <script src="data.js"></script>
 </head>
 
 <body>
@@ -27,107 +36,70 @@
 
     <h1 class="page-title">Shop</h1>
 
-    <!-- FILTERS -->
-    <div class="filter-bar">
-      <button class="filter-btn active" onclick="showCollection('all')">All</button>
-      <button class="filter-btn" onclick="showCollection('sunq')">SUNQ</button>
-      <button class="filter-btn" onclick="showCollection('jet')">JET</button>
-    </div>
-
-    <!-- ================= SUNQ ================= -->
     <section class="collection sunq-collection">
       <h2 class="collection-title">SUNQ Collection</h2>
 
       <div class="grid">
 
-        <div class="card fade">
-          <span class="badge">SUNQ</span>
+        <a class="card fade" href="product.html?id=s1">
           <div class="card-image"></div>
           <h3>SUNQ / 01</h3>
           <p>$9.99</p>
-          <a class="button-primary" href="product.html?id=s1">View</a>
-        </div>
+        </a>
 
-        <div class="card fade">
-          <span class="badge">SUNQ</span>
+        <a class="card fade" href="product.html?id=s2">
           <div class="card-image"></div>
           <h3>SUNQ / 02</h3>
           <p>$19.99</p>
-          <a class="button-primary" href="product.html?id=s2">View</a>
-        </div>
+        </a>
 
-        <div class="card fade">
-          <span class="badge">SUNQ</span>
+        <a class="card fade" href="product.html?id=s3">
           <div class="card-image"></div>
           <h3>SUNQ / 03</h3>
           <p>$29.99</p>
-          <a class="button-primary" href="product.html?id=s3">View</a>
-        </div>
+        </a>
 
-        <div class="card fade">
-          <span class="badge">SUNQ</span>
+        <a class="card fade" href="product.html?id=s4">
           <div class="card-image"></div>
           <h3>SUNQ / 04</h3>
           <p>$39.99</p>
-          <a class="button-primary" href="product.html?id=s4">View</a>
-        </div>
+        </a>
 
-        <div class="card fade">
-          <span class="badge">SUNQ</span>
+        <a class="card fade" href="product.html?id=s5">
           <div class="card-image"></div>
           <h3>SUNQ / 05</h3>
           <p>$49.99</p>
-          <a class="button-primary" href="product.html?id=s5">View</a>
-        </div>
+        </a>
 
-      </div>
-    </section>
-
-    <!-- ================= JET ================= -->
-    <section class="collection jet-collection">
-      <h2 class="collection-title">JET Collection</h2>
-
-      <div class="grid">
-
-        <div class="card fade">
-          <span class="badge">JET</span>
+        <a class="card fade" href="product.html?id=s6">
           <div class="card-image"></div>
-          <h3>JET / A1</h3>
-          <p>$9.99</p>
-          <a class="button-primary" href="product.html?id=j1">View</a>
-        </div>
+          <h3>SUNQ / 06</h3>
+          <p>$59.99</p>
+        </a>
 
-        <div class="card fade">
-          <span class="badge">JET</span>
+        <a class="card fade" href="product.html?id=s7">
           <div class="card-image"></div>
-          <h3>JET / A2</h3>
-          <p>$19.99</p>
-          <a class="button-primary" href="product.html?id=j2">View</a>
-        </div>
+          <h3>SUNQ / 07</h3>
+          <p>$69.99</p>
+        </a>
 
-        <div class="card fade">
-          <span class="badge">JET</span>
+        <a class="card fade" href="product.html?id=s8">
           <div class="card-image"></div>
-          <h3>JET / A3</h3>
-          <p>$29.99</p>
-          <a class="button-primary" href="product.html?id=j3">View</a>
-        </div>
+          <h3>SUNQ / 08</h3>
+          <p>$79.99</p>
+        </a>
 
-        <div class="card fade">
-          <span class="badge">JET</span>
+        <a class="card fade" href="product.html?id=s9">
           <div class="card-image"></div>
-          <h3>JET / A4</h3>
-          <p>$39.99</p>
-          <a class="button-primary" href="product.html?id=j4">View</a>
-        </div>
+          <h3>SUNQ / 09</h3>
+          <p>$89.99</p>
+        </a>
 
-        <div class="card fade">
-          <span class="badge">JET</span>
+        <a class="card fade" href="product.html?id=s10">
           <div class="card-image"></div>
-          <h3>JET / A5</h3>
-          <p>$49.99</p>
-          <a class="button-primary" href="product.html?id=j5">View</a>
-        </div>
+          <h3>SUNQ / 10</h3>
+          <p>$99.99</p>
+        </a>
 
       </div>
     </section>
@@ -149,35 +121,6 @@
 
     updateCartCount();
     window.addEventListener("storage", updateCartCount);
-  </script>
-
-  <!-- FILTER SYSTEM -->
-  <script>
-    function showCollection(type) {
-      const sunq = document.querySelector(".sunq-collection");
-      const jet = document.querySelector(".jet-collection");
-      const buttons = document.querySelectorAll(".filter-btn");
-
-      buttons.forEach(b => b.classList.remove("active"));
-
-      if (type === "all") {
-        sunq.style.display = "block";
-        jet.style.display = "block";
-        buttons[0].classList.add("active");
-      }
-
-      if (type === "sunq") {
-        sunq.style.display = "block";
-        jet.style.display = "none";
-        buttons[1].classList.add("active");
-      }
-
-      if (type === "jet") {
-        sunq.style.display = "none";
-        jet.style.display = "block";
-        buttons[2].classList.add("active");
-      }
-    }
   </script>
 
 </body>
