@@ -5,18 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shop | SUNQ</title>
 
+  <!-- FONTS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
 
+  <!-- PRODUCTS -->
   <script src="data.js"></script>
-  <script src="store-ui.js"></script>
 </head>
 
 <body>
 
+  <!-- NAV -->
   <nav class="navbar">
     <div class="nav-container">
       <a href="index.html" class="logo">SUNQ</a>
@@ -29,51 +31,160 @@
     </div>
   </nav>
 
+  <!-- SHOP -->
   <main class="shop">
 
     <h1 class="page-title">Shop</h1>
-<input
-  type="text"
-  id="searchInput"
-  placeholder="Search products..."
-  class="search-bar"
-/>
+
+    <!-- SEARCH -->
+    <input
+      type="text"
+      id="searchInput"
+      class="search-bar"
+      placeholder="Search products..."
+    />
+
+    <!-- FILTERS -->
     <div class="filter-bar">
       <button class="filter-btn active" onclick="setFilter('all', event)">All</button>
       <button class="filter-btn" onclick="setFilter('sunq', event)">SUNQ</button>
       <button class="filter-btn" onclick="setFilter('diamond', event)">Diamond / Champ FA</button>
     </div>
 
-    <div id="shop-grid"></div>
+    <!-- ================= DIAMOND / CHAMP FA ================= -->
+    <section class="collection diamond-collection">
+      <h2 class="collection-title">Diamond / Champ FA</h2>
+
+      <div class="grid">
+        <a class="card fade" href="product.html?id=s1">
+          <div class="card-image"></div>
+          <h3>SUNQ / 01</h3>
+          <p>$9.99</p>
+        </a>
+
+        <a class="card fade" href="product.html?id=s2">
+          <div class="card-image"></div>
+          <h3>SUNQ / 02</h3>
+          <p>$19.99</p>
+        </a>
+
+        <a class="card fade" href="product.html?id=s3">
+          <div class="card-image"></div>
+          <h3>SUNQ / 03</h3>
+          <p>$29.99</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- ================= SUNQ ================= -->
+    <section class="collection sunq-collection">
+      <h2 class="collection-title">SUNQ Collection</h2>
+
+      <div class="grid">
+        <a class="card fade" href="product.html?id=s1"><div class="card-image"></div><h3>SUNQ / 01</h3><p>$9.99</p></a>
+        <a class="card fade" href="product.html?id=s2"><div class="card-image"></div><h3>SUNQ / 02</h3><p>$19.99</p></a>
+        <a class="card fade" href="product.html?id=s3"><div class="card-image"></div><h3>SUNQ / 03</h3><p>$29.99</p></a>
+        <a class="card fade" href="product.html?id=s4"><div class="card-image"></div><h3>SUNQ / 04</h3><p>$39.99</p></a>
+        <a class="card fade" href="product.html?id=s5"><div class="card-image"></div><h3>SUNQ / 05</h3><p>$49.99</p></a>
+        <a class="card fade" href="product.html?id=s6"><div class="card-image"></div><h3>SUNQ / 06</h3><p>$59.99</p></a>
+        <a class="card fade" href="product.html?id=s7"><div class="card-image"></div><h3>SUNQ / 07</h3><p>$69.99</p></a>
+        <a class="card fade" href="product.html?id=s8"><div class="card-image"></div><h3>SUNQ / 08</h3><p>$79.99</p></a>
+        <a class="card fade" href="product.html?id=s9"><div class="card-image"></div><h3>SUNQ / 09</h3><p>$89.99</p></a>
+        <a class="card fade" href="product.html?id=s10"><div class="card-image"></div><h3>SUNQ / 10</h3><p>$99.99</p></a>
+      </div>
+    </section>
 
   </main>
 
+  <!-- CART COUNT -->
+  <script>
+    function getCart() {
+      return JSON.parse(localStorage.getItem("sunqCart")) || [];
+    }
+
+    function updateCartCount() {
+      const cart = getCart();
+      const total = cart.reduce((sum, i) => sum + i.quantity, 0);
+      const el = document.getElementById("cart-count");
+      if (el) el.textContent = total;
+    }
+
+    updateCartCount();
+    window.addEventListener("storage", updateCartCount);
+  </script>
+
+  <!-- SHOP LOGIC (FULL MERGED SYSTEM) -->
   <script>
     updateCartCount();
 
     const diamondSet = ["s1","s2","s3"];
     const sunqSet = ["s4","s5","s6","s7","s8","s9","s10"];
 
-    function setFilter(type, e) {
+    let currentFilter = "all";
+    let searchQuery = "";
+
+    function getFilteredProducts() {
       let products = Object.values(PRODUCTS);
 
-      if (type === "diamond") {
+      if (currentFilter === "diamond") {
         products = products.filter(p => diamondSet.includes(p.id));
       }
 
-      if (type === "sunq") {
+      if (currentFilter === "sunq") {
         products = products.filter(p => sunqSet.includes(p.id));
       }
 
-      renderGrid("shop-grid", products);
+      if (searchQuery.trim() !== "") {
+        const q = searchQuery.toLowerCase();
+        products = products.filter(p =>
+          p.name.toLowerCase().includes(q)
+        );
+      }
+
+      return products;
+    }
+
+    function renderShop() {
+      // (kept for consistency; your current UI is static sections)
+      const diamondSection = document.querySelector(".diamond-collection");
+      const sunqSection = document.querySelector(".sunq-collection");
+
+      const filtered = getFilteredProducts().map(p => p.id);
+
+      // search + filter visibility control
+      const showDiamond = filtered.some(id => diamondSet.includes(id));
+      const showSunq = filtered.some(id => sunqSet.includes(id));
+
+      diamondSection.style.display =
+        currentFilter === "sunq" ? "none" :
+        searchQuery ? (showDiamond ? "block" : "none") : "block";
+
+      sunqSection.style.display =
+        currentFilter === "diamond" ? "none" :
+        searchQuery ? (showSunq ? "block" : "none") : "block";
+    }
+
+    function setFilter(type, e) {
+      currentFilter = type;
 
       document.querySelectorAll(".filter-btn")
         .forEach(b => b.classList.remove("active"));
 
-      e.target.classList.add("active");
+      if (e && e.target) e.target.classList.add("active");
+
+      renderShop();
     }
 
-    renderGrid("shop-grid", Object.values(PRODUCTS));
+    const searchInput = document.getElementById("searchInput");
+
+    if (searchInput) {
+      searchInput.addEventListener("input", (e) => {
+        searchQuery = e.target.value;
+        renderShop();
+      });
+    }
+
+    renderShop();
 
     window.addEventListener("storage", updateCartCount);
   </script>
