@@ -419,3 +419,29 @@ h1, h2, h3,
     aspect-ratio: 1 / 1;
   }
 }
+/* ================= SEARCH BAR (ADDITION ONLY) ================= */
+.search-bar {
+  width: 100%;
+  max-width: 420px;
+  padding: 12px 14px;
+  margin-bottom: 15px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.35);
+  color: #fff;
+
+  outline: none;
+  backdrop-filter: blur(12px);
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.search-bar::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.search-bar:focus {
+  border-color: rgba(212,175,55,0.6);
+  box-shadow: 0 0 0 2px rgba(212,175,55,0.15);
+}
