@@ -5,14 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product | SUNQ</title>
 
-  <!-- FONTS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- PRODUCTS -->
+  <!-- MUST load first -->
   <script src="data.js"></script>
 </head>
 
@@ -35,8 +34,15 @@
   </main>
 
   <script>
+    /* ================= CART ================= */
+
     function getCart() {
       return JSON.parse(localStorage.getItem("sunqCart")) || [];
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem("sunqCart", JSON.stringify(cart));
+      updateCartCount();
     }
 
     function updateCartCount() {
@@ -46,19 +52,40 @@
       if (el) el.textContent = total;
     }
 
-    function saveCart(cart) {
-      localStorage.setItem("sunqCart", JSON.stringify(cart));
-      updateCartCount();
-    }
+    /* ================= PRODUCT LOOKUP ================= */
 
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
+    function getProduct(id) {
+      return PRODUCTS.find(p => p.id === id);
+    }
+
     const product = getProduct(id);
     const container = document.getElementById("product-container");
 
+    /* ================= STOCK ================= */
+
+    function getStock(id) {
+      const data = JSON.parse(localStorage.getItem("sunqStock")) || {};
+      return data[id] ?? 0;
+    }
+
+    function reduceStock(id, amount) {
+      const data = JSON.parse(localStorage.getItem("sunqStock")) || {};
+
+      if (data[id] === undefined) return false;
+      if (data[id] < amount) return false;
+
+      data[id] -= amount;
+      localStorage.setItem("sunqStock", JSON.stringify(data));
+      return true;
+    }
+
+    /* ================= ADD TO CART ================= */
+
     function addToCart(id) {
-      const product = PRODUCTS[id];
+      const product = getProduct(id);
       if (!product) return;
 
       const stockLeft = getStock(id);
@@ -71,28 +98,31 @@
       const cart = getCart();
       const item = cart.find(i => i.id === id);
 
+      const newQty = item ? item.quantity + 1 : 1;
+
+      if (newQty > stockLeft) {
+        alert("Not enough stock left.");
+        return;
+      }
+
       if (item) {
-        if (item.quantity + 1 > stockLeft) {
-          alert("Not enough stock left.");
-          return;
-        }
-        item.quantity += 1;
+        item.quantity = newQty;
       } else {
         cart.push({ id, quantity: 1 });
       }
 
       saveCart(cart);
-
-      // refresh the page UI so stock updates live
       renderProduct();
     }
+
+    /* ================= RENDER ================= */
 
     function renderProduct() {
       if (!product) {
         container.innerHTML = `
           <div class="card" style="text-align:center; padding:25px;">
             <h2>Item not found</h2>
-            <p style="opacity:0.7;">This product does not exist or the link is incorrect.</p>
+            <p style="opacity:0.7;">This product does not exist or link is incorrect.</p>
             <a class="button-primary" href="shop.html">Back to shop</a>
           </div>
         `;
@@ -100,14 +130,6 @@
       }
 
       const stockLeft = getStock(product.id);
-
-      const stockHTML = stockLeft > 0
-        ? `<p style="opacity:0.85;"><strong>Stock:</strong> ${stockLeft} left</p>`
-        : `<p style="color:#ff4d4d; font-weight:600;">Out of stock</p>`;
-
-      const buttonHTML = stockLeft > 0
-        ? `<button class="button-primary" onclick="addToCart('${product.id}')">Add to cart</button>`
-        : `<button class="button-primary" style="opacity:0.5; cursor:not-allowed;" disabled>Out of stock</button>`;
 
       container.innerHTML = `
         <div class="product-layout">
@@ -120,44 +142,27 @@
             <h1>${product.name}</h1>
             <p class="price">$${product.price}</p>
 
-            ${stockHTML}
-
-            <p style="opacity:0.75;">
-              A curated product from SUNQ. Clean, minimal, and intentionally designed.
+            <p style="opacity:0.8;">
+              Stock: ${stockLeft}
             </p>
 
-            ${buttonHTML}
+            <button class="button-primary" onclick="addToCart('${product.id}')">
+              Add to cart
+            </button>
 
-            <div class="meta" style="opacity:0.75;">
+            <div class="meta" style="opacity:0.7;">
               <p>✔ Secure checkout (demo)</p>
               <p>✔ Limited availability</p>
             </div>
           </div>
 
         </div>
-
-        <section class="collection" style="margin-top:40px;">
-          <h2 class="collection-title">You may also like</h2>
-
-          <div class="grid">
-            ${Object.values(PRODUCTS)
-              .filter(p => p.id !== product.id)
-              .map(p => `
-                <a class="card fade" href="product.html?id=${p.id}">
-                  <div class="card-image"></div>
-                  <h3>${p.name}</h3>
-                  <p>$${p.price}</p>
-                </a>
-              `).join("")}
-          </div>
-        </section>
       `;
     }
 
     updateCartCount();
     renderProduct();
 
-    // If user comes back after checkout in another tab, update stock display
     window.addEventListener("storage", () => {
       updateCartCount();
       renderProduct();
