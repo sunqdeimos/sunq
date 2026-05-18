@@ -36,6 +36,41 @@
 
     <h1 class="page-title">Shop</h1>
 
+    <!-- FILTERS -->
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="showCollection('all')">All</button>
+      <button class="filter-btn" onclick="showCollection('sunq')">SUNQ</button>
+      <button class="filter-btn" onclick="showCollection('diamond')">Diamond / Champ FA</button>
+    </div>
+
+    <!-- ================= DIAMOND / CHAMP FA ================= -->
+    <section class="collection diamond-collection">
+      <h2 class="collection-title">Diamond / Champ FA</h2>
+
+      <div class="grid">
+
+        <a class="card fade" href="product.html?id=s1">
+          <div class="card-image"></div>
+          <h3>SUNQ / 01</h3>
+          <p>$9.99</p>
+        </a>
+
+        <a class="card fade" href="product.html?id=s2">
+          <div class="card-image"></div>
+          <h3>SUNQ / 02</h3>
+          <p>$19.99</p>
+        </a>
+
+        <a class="card fade" href="product.html?id=s3">
+          <div class="card-image"></div>
+          <h3>SUNQ / 03</h3>
+          <p>$29.99</p>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ================= SUNQ ================= -->
     <section class="collection sunq-collection">
       <h2 class="collection-title">SUNQ Collection</h2>
 
@@ -121,6 +156,35 @@
 
     updateCartCount();
     window.addEventListener("storage", updateCartCount);
+  </script>
+
+  <!-- FILTER SYSTEM -->
+  <script>
+    function showCollection(type) {
+      const sunq = document.querySelector(".sunq-collection");
+      const diamond = document.querySelector(".diamond-collection");
+      const buttons = document.querySelectorAll(".filter-btn");
+
+      buttons.forEach(b => b.classList.remove("active"));
+
+      if (type === "all") {
+        sunq.style.display = "block";
+        diamond.style.display = "block";
+        buttons[0].classList.add("active");
+      }
+
+      if (type === "sunq") {
+        sunq.style.display = "block";
+        diamond.style.display = "none";
+        buttons[1].classList.add("active");
+      }
+
+      if (type === "diamond") {
+        sunq.style.display = "none";
+        diamond.style.display = "block";
+        buttons[2].classList.add("active");
+      }
+    }
   </script>
 
 </body>
