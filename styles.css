@@ -467,3 +467,17 @@ h1, h2, h3,
 .search-bar:focus {
   border-color: rgba(212,175,55,0.6);
 }
+.sort-btn {
+  background: rgba(20,20,24,0.8);
+  color: rgba(255,255,255,0.9);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.sort-btn:hover {
+  border-color: rgba(212,175,55,0.55);
+  color: #d4af37;
+}
