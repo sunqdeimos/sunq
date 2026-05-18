@@ -54,7 +54,7 @@
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
-    const product = PRODUCTS[id];
+    const product = getProduct(id);
     const container = document.getElementById("product-container");
 
     function addToCart(id) {
