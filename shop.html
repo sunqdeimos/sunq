@@ -5,20 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shop | SUNQ</title>
 
-  <!-- FONTS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- PRODUCTS -->
   <script src="data.js"></script>
+  <script src="store-ui.js"></script>
 </head>
 
 <body>
 
-  <!-- NAV -->
   <nav class="navbar">
     <div class="nav-container">
       <a href="index.html" class="logo">SUNQ</a>
@@ -31,160 +29,48 @@
     </div>
   </nav>
 
-  <!-- SHOP -->
   <main class="shop">
 
     <h1 class="page-title">Shop</h1>
 
-    <!-- FILTERS -->
     <div class="filter-bar">
-      <button class="filter-btn active" onclick="showCollection('all')">All</button>
-      <button class="filter-btn" onclick="showCollection('sunq')">SUNQ</button>
-      <button class="filter-btn" onclick="showCollection('diamond')">Diamond / Champ FA</button>
+      <button class="filter-btn active" onclick="setFilter('all', event)">All</button>
+      <button class="filter-btn" onclick="setFilter('sunq', event)">SUNQ</button>
+      <button class="filter-btn" onclick="setFilter('diamond', event)">Diamond / Champ FA</button>
     </div>
 
-    <!-- ================= DIAMOND / CHAMP FA ================= -->
-    <section class="collection diamond-collection">
-      <h2 class="collection-title">Diamond / Champ FA</h2>
-
-      <div class="grid">
-
-        <a class="card fade" href="product.html?id=s1">
-          <div class="card-image"></div>
-          <h3>SUNQ / 01</h3>
-          <p>$9.99</p>
-        </a>
-
-        <a class="card fade" href="product.html?id=s2">
-          <div class="card-image"></div>
-          <h3>SUNQ / 02</h3>
-          <p>$19.99</p>
-        </a>
-
-        <a class="card fade" href="product.html?id=s3">
-          <div class="card-image"></div>
-          <h3>SUNQ / 03</h3>
-          <p>$29.99</p>
-        </a>
-
-      </div>
-    </section>
-
-    <!-- ================= SUNQ ================= -->
-    <section class="collection sunq-collection">
-      <h2 class="collection-title">SUNQ Collection</h2>
-
-      <div class="grid">
-
-        <a class="card fade" href="product.html?id=s1">
-          <div class="card-image"></div>
-          <h3>SUNQ / 01</h3>
-          <p>$9.99</p>
-        </a>
-
-        <a class="card fade" href="product.html?id=s2">
-          <div class="card-image"></div>
-          <h3>SUNQ / 02</h3>
-          <p>$19.99</p>
-        </a>
-
-        <a class="card fade" href="product.html?id=s3">
-          <div class="card-image"></div>
-          <h3>SUNQ / 03</h3>
-          <p>$29.99</p>
-        </a>
-
-        <a class="card fade" href="product.html?id=s4">
-          <div class="card-image"></div>
-          <h3>SUNQ / 04</h3>
-          <p>$39.99</p>
-        </a>
-
-        <a class="card fade" href="product.html?id=s5">
-          <div class="card-image"></div>
-          <h3>SUNQ / 05</h3>
-          <p>$49.99</p>
-        </a>
-
-        <a class="card fade" href="product.html?id=s6">
-          <div class="card-image"></div>
-          <h3>SUNQ / 06</h3>
-          <p>$59.99</p>
-        </a>
-
-        <a class="card fade" href="product.html?id=s7">
-          <div class="card-image"></div>
-          <h3>SUNQ / 07</h3>
-          <p>$69.99</p>
-        </a>
-
-        <a class="card fade" href="product.html?id=s8">
-          <div class="card-image"></div>
-          <h3>SUNQ / 08</h3>
-          <p>$79.99</p>
-        </a>
-
-        <a class="card fade" href="product.html?id=s9">
-          <div class="card-image"></div>
-          <h3>SUNQ / 09</h3>
-          <p>$89.99</p>
-        </a>
-
-        <a class="card fade" href="product.html?id=s10">
-          <div class="card-image"></div>
-          <h3>SUNQ / 10</h3>
-          <p>$99.99</p>
-        </a>
-
-      </div>
-    </section>
+    <div id="shop-grid"></div>
 
   </main>
 
-  <!-- CART COUNT -->
   <script>
-    function getCart() {
-      return JSON.parse(localStorage.getItem("sunqCart")) || [];
-    }
-
-    function updateCartCount() {
-      const cart = getCart();
-      const total = cart.reduce((sum, i) => sum + i.quantity, 0);
-      const el = document.getElementById("cart-count");
-      if (el) el.textContent = total;
-    }
-
     updateCartCount();
-    window.addEventListener("storage", updateCartCount);
-  </script>
 
-  <!-- FILTER SYSTEM -->
-  <script>
-    function showCollection(type) {
-      const sunq = document.querySelector(".sunq-collection");
-      const diamond = document.querySelector(".diamond-collection");
-      const buttons = document.querySelectorAll(".filter-btn");
+    const diamondSet = ["s1","s2","s3"];
+    const sunqSet = ["s4","s5","s6","s7","s8","s9","s10"];
 
-      buttons.forEach(b => b.classList.remove("active"));
+    function setFilter(type, e) {
+      let products = Object.values(PRODUCTS);
 
-      if (type === "all") {
-        sunq.style.display = "block";
-        diamond.style.display = "block";
-        buttons[0].classList.add("active");
+      if (type === "diamond") {
+        products = products.filter(p => diamondSet.includes(p.id));
       }
 
       if (type === "sunq") {
-        sunq.style.display = "block";
-        diamond.style.display = "none";
-        buttons[1].classList.add("active");
+        products = products.filter(p => sunqSet.includes(p.id));
       }
 
-      if (type === "diamond") {
-        sunq.style.display = "none";
-        diamond.style.display = "block";
-        buttons[2].classList.add("active");
-      }
+      renderGrid("shop-grid", products);
+
+      document.querySelectorAll(".filter-btn")
+        .forEach(b => b.classList.remove("active"));
+
+      e.target.classList.add("active");
     }
+
+    renderGrid("shop-grid", Object.values(PRODUCTS));
+
+    window.addEventListener("storage", updateCartCount);
   </script>
 
 </body>
