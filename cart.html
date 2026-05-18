@@ -83,7 +83,22 @@
         return;
       }
 
-      alert("Checkout complete (demo). Thanks for your order!");
+      // Check stock first
+      for (const item of cart) {
+        const available = getStock(item.id);
+
+        if (item.quantity > available) {
+          alert(`Not enough stock for ${PRODUCTS[item.id].name}. Only ${available} left.`);
+          return;
+        }
+      }
+
+      // Reduce stock
+      for (const item of cart) {
+        reduceStock(item.id, item.quantity);
+      }
+
+      alert("Checkout complete! Stock updated.");
       clearCart();
     }
 
@@ -113,6 +128,8 @@
           `;
         }
 
+        const stockLeft = getStock(item.id);
+
         const itemTotal = product.price * item.quantity;
         total += itemTotal;
 
@@ -120,6 +137,8 @@
           <div class="card" style="padding:25px;">
             <h3>${product.name}</h3>
             <p>$${product.price}</p>
+
+            <p style="opacity:0.7;">Stock left: ${stockLeft}</p>
 
             <div class="qty-row">
               <button onclick="changeQty('${item.id}', -1)">-</button>
