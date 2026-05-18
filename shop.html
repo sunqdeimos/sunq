@@ -35,9 +35,9 @@
 
     <!-- SEARCH -->
     <input
-      type="text"
       id="searchInput"
       class="search-bar"
+      type="text"
       placeholder="Search products..."
     />
 
@@ -91,7 +91,7 @@
     function getFilteredProducts() {
       let products = Object.values(PRODUCTS);
 
-      // CATEGORY FILTER
+      // FILTER
       if (currentFilter === "diamond") {
         products = products.filter(p => diamondSet.includes(p.id));
       }
@@ -100,8 +100,8 @@
         products = products.filter(p => sunqSet.includes(p.id));
       }
 
-      // SEARCH FILTER
-      if (searchQuery.trim() !== "") {
+      // SEARCH
+      if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         products = products.filter(p =>
           p.name.toLowerCase().includes(q)
@@ -134,7 +134,13 @@
 
       grid.innerHTML = products.map(p => `
         <a class="card fade" href="product.html?id=${p.id}">
-          <div class="card-image"></div>
+
+          <div class="card-image" style="
+            background-image: url('${p.image}');
+            background-size: cover;
+            background-position: center;
+          "></div>
+
           <h3>${p.name}</h3>
           <p>$${p.price}</p>
         </a>
@@ -147,7 +153,7 @@
       document.querySelectorAll(".filter-btn")
         .forEach(b => b.classList.remove("active"));
 
-      if (e && e.target) e.target.classList.add("active");
+      if (e?.target) e.target.classList.add("active");
 
       renderProducts();
     }
