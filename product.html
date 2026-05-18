@@ -52,6 +52,14 @@
     }
 
     function addToCart(id) {
+      const product = PRODUCTS[id];
+      if (!product) return;
+
+      if (product.stock <= 0) {
+        alert("Out of stock.");
+        return;
+      }
+
       const cart = getCart();
       const item = cart.find(i => i.id === id);
 
@@ -80,6 +88,14 @@
         return;
       }
 
+      const stockText = product.stock > 0
+        ? `<p style="opacity:0.8;"><strong>Stock:</strong> ${product.stock} left</p>`
+        : `<p style="color:#ff4d4d;"><strong>Out of stock</strong></p>`;
+
+      const buttonHTML = product.stock > 0
+        ? `<button class="button-primary" onclick="addToCart('${product.id}')">Add to cart</button>`
+        : `<button class="button-primary" style="opacity:0.5; cursor:not-allowed;" disabled>Out of stock</button>`;
+
       container.innerHTML = `
         <div class="product-layout">
 
@@ -91,13 +107,13 @@
             <h1>${product.name}</h1>
             <p class="price">$${product.price}</p>
 
+            ${stockText}
+
             <p style="opacity:0.75;">
               A curated product from SUNQ. Clean, minimal, and intentionally designed.
             </p>
 
-            <button class="button-primary" onclick="addToCart('${product.id}')">
-              Add to cart
-            </button>
+            ${buttonHTML}
 
             <div class="meta" style="opacity:0.75;">
               <p>✔ Secure checkout (demo)</p>
