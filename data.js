@@ -81,18 +81,16 @@ const PRODUCTS = [
   }
 ];
 
-/* ================= HELPERS ================= */
-
 function getProduct(id) {
   return PRODUCTS.find(p => p.id === id);
 }
 
-function getProductsByCollection(name) {
-  if (name === "all") return PRODUCTS;
-  return PRODUCTS.filter(p => p.collection === name);
+function getProductsByCollection(type) {
+  if (type === "all") return PRODUCTS;
+  return PRODUCTS.filter(p => p.collection === type);
 }
 
-/* ================= STOCK SYSTEM ================= */
+/* ================= STOCK ================= */
 
 function getStockData() {
   return JSON.parse(localStorage.getItem("sunqStock")) || {};
