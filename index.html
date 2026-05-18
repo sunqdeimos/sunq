@@ -5,20 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SUNQ</title>
 
-  <!-- FONTS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- PRODUCTS -->
   <script src="data.js"></script>
+  <script src="store-ui.js"></script>
 </head>
 
 <body>
 
-  <!-- NAV -->
   <nav class="navbar">
     <div class="nav-container">
       <a href="index.html" class="logo">SUNQ</a>
@@ -31,7 +29,6 @@
     </div>
   </nav>
 
-  <!-- HERO -->
   <header class="hero">
     <div class="hero-content">
       <h1>Welcome mat deployed.</h1>
@@ -40,51 +37,21 @@
     </div>
   </header>
 
-  <!-- FEATURED -->
   <section class="shop">
     <h2 class="page-title">Featured Drops</h2>
-
-    <div class="grid">
-
-      <a class="card fade" href="product.html?id=s1">
-        <div class="card-image"></div>
-        <h3>SUNQ / 01</h3>
-        <p>$9.99</p>
-      </a>
-
-      <a class="card fade" href="product.html?id=s4">
-        <div class="card-image"></div>
-        <h3>SUNQ / 04</h3>
-        <p>$39.99</p>
-      </a>
-
-      <a class="card fade" href="product.html?id=s8">
-        <div class="card-image"></div>
-        <h3>SUNQ / 08</h3>
-        <p>$79.99</p>
-      </a>
-
-    </div>
+    <div id="featured-grid"></div>
   </section>
 
-  <!-- FOOTER -->
   <footer style="padding:40px; text-align:center; color:#666;">
     SUNQ — W.I.P marketplace
   </footer>
 
   <script>
-    function getCart() {
-      return JSON.parse(localStorage.getItem("sunqCart")) || [];
-    }
-
-    function updateCartCount() {
-      const cart = getCart();
-      const total = cart.reduce((sum, i) => sum + i.quantity, 0);
-      const el = document.getElementById("cart-count");
-      if (el) el.textContent = total;
-    }
-
     updateCartCount();
+
+    const featured = ["s1", "s4", "s8"].map(id => PRODUCTS[id]);
+    renderGrid("featured-grid", featured);
+
     window.addEventListener("storage", updateCartCount);
   </script>
 
