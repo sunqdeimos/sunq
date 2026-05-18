@@ -11,12 +11,13 @@
 
   <link rel="stylesheet" href="styles.css">
 
+  <!-- PRODUCTS -->
   <script src="data.js"></script>
-  <script src="store-ui.js"></script>
 </head>
 
 <body>
 
+  <!-- NAV -->
   <nav class="navbar">
     <div class="nav-container">
       <a href="index.html" class="logo">SUNQ</a>
@@ -29,6 +30,7 @@
     </div>
   </nav>
 
+  <!-- HERO -->
   <header class="hero">
     <div class="hero-content">
       <h1>Welcome mat deployed.</h1>
@@ -37,20 +39,51 @@
     </div>
   </header>
 
+  <!-- FEATURED -->
   <section class="shop">
     <h2 class="page-title">Featured Drops</h2>
-    <div id="featured-grid"></div>
+
+    <div class="grid" id="featured"></div>
   </section>
 
+  <!-- FOOTER -->
   <footer style="padding:40px; text-align:center; color:#666;">
     SUNQ — W.I.P marketplace
   </footer>
 
   <script>
-    updateCartCount();
+    function getCart() {
+      return JSON.parse(localStorage.getItem("sunqCart")) || [];
+    }
 
-    const featured = ["s1", "s4", "s8"].map(id => PRODUCTS[id]);
-    renderGrid("featured-grid", featured);
+    function updateCartCount() {
+      const cart = getCart();
+      const total = cart.reduce((sum, i) => sum + i.quantity, 0);
+      const el = document.getElementById("cart-count");
+      if (el) el.textContent = total;
+    }
+
+    function renderFeatured() {
+      const featuredIds = ["s1", "s4", "s8"];
+      const container = document.getElementById("featured");
+
+      container.innerHTML = featuredIds.map(id => {
+        const p = getProduct(id);
+
+        if (!p) return "";
+
+        return `
+          <a class="card fade" href="product.html?id=${p.id}">
+            <img class="card-image" src="${p.image}" alt="${p.name}">
+            <h3>${p.name}</h3>
+            <p>$${p.price}</p>
+          </a>
+        `;
+      }).join("");
+    }
+
+    updateCartCount();
+    renderFeatured();
 
     window.addEventListener("storage", updateCartCount);
   </script>
