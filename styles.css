@@ -481,3 +481,13 @@ h1, h2, h3,
   border-color: rgba(212,175,55,0.55);
   color: #d4af37;
 }
+/* ================= PRODUCT CARD IMAGE FIX ================= */
+
+.card-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  display: block;
+}
