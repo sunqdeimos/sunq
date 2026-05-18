@@ -11,3 +11,44 @@ const PRODUCTS = {
   s9: { id: "s9", name: "SUNQ / 09", price: 89.99, stock: 16, image: "https://placehold.co/800x800/111/fff?text=SUNQ+09" },
   s10:{ id: "s10", name: "SUNQ / 10", price: 99.99, stock: 1, image: "https://placehold.co/800x800/111/fff?text=SUNQ+10" }
 };
+
+/* ================= STOCK SYSTEM (LOCAL STORAGE) ================= */
+
+function getStockData() {
+  return JSON.parse(localStorage.getItem("sunqStock")) || {};
+}
+
+function saveStockData(stockData) {
+  localStorage.setItem("sunqStock", JSON.stringify(stockData));
+}
+
+function initStock() {
+  const stockData = getStockData();
+
+  Object.values(PRODUCTS).forEach(product => {
+    if (stockData[product.id] === undefined) {
+      stockData[product.id] = product.stock;
+    }
+  });
+
+  saveStockData(stockData);
+}
+
+function getStock(id) {
+  const stockData = getStockData();
+  return stockData[id] ?? 0;
+}
+
+function reduceStock(id, amount) {
+  const stockData = getStockData();
+
+  if (stockData[id] === undefined) return false;
+  if (stockData[id] < amount) return false;
+
+  stockData[id] -= amount;
+  saveStockData(stockData);
+  return true;
+}
+
+/* Initialize stock when site loads */
+initStock();
