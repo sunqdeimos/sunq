@@ -1,5 +1,3 @@
-/* ================= PRODUCT CATALOG ================= */
-
 const PRODUCTS = [
   {
     id: "s1",
@@ -14,7 +12,7 @@ const PRODUCTS = [
     name: "SUNQ / 02",
     price: 19.99,
     stock: 8,
-    image: "https://raw.githubusercontent.com/sunqdeimos/sunq/main/images/sunq02.jpg",
+    image: "https://github.com/sunqdeimos/sunq/raw/main/sunq02.jpg",
     collection: "diamond"
   },
   {
@@ -22,7 +20,7 @@ const PRODUCTS = [
     name: "SUNQ / 03",
     price: 29.99,
     stock: 20,
-    image: "https://raw.githubusercontent.com/sunqdeimos/sunq/main/images/sunq03.jpg",
+    image: "https://github.com/sunqdeimos/sunq/raw/main/sunq03.jpg",
     collection: "diamond"
   },
   {
@@ -30,7 +28,7 @@ const PRODUCTS = [
     name: "SUNQ / 04",
     price: 39.99,
     stock: 5,
-    image: "https://raw.githubusercontent.com/sunqdeimos/sunq/main/images/sunq04.jpg",
+    image: "https://github.com/sunqdeimos/sunq/raw/main/sunq04.jpg",
     collection: "sunq"
   },
   {
@@ -38,7 +36,7 @@ const PRODUCTS = [
     name: "SUNQ / 05",
     price: 49.99,
     stock: 2,
-    image: "https://raw.githubusercontent.com/sunqdeimos/sunq/main/images/sunq05.jpg",
+    image: "https://github.com/sunqdeimos/sunq/raw/main/sunq05.jpg",
     collection: "sunq"
   },
   {
@@ -46,7 +44,7 @@ const PRODUCTS = [
     name: "SUNQ / 06",
     price: 59.99,
     stock: 11,
-    image: "https://raw.githubusercontent.com/sunqdeimos/sunq/main/images/sunq06.jpg",
+    image: "https://github.com/sunqdeimos/sunq/raw/main/sunq06.jpg",
     collection: "sunq"
   },
   {
@@ -54,7 +52,7 @@ const PRODUCTS = [
     name: "SUNQ / 07",
     price: 69.99,
     stock: 7,
-    image: "https://raw.githubusercontent.com/sunqdeimos/sunq/main/images/sunq07.jpg",
+    image: "https://github.com/sunqdeimos/sunq/raw/main/sunq07.jpg",
     collection: "sunq"
   },
   {
@@ -62,7 +60,7 @@ const PRODUCTS = [
     name: "SUNQ / 08",
     price: 79.99,
     stock: 4,
-    image: "https://raw.githubusercontent.com/sunqdeimos/sunq/main/images/sunq08.jpg",
+    image: "https://github.com/sunqdeimos/sunq/raw/main/sunq08.jpg",
     collection: "sunq"
   },
   {
@@ -70,7 +68,7 @@ const PRODUCTS = [
     name: "SUNQ / 09",
     price: 89.99,
     stock: 16,
-    image: "https://raw.githubusercontent.com/sunqdeimos/sunq/main/images/sunq09.jpg",
+    image: "https://github.com/sunqdeimos/sunq/raw/main/sunq09.jpg",
     collection: "sunq"
   },
   {
@@ -78,7 +76,7 @@ const PRODUCTS = [
     name: "SUNQ / 10",
     price: 99.99,
     stock: 1,
-    image: "https://raw.githubusercontent.com/sunqdeimos/sunq/main/images/sunq10.jpg",
+    image: "https://github.com/sunqdeimos/sunq/raw/main/sunq10.jpg",
     collection: "sunq"
   }
 ];
@@ -87,6 +85,11 @@ const PRODUCTS = [
 
 function getProduct(id) {
   return PRODUCTS.find(p => p.id === id);
+}
+
+function getProductsByCollection(name) {
+  if (name === "all") return PRODUCTS;
+  return PRODUCTS.filter(p => p.collection === name);
 }
 
 /* ================= STOCK SYSTEM ================= */
@@ -99,7 +102,6 @@ function saveStockData(data) {
   localStorage.setItem("sunqStock", JSON.stringify(data));
 }
 
-/* initialize stock once */
 function initStock() {
   const data = getStockData();
 
@@ -128,5 +130,4 @@ function reduceStock(id, amount) {
   return true;
 }
 
-/* ================= INIT ================= */
 initStock();
