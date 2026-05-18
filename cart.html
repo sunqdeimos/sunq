@@ -12,7 +12,7 @@
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- PRODUCT DATA -->
+  <!-- PRODUCTS -->
   <script src="data.js"></script>
 </head>
 
@@ -93,7 +93,7 @@
 
       if (cart.length === 0) {
         container.innerHTML = `
-          <div class="card" style="text-align:center;">
+          <div class="card" style="text-align:center; padding:25px;">
             <p>Your cart is empty.</p>
           </div>
         `;
@@ -107,7 +107,7 @@
 
         if (!product) {
           return `
-            <div class="card">
+            <div class="card" style="padding:25px;">
               <p>Unknown item (ID: ${item.id})</p>
             </div>
           `;
@@ -117,7 +117,7 @@
         total += itemTotal;
 
         return `
-          <div class="card">
+          <div class="card" style="padding:25px;">
             <h3>${product.name}</h3>
             <p>$${product.price}</p>
 
@@ -135,14 +135,14 @@
       container.innerHTML = `
         ${html}
 
-        <div class="card" style="margin-top: 20px;">
+        <div class="card" style="margin-top: 20px; padding:25px;">
           <h2>Total: $${total.toFixed(2)}</h2>
 
           <button class="button-primary" onclick="checkout()">
             Checkout
           </button>
 
-          <button onclick="clearCart()" style="margin-top:10px;">
+          <button onclick="clearCart()" style="margin-top:10px; width:100%;">
             Clear Cart
           </button>
         </div>
