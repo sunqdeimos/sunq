@@ -28,6 +28,7 @@
     </div>
   </nav>
 
+  <!-- SHOP -->
   <main class="shop">
 
     <h1 class="page-title">Shop</h1>
@@ -45,6 +46,13 @@
       <button class="filter-btn active" onclick="setFilter('all', event)">All</button>
       <button class="filter-btn" onclick="setFilter('sunq', event)">SUNQ</button>
       <button class="filter-btn" onclick="setFilter('diamond', event)">Diamond / Champ FA</button>
+    </div>
+
+    <!-- SORT -->
+    <div class="filter-bar">
+      <button class="sort-btn" onclick="setSort('none')">Default</button>
+      <button class="sort-btn" onclick="setSort('low')">Price: Low → High</button>
+      <button class="sort-btn" onclick="setSort('high')">Price: High → Low</button>
     </div>
 
     <!-- PRODUCT GRID -->
@@ -76,13 +84,14 @@
 
     let currentFilter = "all";
     let searchQuery = "";
+    let sortMode = "none";
 
     const grid = document.getElementById("productGrid");
 
     function getFilteredProducts() {
       let products = Object.values(PRODUCTS);
 
-      // category filter
+      // CATEGORY FILTER
       if (currentFilter === "diamond") {
         products = products.filter(p => diamondSet.includes(p.id));
       }
@@ -91,12 +100,21 @@
         products = products.filter(p => sunqSet.includes(p.id));
       }
 
-      // search filter
+      // SEARCH FILTER
       if (searchQuery.trim() !== "") {
         const q = searchQuery.toLowerCase();
         products = products.filter(p =>
           p.name.toLowerCase().includes(q)
         );
+      }
+
+      // SORT
+      if (sortMode === "low") {
+        products.sort((a, b) => a.price - b.price);
+      }
+
+      if (sortMode === "high") {
+        products.sort((a, b) => b.price - a.price);
       }
 
       return products;
@@ -131,6 +149,11 @@
 
       if (e && e.target) e.target.classList.add("active");
 
+      renderProducts();
+    }
+
+    function setSort(mode) {
+      sortMode = mode;
       renderProducts();
     }
 
