@@ -25,7 +25,13 @@
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Load catalog first, then shared UI -->
+  <!-- Supabase first -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Project connection -->
+  <script src="supabase-config.js"></script>
+
+  <!-- Product data and shared UI -->
   <script src="data.js"></script>
   <script src="store-ui.js"></script>
 </head>
@@ -68,7 +74,29 @@
 
   <main class="shop">
 
-    <div id="product-container"></div>
+    <div
+      id="product-container"
+      aria-live="polite"
+      aria-busy="true"
+    >
+
+      <section class="empty-state">
+
+        <p class="empty-state-kicker">
+          Loading
+        </p>
+
+        <h2>
+          Getting the product ready.
+        </h2>
+
+        <p>
+          This should only take a moment.
+        </p>
+
+      </section>
+
+    </div>
 
   </main>
 
@@ -100,7 +128,7 @@
         </a>
 
         <p>
-          W.I.P online marketplace.
+          Built one listing at a time.
         </p>
 
       </div>
@@ -126,17 +154,16 @@
   <!-- ================= PRODUCT LOGIC ================= -->
 
   <script>
-    const params = new URLSearchParams(
-      window.location.search
-    );
-
-    const productId = params.get("id");
-
-    const product = getProduct(productId);
-
     const productContainer =
       document.getElementById("product-container");
 
+    const params =
+      new URLSearchParams(window.location.search);
+
+    const productId =
+      params.get("id");
+
+    let currentProduct = null;
     let toastTimer;
 
 
@@ -144,7 +171,10 @@
        TOAST
        ===================================================== */
 
-    function showToast(message, type = "success") {
+    function showToast(
+      message,
+      type = "success"
+    ) {
       const toast =
         document.getElementById("toast");
 
@@ -179,7 +209,8 @@
       const originalText =
         button.textContent;
 
-      button.textContent = "Added";
+      button.textContent =
+        "Added";
 
       button.classList.add(
         "button-added"
@@ -204,7 +235,10 @@
        ADD TO CART
        ===================================================== */
 
-    function addToCart(id, button) {
+    function addToCart(
+      id,
+      button
+    ) {
       const selectedProduct =
         getProduct(id);
 
@@ -229,11 +263,13 @@
         return;
       }
 
-      const cart = getCart();
+      const cart =
+        getCart();
 
-      const cartItem = cart.find(item => {
-        return item.id === id;
-      });
+      const cartItem =
+        cart.find(item => {
+          return item.id === id;
+        });
 
       const currentQuantity =
         cartItem
@@ -271,7 +307,69 @@
       );
 
       updateCartCount();
-      renderProduct();
+    }
+
+
+    /* =====================================================
+       PRODUCT SPECIFICATION
+       ===================================================== */
+
+    function renderProductSpecification(
+      label,
+      value,
+      extraClass = ""
+    ) {
+      return `
+        <div class="product-spec ${escapeHTML(extraClass)}">
+
+          <span class="product-spec-label">
+            ${escapeHTML(label)}
+          </span>
+
+          <strong class="product-spec-value">
+            ${escapeHTML(value)}
+          </strong>
+
+        </div>
+      `;
+    }
+
+
+    /* =====================================================
+       LOADING ERROR
+       ===================================================== */
+
+    function renderLoadError() {
+      productContainer.innerHTML = `
+        <section class="empty-state">
+
+          <p class="empty-state-kicker">
+            Something went wrong
+          </p>
+
+          <h1>
+            The product did not load.
+          </h1>
+
+          <p>
+            Check the database connection and try refreshing the page.
+          </p>
+
+          <button
+            class="button-secondary"
+            type="button"
+            onclick="window.location.reload()"
+          >
+            Try again
+          </button>
+
+        </section>
+      `;
+
+      productContainer.setAttribute(
+        "aria-busy",
+        "false"
+      );
     }
 
 
@@ -304,31 +402,11 @@
 
         </section>
       `;
-    }
 
-
-    /* =====================================================
-       PRODUCT SPECIFICATION
-       ===================================================== */
-
-    function renderProductSpecification(
-      label,
-      value,
-      extraClass = ""
-    ) {
-      return `
-        <div class="product-spec ${escapeHTML(extraClass)}">
-
-          <span class="product-spec-label">
-            ${escapeHTML(label)}
-          </span>
-
-          <strong class="product-spec-value">
-            ${escapeHTML(value)}
-          </strong>
-
-        </div>
-      `;
+      productContainer.setAttribute(
+        "aria-busy",
+        "false"
+      );
     }
 
 
@@ -337,37 +415,43 @@
        ===================================================== */
 
     function renderProduct() {
-      if (!product) {
+      if (!currentProduct) {
         renderMissingProduct();
         return;
       }
 
       const stock =
-        getStock(product.id);
+        getStock(currentProduct.id);
 
       const categoryLabel =
         getCategoryLabel(
-          product.category
+          currentProduct.category
         );
 
       const platform =
-        getProductPlatform(product);
+        getProductPlatform(
+          currentProduct
+        );
 
       const delivery =
-        getProductDelivery(product);
+        getProductDelivery(
+          currentProduct
+        );
 
       const availability =
         getAvailabilityLabel(
-          product.id
+          currentProduct.id
         );
 
       const availabilityClass =
         getAvailabilityClass(
-          product.id
+          currentProduct.id
         );
 
       const badge =
-        getProductBadge(product);
+        getProductBadge(
+          currentProduct
+        );
 
       const badgeClass =
         getBadgeClass(badge);
@@ -388,7 +472,7 @@
             <button
               class="button-primary product-add-button"
               type="button"
-              onclick="addToCart('${escapeHTML(product.id)}', this)"
+              onclick="addToCart('${escapeHTML(currentProduct.id)}', this)"
             >
               Add to cart
             </button>
@@ -406,7 +490,7 @@
       productContainer.innerHTML = `
         <article class="product-layout">
 
-          <!-- PRODUCT IMAGE -->
+          <!-- IMAGE -->
 
           <div class="product-media">
 
@@ -414,8 +498,8 @@
 
               <img
                 class="product-image-large"
-                src="${escapeHTML(getProductImage(product))}"
-                alt="${escapeHTML(product.name)}"
+                src="${escapeHTML(getProductImage(currentProduct))}"
+                alt="${escapeHTML(currentProduct.name)}"
                 onerror="
                   this.onerror = null;
                   this.src = 'https://placehold.co/800x800/111111/d4af37?text=SUNQ';
@@ -429,7 +513,7 @@
           </div>
 
 
-          <!-- PRODUCT INFORMATION -->
+          <!-- INFORMATION -->
 
           <div class="product-info">
 
@@ -438,11 +522,11 @@
             </p>
 
             <h1>
-              ${escapeHTML(product.name)}
+              ${escapeHTML(currentProduct.name)}
             </h1>
 
             <p class="price">
-              ${formatPrice(product.price)}
+              ${formatPrice(currentProduct.price)}
             </p>
 
 
@@ -483,13 +567,13 @@
               </h2>
 
               <p>
-                ${escapeHTML(product.description)}
+                ${escapeHTML(currentProduct.description)}
               </p>
 
             </section>
 
 
-            <!-- ADD BUTTON -->
+            <!-- ADD TO CART -->
 
             ${addButtonMarkup}
 
@@ -551,41 +635,90 @@
 
       renderRelatedProducts(
         "related-products",
-        product.id,
+        currentProduct.id,
         4
       );
+
+      productContainer.setAttribute(
+        "aria-busy",
+        "false"
+      );
     }
-
-
-    /* =====================================================
-       LIVE UPDATES
-       ===================================================== */
-
-    window.addEventListener(
-      "sunq:stockchange",
-      renderProduct
-    );
-
-    window.addEventListener(
-      "sunq:externalchange",
-      () => {
-        updateCartCount();
-        renderProduct();
-      }
-    );
-
-    window.addEventListener(
-      "sunq:cartchange",
-      updateCartCount
-    );
 
 
     /* =====================================================
        INITIALIZE
        ===================================================== */
 
-    updateCartCount();
-    renderProduct();
+    async function initializeProductPage() {
+      updateCartCount();
+
+      if (!productId) {
+        renderMissingProduct();
+        return;
+      }
+
+      try {
+        await productsReady;
+
+        if (
+          getProductsLoadError() ||
+          !areProductsLoaded()
+        ) {
+          renderLoadError();
+          return;
+        }
+
+        currentProduct =
+          getProduct(productId);
+
+        renderProduct();
+      } catch (error) {
+        console.error(
+          "Could not initialize the product page:",
+          error
+        );
+
+        renderLoadError();
+      }
+    }
+
+
+    /* =====================================================
+       CART UPDATES
+       ===================================================== */
+
+    window.addEventListener(
+      "sunq:cartchange",
+      updateCartCount
+    );
+
+    window.addEventListener(
+      "sunq:externalchange",
+      updateCartCount
+    );
+
+
+    /* =====================================================
+       FUTURE PRODUCT REFRESH
+       ===================================================== */
+
+    window.addEventListener(
+      "sunq:productsloaded",
+      () => {
+        if (!productId) {
+          return;
+        }
+
+        currentProduct =
+          getProduct(productId);
+
+        renderProduct();
+      }
+    );
+
+
+    initializeProductPage();
   </script>
 
 </body>
