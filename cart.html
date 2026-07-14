@@ -2,12 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Cart | SUNQ</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
@@ -16,7 +25,7 @@
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Load product data before shared UI -->
+  <!-- Load catalog first, then shared UI -->
   <script src="data.js"></script>
   <script src="store-ui.js"></script>
 </head>
@@ -27,16 +36,33 @@
 
   <nav class="navbar">
     <div class="nav-container">
-      <a href="index.html" class="logo">SUNQ</a>
+
+      <a
+        href="index.html"
+        class="logo"
+      >
+        SUNQ
+      </a>
 
       <div class="nav-links">
-        <a href="shop.html">Shop</a>
-        <a href="about.html">About</a>
 
-        <a href="cart.html" aria-current="page">
+        <a href="shop.html">
+          Shop
+        </a>
+
+        <a href="about.html">
+          About
+        </a>
+
+        <a
+          href="cart.html"
+          aria-current="page"
+        >
           Cart (<span id="cart-count">0</span>)
         </a>
+
       </div>
+
     </div>
   </nav>
 
@@ -46,11 +72,16 @@
   <main class="shop">
 
     <header class="page-header">
-      <h1 class="page-title">Your Cart</h1>
+
+      <h1 class="page-title">
+        Your Cart
+      </h1>
 
       <p class="page-intro">
-        Review your items before checkout.
+        Review your items, adjust quantities, and make sure
+        everything looks right before checkout.
       </p>
+
     </header>
 
     <div id="cart-container"></div>
@@ -72,16 +103,22 @@
   <!-- ================= FOOTER ================= -->
 
   <footer class="site-footer">
+
     <div class="footer-inner">
 
       <div class="footer-brand">
-        <a href="index.html" class="footer-logo">
+
+        <a
+          href="index.html"
+          class="footer-logo"
+        >
           SUNQ
         </a>
 
         <p>
           W.I.P online marketplace.
         </p>
+
       </div>
 
       <nav
@@ -98,6 +135,7 @@
       </p>
 
     </div>
+
   </footer>
 
 
@@ -108,6 +146,7 @@
       document.getElementById("cart-container");
 
     let toastTimer;
+    let checkoutComplete = false;
 
 
     /* =====================================================
@@ -115,7 +154,8 @@
        ===================================================== */
 
     function showToast(message, type = "success") {
-      const toast = document.getElementById("toast");
+      const toast =
+        document.getElementById("toast");
 
       if (!toast) {
         return;
@@ -124,17 +164,20 @@
       clearTimeout(toastTimer);
 
       toast.textContent = message;
+
       toast.className =
         `toast toast-${type} toast-visible`;
 
       toastTimer = setTimeout(() => {
-        toast.classList.remove("toast-visible");
+        toast.classList.remove(
+          "toast-visible"
+        );
       }, 2200);
     }
 
 
     /* =====================================================
-       QUANTITY FEEDBACK
+       QUANTITY ANIMATION
        ===================================================== */
 
     function animateQuantity(productId) {
@@ -164,7 +207,10 @@
        ===================================================== */
 
     function changeQuantity(productId, delta) {
-      const product = getProduct(productId);
+      checkoutComplete = false;
+
+      const product =
+        getProduct(productId);
 
       if (!product) {
         showToast(
@@ -177,9 +223,9 @@
 
       const cart = getCart();
 
-      const item = cart.find(
-        cartItem => cartItem.id === productId
-      );
+      const item = cart.find(cartItem => {
+        return cartItem.id === productId;
+      });
 
       if (!item) {
         return;
@@ -224,7 +270,10 @@
        ===================================================== */
 
     function removeCartItem(productId) {
-      const product = getProduct(productId);
+      checkoutComplete = false;
+
+      const product =
+        getProduct(productId);
 
       const cartItemElement =
         document.querySelector(
@@ -238,9 +287,10 @@
       }
 
       setTimeout(() => {
-        const updatedCart = getCart().filter(
-          item => item.id !== productId
-        );
+        const updatedCart =
+          getCart().filter(item => {
+            return item.id !== productId;
+          });
 
         saveCart(updatedCart);
         renderCart();
@@ -259,6 +309,8 @@
        ===================================================== */
 
     function clearCart() {
+      checkoutComplete = false;
+
       const cart = getCart();
 
       if (cart.length === 0) {
@@ -281,7 +333,9 @@
       clearStoredCart();
       renderCart();
 
-      showToast("Your cart has been cleared.");
+      showToast(
+        "Your cart has been cleared."
+      );
     }
 
 
@@ -301,8 +355,15 @@
         return;
       }
 
+      /*
+        Check the entire cart before changing any stock.
+        This avoids completing half an order if one item
+        suddenly becomes unavailable.
+      */
+
       for (const item of cart) {
-        const product = getProduct(item.id);
+        const product =
+          getProduct(item.id);
 
         if (!product) {
           showToast(
@@ -316,7 +377,20 @@
         const availableStock =
           getStock(item.id);
 
-        if (item.quantity > availableStock) {
+        if (availableStock <= 0) {
+          showToast(
+            `${product.name} is no longer available.`,
+            "error"
+          );
+
+          renderCart();
+          return;
+        }
+
+        if (
+          Number(item.quantity) >
+          availableStock
+        ) {
           showToast(
             `${product.name} only has ${availableStock} available.`,
             "error"
@@ -327,10 +401,14 @@
         }
       }
 
+      /*
+        Reduce stock after every item passes validation.
+      */
+
       for (const item of cart) {
         const success = reduceStock(
           item.id,
-          item.quantity
+          Number(item.quantity)
         );
 
         if (!success) {
@@ -344,11 +422,13 @@
         }
       }
 
+      checkoutComplete = true;
+
       clearStoredCart();
       renderCart();
 
       showToast(
-        "Checkout complete. Stock updated."
+        "Checkout complete."
       );
     }
 
@@ -358,21 +438,33 @@
        ===================================================== */
 
     function renderCartItem(item, index) {
-      const product = getProduct(item.id);
+      const product =
+        getProduct(item.id);
 
       if (!product) {
         return `
           <article
             class="cart-item cart-item-error fade"
+            data-cart-item="${escapeHTML(item.id)}"
             style="animation-delay:${index * 55}ms;"
           >
+
             <div class="cart-item-main">
+
               <div>
-                <h2>Unknown item</h2>
+
+                <p class="cart-item-category">
+                  Unknown listing
+                </p>
+
+                <h2>
+                  Item not found
+                </h2>
 
                 <p>
                   Product ID: ${escapeHTML(item.id)}
                 </p>
+
               </div>
 
               <button
@@ -382,21 +474,33 @@
               >
                 Remove
               </button>
+
             </div>
+
           </article>
         `;
       }
 
-      const stock = getStock(product.id);
+      const stock =
+        getStock(product.id);
 
       const itemQuantity =
         Number(item.quantity);
 
       const itemTotal =
-        Number(product.price) * itemQuantity;
+        Number(product.price) *
+        itemQuantity;
 
       const category =
-        getCategoryLabel(product.category);
+        getCategoryLabel(
+          product.category
+        );
+
+      const platform =
+        getProductPlatform(product);
+
+      const delivery =
+        getProductDelivery(product);
 
       const stockClass =
         getStockClass(stock);
@@ -405,7 +509,8 @@
         getStockLabel(stock);
 
       const plusDisabled =
-        itemQuantity >= stock || stock <= 0;
+        itemQuantity >= stock ||
+        stock <= 0;
 
       return `
         <article
@@ -414,11 +519,14 @@
           style="animation-delay:${index * 55}ms;"
         >
 
+          <!-- IMAGE -->
+
           <a
             class="cart-item-image-link"
             href="product.html?id=${encodeURIComponent(product.id)}"
             aria-label="View ${escapeHTML(product.name)}"
           >
+
             <img
               class="cart-item-image"
               src="${escapeHTML(getProductImage(product))}"
@@ -429,8 +537,11 @@
                 this.src = 'https://placehold.co/800x800/111111/d4af37?text=SUNQ';
               "
             >
+
           </a>
 
+
+          <!-- DETAILS -->
 
           <div class="cart-item-details">
 
@@ -449,10 +560,24 @@
               ${formatPrice(product.price)} each
             </p>
 
+            <div class="cart-item-meta">
+
+              <span>
+                ${escapeHTML(platform)}
+              </span>
+
+              <span>
+                ${escapeHTML(delivery)}
+              </span>
+
+            </div>
+
             <p class="cart-item-stock ${escapeHTML(stockClass)}">
               ${escapeHTML(stockLabel)}
             </p>
 
+
+            <!-- CONTROLS -->
 
             <div class="cart-item-actions">
 
@@ -460,6 +585,7 @@
                 class="qty-row"
                 aria-label="Quantity controls for ${escapeHTML(product.name)}"
               >
+
                 <button
                   type="button"
                   onclick="changeQuantity('${escapeHTML(product.id)}', -1)"
@@ -483,6 +609,7 @@
                 >
                   +
                 </button>
+
               </div>
 
               <button
@@ -498,12 +625,18 @@
           </div>
 
 
+          <!-- TOTAL -->
+
           <div class="cart-item-total">
-            <span>Item total</span>
+
+            <span>
+              Item total
+            </span>
 
             <strong>
               ${formatPrice(itemTotal)}
             </strong>
+
           </div>
 
         </article>
@@ -518,11 +651,14 @@
     function renderEmptyCart() {
       cartContainer.innerHTML = `
         <section class="empty-state cart-empty-state">
+
           <p class="empty-state-kicker">
             Your cart
           </p>
 
-          <h2>Nothing here yet</h2>
+          <h2>
+            It's a little lonely in here.
+          </h2>
 
           <p>
             Browse the shop and add something when you find it.
@@ -532,8 +668,60 @@
             class="button-primary empty-state-button"
             href="shop.html"
           >
-            Go shopping
+            Browse the shop
           </a>
+
+        </section>
+      `;
+    }
+
+
+    /* =====================================================
+       CHECKOUT COMPLETE
+       ===================================================== */
+
+    function renderCheckoutComplete() {
+      cartContainer.innerHTML = `
+        <section class="checkout-complete">
+
+          <div
+            class="checkout-complete-icon"
+            aria-hidden="true"
+          >
+            ✓
+          </div>
+
+          <p class="section-kicker">
+            Checkout complete
+          </p>
+
+          <h2>
+            Nice doing business with you.
+          </h2>
+
+          <p>
+            Your checkout demo is complete and the local
+            stock has been updated.
+          </p>
+
+          <div class="checkout-complete-actions">
+
+            <a
+              class="button-primary"
+              href="shop.html"
+            >
+              Continue shopping
+            </a>
+
+            <a
+              class="button-secondary"
+              href="index.html"
+            >
+              Return home
+            </a>
+
+          </div>
+
         </section>
       `;
     }
@@ -548,6 +736,11 @@
 
       updateCartCount();
 
+      if (checkoutComplete) {
+        renderCheckoutComplete();
+        return;
+      }
+
       if (cart.length === 0) {
         renderEmptyCart();
         return;
@@ -557,7 +750,8 @@
       let totalItems = 0;
 
       cart.forEach(item => {
-        const product = getProduct(item.id);
+        const product =
+          getProduct(item.id);
 
         if (!product) {
           return;
@@ -567,17 +761,23 @@
           Number(product.price) *
           Number(item.quantity);
 
-        totalItems += Number(item.quantity);
+        totalItems +=
+          Number(item.quantity);
       });
 
       const itemMarkup = cart
         .map((item, index) => {
-          return renderCartItem(item, index);
+          return renderCartItem(
+            item,
+            index
+          );
         })
         .join("");
 
       cartContainer.innerHTML = `
         <div class="cart-layout">
+
+          <!-- ITEMS -->
 
           <section
             class="cart-items"
@@ -586,6 +786,8 @@
             ${itemMarkup}
           </section>
 
+
+          <!-- SUMMARY -->
 
           <aside class="cart-summary">
 
@@ -599,19 +801,39 @@
             </h2>
 
             <div class="summary-row">
-              <span>Subtotal</span>
+
+              <span>
+                Subtotal
+              </span>
 
               <strong>
                 ${formatPrice(subtotal)}
               </strong>
+
+            </div>
+
+            <div class="summary-row">
+
+              <span>
+                Delivery
+              </span>
+
+              <strong>
+                Digital
+              </strong>
+
             </div>
 
             <div class="summary-row summary-total">
-              <span>Total</span>
+
+              <span>
+                Total
+              </span>
 
               <strong>
                 ${formatPrice(subtotal)}
               </strong>
+
             </div>
 
             <p class="summary-note">
@@ -654,17 +876,24 @@
 
     window.addEventListener(
       "sunq:cartchange",
-      renderCart
+      () => {
+        renderCart();
+      }
     );
 
     window.addEventListener(
       "sunq:stockchange",
-      renderCart
+      () => {
+        renderCart();
+      }
     );
 
     window.addEventListener(
       "sunq:externalchange",
-      renderCart
+      () => {
+        checkoutComplete = false;
+        renderCart();
+      }
     );
 
 
