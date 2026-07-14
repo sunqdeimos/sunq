@@ -3,20 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Cart | SUNQ</title>
 
-  <!-- FONTS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- PRODUCTS -->
+  <!-- Load product data before shared UI -->
   <script src="data.js"></script>
+  <script src="store-ui.js"></script>
 </head>
 
 <body>
+
+  <!-- ================= NAVBAR ================= -->
 
   <nav class="navbar">
     <div class="nav-container">
@@ -25,148 +32,645 @@
       <div class="nav-links">
         <a href="shop.html">Shop</a>
         <a href="about.html">About</a>
-        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+
+        <a href="cart.html" aria-current="page">
+          Cart (<span id="cart-count">0</span>)
+        </a>
       </div>
     </div>
   </nav>
 
+
+  <!-- ================= CART ================= -->
+
   <main class="shop">
-    <h1 class="page-title">Your Cart</h1>
+
+    <header class="page-header">
+      <h1 class="page-title">Your Cart</h1>
+
+      <p class="page-intro">
+        Review your items before checkout.
+      </p>
+    </header>
 
     <div id="cart-container"></div>
+
   </main>
 
+
+  <!-- ================= TOAST ================= -->
+
+  <div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+  ></div>
+
+
+  <!-- ================= FOOTER ================= -->
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo">
+          SUNQ
+        </a>
+
+        <p>
+          W.I.P online marketplace.
+        </p>
+      </div>
+
+      <nav
+        class="footer-links"
+        aria-label="Footer navigation"
+      >
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="cart.html">Cart</a>
+      </nav>
+
+      <p class="footer-copy">
+        © 2026 SUNQ
+      </p>
+
+    </div>
+  </footer>
+
+
+  <!-- ================= CART LOGIC ================= -->
+
   <script>
-    function getCart() {
-      return JSON.parse(localStorage.getItem("sunqCart")) || [];
-    }
+    const cartContainer =
+      document.getElementById("cart-container");
 
-    function saveCart(cart) {
-      localStorage.setItem("sunqCart", JSON.stringify(cart));
-      updateCartCount();
-      renderCart();
-    }
+    let toastTimer;
 
-    function updateCartCount() {
-      const cart = getCart();
-      const total = cart.reduce((sum, i) => sum + i.quantity, 0);
-      const el = document.getElementById("cart-count");
-      if (el) el.textContent = total;
-    }
 
-    function changeQty(id, delta) {
-      let cart = getCart();
-      const item = cart.find(i => i.id === id);
+    /* =====================================================
+       TOAST
+       ===================================================== */
 
-      if (!item) return;
+    function showToast(message, type = "success") {
+      const toast = document.getElementById("toast");
 
-      item.quantity += delta;
-
-      if (item.quantity <= 0) {
-        cart = cart.filter(i => i.id !== id);
+      if (!toast) {
+        return;
       }
 
-      saveCart(cart);
+      clearTimeout(toastTimer);
+
+      toast.textContent = message;
+      toast.className =
+        `toast toast-${type} toast-visible`;
+
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("toast-visible");
+      }, 2200);
     }
 
-    function clearCart() {
-      localStorage.removeItem("sunqCart");
-      updateCartCount();
-      renderCart();
+
+    /* =====================================================
+       QUANTITY FEEDBACK
+       ===================================================== */
+
+    function animateQuantity(productId) {
+      const quantityElement =
+        document.querySelector(
+          `[data-quantity="${productId}"]`
+        );
+
+      if (!quantityElement) {
+        return;
+      }
+
+      quantityElement.classList.remove(
+        "quantity-pop"
+      );
+
+      void quantityElement.offsetWidth;
+
+      quantityElement.classList.add(
+        "quantity-pop"
+      );
     }
+
+
+    /* =====================================================
+       CHANGE QUANTITY
+       ===================================================== */
+
+    function changeQuantity(productId, delta) {
+      const product = getProduct(productId);
+
+      if (!product) {
+        showToast(
+          "This product could not be found.",
+          "error"
+        );
+
+        return;
+      }
+
+      const cart = getCart();
+
+      const item = cart.find(
+        cartItem => cartItem.id === productId
+      );
+
+      if (!item) {
+        return;
+      }
+
+      const currentQuantity =
+        Number(item.quantity);
+
+      const nextQuantity =
+        currentQuantity + Number(delta);
+
+      if (nextQuantity <= 0) {
+        removeCartItem(productId);
+        return;
+      }
+
+      const availableStock =
+        getStock(productId);
+
+      if (nextQuantity > availableStock) {
+        showToast(
+          `Only ${availableStock} available.`,
+          "error"
+        );
+
+        return;
+      }
+
+      item.quantity = nextQuantity;
+
+      saveCart(cart);
+      renderCart();
+
+      requestAnimationFrame(() => {
+        animateQuantity(productId);
+      });
+    }
+
+
+    /* =====================================================
+       REMOVE ITEM
+       ===================================================== */
+
+    function removeCartItem(productId) {
+      const product = getProduct(productId);
+
+      const cartItemElement =
+        document.querySelector(
+          `[data-cart-item="${productId}"]`
+        );
+
+      if (cartItemElement) {
+        cartItemElement.classList.add(
+          "cart-item-removing"
+        );
+      }
+
+      setTimeout(() => {
+        const updatedCart = getCart().filter(
+          item => item.id !== productId
+        );
+
+        saveCart(updatedCart);
+        renderCart();
+
+        if (product) {
+          showToast(
+            `${product.name} removed from your cart.`
+          );
+        }
+      }, cartItemElement ? 260 : 0);
+    }
+
+
+    /* =====================================================
+       CLEAR CART
+       ===================================================== */
+
+    function clearCart() {
+      const cart = getCart();
+
+      if (cart.length === 0) {
+        showToast(
+          "Your cart is already empty.",
+          "error"
+        );
+
+        return;
+      }
+
+      const confirmed = window.confirm(
+        "Remove every item from your cart?"
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      clearStoredCart();
+      renderCart();
+
+      showToast("Your cart has been cleared.");
+    }
+
+
+    /* =====================================================
+       CHECKOUT
+       ===================================================== */
 
     function checkout() {
       const cart = getCart();
 
       if (cart.length === 0) {
-        alert("Your cart is empty.");
+        showToast(
+          "Your cart is empty.",
+          "error"
+        );
+
         return;
       }
 
-      // Check stock first
       for (const item of cart) {
-        const available = getStock(item.id);
+        const product = getProduct(item.id);
 
-        if (item.quantity > available) {
-          alert(`Not enough stock for ${PRODUCTS[item.id].name}. Only ${available} left.`);
+        if (!product) {
+          showToast(
+            "One cart item is no longer available.",
+            "error"
+          );
+
+          return;
+        }
+
+        const availableStock =
+          getStock(item.id);
+
+        if (item.quantity > availableStock) {
+          showToast(
+            `${product.name} only has ${availableStock} available.`,
+            "error"
+          );
+
+          renderCart();
           return;
         }
       }
 
-      // Reduce stock
       for (const item of cart) {
-        reduceStock(item.id, item.quantity);
+        const success = reduceStock(
+          item.id,
+          item.quantity
+        );
+
+        if (!success) {
+          showToast(
+            "Stock changed before checkout. Please review your cart.",
+            "error"
+          );
+
+          renderCart();
+          return;
+        }
       }
 
-      alert("Checkout complete! Stock updated.");
-      clearCart();
+      clearStoredCart();
+      renderCart();
+
+      showToast(
+        "Checkout complete. Stock updated."
+      );
     }
 
+
+    /* =====================================================
+       CART ITEM MARKUP
+       ===================================================== */
+
+    function renderCartItem(item, index) {
+      const product = getProduct(item.id);
+
+      if (!product) {
+        return `
+          <article
+            class="cart-item cart-item-error fade"
+            style="animation-delay:${index * 55}ms;"
+          >
+            <div class="cart-item-main">
+              <div>
+                <h2>Unknown item</h2>
+
+                <p>
+                  Product ID: ${escapeHTML(item.id)}
+                </p>
+              </div>
+
+              <button
+                class="remove-item-button"
+                type="button"
+                onclick="removeCartItem('${escapeHTML(item.id)}')"
+              >
+                Remove
+              </button>
+            </div>
+          </article>
+        `;
+      }
+
+      const stock = getStock(product.id);
+
+      const itemQuantity =
+        Number(item.quantity);
+
+      const itemTotal =
+        Number(product.price) * itemQuantity;
+
+      const category =
+        getCategoryLabel(product.category);
+
+      const stockClass =
+        getStockClass(stock);
+
+      const stockLabel =
+        getStockLabel(stock);
+
+      const plusDisabled =
+        itemQuantity >= stock || stock <= 0;
+
+      return `
+        <article
+          class="cart-item fade"
+          data-cart-item="${escapeHTML(product.id)}"
+          style="animation-delay:${index * 55}ms;"
+        >
+
+          <a
+            class="cart-item-image-link"
+            href="product.html?id=${encodeURIComponent(product.id)}"
+            aria-label="View ${escapeHTML(product.name)}"
+          >
+            <img
+              class="cart-item-image"
+              src="${escapeHTML(getProductImage(product))}"
+              alt="${escapeHTML(product.name)}"
+              loading="lazy"
+              onerror="
+                this.onerror = null;
+                this.src = 'https://placehold.co/800x800/111111/d4af37?text=SUNQ';
+              "
+            >
+          </a>
+
+
+          <div class="cart-item-details">
+
+            <p class="cart-item-category">
+              ${escapeHTML(category)}
+            </p>
+
+            <a
+              class="cart-item-name"
+              href="product.html?id=${encodeURIComponent(product.id)}"
+            >
+              ${escapeHTML(product.name)}
+            </a>
+
+            <p class="cart-item-unit-price">
+              ${formatPrice(product.price)} each
+            </p>
+
+            <p class="cart-item-stock ${escapeHTML(stockClass)}">
+              ${escapeHTML(stockLabel)}
+            </p>
+
+
+            <div class="cart-item-actions">
+
+              <div
+                class="qty-row"
+                aria-label="Quantity controls for ${escapeHTML(product.name)}"
+              >
+                <button
+                  type="button"
+                  onclick="changeQuantity('${escapeHTML(product.id)}', -1)"
+                  aria-label="Decrease quantity"
+                >
+                  −
+                </button>
+
+                <span
+                  data-quantity="${escapeHTML(product.id)}"
+                  aria-live="polite"
+                >
+                  ${itemQuantity}
+                </span>
+
+                <button
+                  type="button"
+                  onclick="changeQuantity('${escapeHTML(product.id)}', 1)"
+                  aria-label="Increase quantity"
+                  ${plusDisabled ? "disabled" : ""}
+                >
+                  +
+                </button>
+              </div>
+
+              <button
+                class="remove-item-button"
+                type="button"
+                onclick="removeCartItem('${escapeHTML(product.id)}')"
+              >
+                Remove
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="cart-item-total">
+            <span>Item total</span>
+
+            <strong>
+              ${formatPrice(itemTotal)}
+            </strong>
+          </div>
+
+        </article>
+      `;
+    }
+
+
+    /* =====================================================
+       EMPTY CART
+       ===================================================== */
+
+    function renderEmptyCart() {
+      cartContainer.innerHTML = `
+        <section class="empty-state cart-empty-state">
+          <p class="empty-state-kicker">
+            Your cart
+          </p>
+
+          <h2>Nothing here yet</h2>
+
+          <p>
+            Browse the shop and add something when you find it.
+          </p>
+
+          <a
+            class="button-primary empty-state-button"
+            href="shop.html"
+          >
+            Go shopping
+          </a>
+        </section>
+      `;
+    }
+
+
+    /* =====================================================
+       CART RENDER
+       ===================================================== */
+
     function renderCart() {
-      const container = document.getElementById("cart-container");
       const cart = getCart();
 
+      updateCartCount();
+
       if (cart.length === 0) {
-        container.innerHTML = `
-          <div class="card" style="text-align:center; padding:25px;">
-            <p>Your cart is empty.</p>
-          </div>
-        `;
+        renderEmptyCart();
         return;
       }
 
-      let total = 0;
+      let subtotal = 0;
+      let totalItems = 0;
 
-      const html = cart.map(item => {
-        const product = PRODUCTS.find(p => p.id === item.id);
+      cart.forEach(item => {
+        const product = getProduct(item.id);
 
         if (!product) {
-          return `
-            <div class="card" style="padding:25px;">
-              <p>Unknown item (ID: ${item.id})</p>
-            </div>
-          `;
+          return;
         }
 
-        const stockLeft = getStock(item.id);
+        subtotal +=
+          Number(product.price) *
+          Number(item.quantity);
 
-        const itemTotal = product.price * item.quantity;
-        total += itemTotal;
+        totalItems += Number(item.quantity);
+      });
 
-        return `
-          <div class="card" style="padding:25px;">
-            <h3>${product.name}</h3>
-            <p>$${product.price}</p>
+      const itemMarkup = cart
+        .map((item, index) => {
+          return renderCartItem(item, index);
+        })
+        .join("");
 
-            <p style="opacity:0.7;">Stock left: ${stockLeft}</p>
+      cartContainer.innerHTML = `
+        <div class="cart-layout">
 
-            <div class="qty-row">
-              <button onclick="changeQty('${item.id}', -1)">-</button>
-              <span>${item.quantity}</span>
-              <button onclick="changeQty('${item.id}', 1)">+</button>
+          <section
+            class="cart-items"
+            aria-label="Cart items"
+          >
+            ${itemMarkup}
+          </section>
+
+
+          <aside class="cart-summary">
+
+            <p class="cart-summary-label">
+              Order summary
+            </p>
+
+            <h2>
+              ${totalItems}
+              item${totalItems === 1 ? "" : "s"}
+            </h2>
+
+            <div class="summary-row">
+              <span>Subtotal</span>
+
+              <strong>
+                ${formatPrice(subtotal)}
+              </strong>
             </div>
 
-            <p><strong>$${itemTotal.toFixed(2)}</strong></p>
-          </div>
-        `;
-      }).join("");
+            <div class="summary-row summary-total">
+              <span>Total</span>
 
-      container.innerHTML = `
-        ${html}
+              <strong>
+                ${formatPrice(subtotal)}
+              </strong>
+            </div>
 
-        <div class="card" style="margin-top: 20px; padding:25px;">
-          <h2>Total: $${total.toFixed(2)}</h2>
+            <p class="summary-note">
+              Taxes and payment processing are not connected yet.
+            </p>
 
-          <button class="button-primary" onclick="checkout()">
-            Checkout
-          </button>
+            <button
+              class="button-primary checkout-button"
+              type="button"
+              onclick="checkout()"
+            >
+              Checkout
+            </button>
 
-          <button onclick="clearCart()" style="margin-top:10px; width:100%;">
-            Clear Cart
-          </button>
+            <a
+              class="button-secondary continue-shopping-button"
+              href="shop.html"
+            >
+              Continue shopping
+            </a>
+
+            <button
+              class="clear-cart-button"
+              type="button"
+              onclick="clearCart()"
+            >
+              Clear cart
+            </button>
+
+          </aside>
+
         </div>
       `;
     }
+
+
+    /* =====================================================
+       LIVE UPDATES
+       ===================================================== */
+
+    window.addEventListener(
+      "sunq:cartchange",
+      renderCart
+    );
+
+    window.addEventListener(
+      "sunq:stockchange",
+      renderCart
+    );
+
+    window.addEventListener(
+      "sunq:externalchange",
+      renderCart
+    );
+
+
+    /* =====================================================
+       INITIALIZE
+       ===================================================== */
 
     updateCartCount();
     renderCart();
