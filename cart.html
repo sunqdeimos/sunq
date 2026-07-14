@@ -116,7 +116,7 @@
         </a>
 
         <p>
-          W.I.P online marketplace.
+          Built one listing at a time.
         </p>
 
       </div>
@@ -356,9 +356,7 @@
       }
 
       /*
-        Check the entire cart before changing any stock.
-        This avoids completing half an order if one item
-        suddenly becomes unavailable.
+        Validate the whole cart before reducing any stock.
       */
 
       for (const item of cart) {
@@ -402,7 +400,7 @@
       }
 
       /*
-        Reduce stock after every item passes validation.
+        Reduce stock only after every item passes validation.
       */
 
       for (const item of cart) {
@@ -657,11 +655,11 @@
           </p>
 
           <h2>
-            It's a little lonely in here.
+            I'm lonely. Give me a friend.
           </h2>
 
           <p>
-            Browse the shop and add something when you find it.
+            Add something from the shop and it will appear here.
           </p>
 
           <a
@@ -696,12 +694,11 @@
           </p>
 
           <h2>
-            Nice doing business with you.
+            Thank you for your purchase.
           </h2>
 
           <p>
-            Your checkout demo is complete and the local
-            stock has been updated.
+            Your order has been received.
           </p>
 
           <div class="checkout-complete-actions">
@@ -876,16 +873,12 @@
 
     window.addEventListener(
       "sunq:cartchange",
-      () => {
-        renderCart();
-      }
+      renderCart
     );
 
     window.addEventListener(
       "sunq:stockchange",
-      () => {
-        renderCart();
-      }
+      renderCart
     );
 
     window.addEventListener(
