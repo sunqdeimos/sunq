@@ -1,9 +1,6 @@
 /* =========================================================
-   SUNQ SHARED USER INTERFACE
-   Requires data.js to load first.
+   SUNQ SHARED STORE UI
    ========================================================= */
-
-const CART_STORAGE_KEY = "sunqCart";
 
 
 /* =========================================================
@@ -12,133 +9,62 @@ const CART_STORAGE_KEY = "sunqCart";
 
 function getCart() {
   try {
-    const storedCart = localStorage.getItem(CART_STORAGE_KEY);
-
-    if (!storedCart) {
-      return [];
-    }
-
-    const parsedCart = JSON.parse(storedCart);
-
-    if (!Array.isArray(parsedCart)) {
-      return [];
-    }
-
-    return parsedCart
-      .filter(item => {
-        return (
-          item &&
-          typeof item.id === "string" &&
-          Number(item.quantity) > 0
-        );
-      })
-      .map(item => ({
-        id: item.id,
-        quantity: Math.floor(Number(item.quantity))
-      }));
-  } catch (error) {
-    console.error("Could not read SUNQ cart:", error);
+    return JSON.parse(
+      localStorage.getItem("sunqCart")
+    ) || [];
+  } catch {
     return [];
   }
 }
 
 function saveCart(cart) {
-  const cleanCart = Array.isArray(cart)
-    ? cart
-        .filter(item => {
-          return (
-            item &&
-            typeof item.id === "string" &&
-            Number(item.quantity) > 0
-          );
-        })
-        .map(item => ({
-          id: item.id,
-          quantity: Math.floor(Number(item.quantity))
-        }))
-    : [];
-
   localStorage.setItem(
-    CART_STORAGE_KEY,
-    JSON.stringify(cleanCart)
+    "sunqCart",
+    JSON.stringify(cart)
+  );
+
+  window.dispatchEvent(
+    new Event("sunq:cartchange")
   );
 
   updateCartCount();
-
-  /*
-    The browser storage event only fires in other tabs.
-    This custom event updates the current page immediately.
-  */
-  window.dispatchEvent(
-    new CustomEvent("sunq:cartchange", {
-      detail: {
-        cart: cleanCart
-      }
-    })
-  );
 }
 
 function clearStoredCart() {
-  localStorage.removeItem(CART_STORAGE_KEY);
-
-  updateCartCount();
+  localStorage.removeItem("sunqCart");
 
   window.dispatchEvent(
-    new CustomEvent("sunq:cartchange", {
-      detail: {
-        cart: []
-      }
-    })
-  );
-}
-
-function getCartQuantity(productId) {
-  const item = getCart().find(
-    cartItem => cartItem.id === productId
+    new Event("sunq:cartchange")
   );
 
-  return item ? Number(item.quantity) : 0;
-}
-
-function getCartItemCount() {
-  return getCart().reduce((total, item) => {
-    return total + Number(item.quantity || 0);
-  }, 0);
+  updateCartCount();
 }
 
 function updateCartCount() {
-  const countElement = document.getElementById("cart-count");
+  const cart = getCart();
 
-  if (!countElement) {
-    return;
-  }
+  const total = cart.reduce((sum, item) => {
+    return sum + Number(item.quantity || 0);
+  }, 0);
 
-  const total = getCartItemCount();
-
-  countElement.textContent = total;
-  countElement.setAttribute(
-    "aria-label",
-    `${total} item${total === 1 ? "" : "s"} in cart`
-  );
+  document
+    .querySelectorAll("#cart-count")
+    .forEach(counter => {
+      counter.textContent = total;
+    });
 }
 
 
 /* =========================================================
-   DISPLAY HELPERS
+   FORMATTERS
    ========================================================= */
 
 function formatPrice(price) {
-  const numericPrice = Number(price);
-
-  if (!Number.isFinite(numericPrice)) {
-    return "$0.00";
-  }
-
-  return `$${numericPrice.toFixed(2)}`;
+  return `$${Number(price).toFixed(2)}`;
 }
 
 function escapeHTML(value) {
-  return String(value ?? "")
+  return String(value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -146,191 +72,179 @@ function escapeHTML(value) {
     .replaceAll("'", "&#039;");
 }
 
-function getStockLabel(stock) {
-  const numericStock = Number(stock);
-
-  if (numericStock <= 0) {
-    return "Sold out";
-  }
-
-  if (numericStock === 1) {
-    return "1 available";
-  }
-
-  return `${numericStock} available`;
-}
-
-function getStockClass(stock) {
-  const numericStock = Number(stock);
-
-  if (numericStock <= 0) {
-    return "stock-sold-out";
-  }
-
-  if (numericStock <= 3) {
-    return "stock-low";
-  }
-
-  return "stock-available";
-}
-
 function getProductImage(product) {
-  const fallbackImage =
+  return product.image ||
     "https://placehold.co/800x800/111111/d4af37?text=SUNQ";
-
-  if (!product || !product.image) {
-    return fallbackImage;
-  }
-
-  return product.image;
 }
 
 
 /* =========================================================
-   PRODUCT CARD RENDERING
+   STOCK HELPERS
    ========================================================= */
 
-function renderProductCard(product, options = {}) {
-  if (!product) {
-    return "";
+function getStockLabel(stock) {
+  if (stock <= 0) {
+    return "Unavailable";
   }
 
-  const {
-    animationIndex = 0,
-    showCategory = true,
-    showStock = true,
-    showBadge = true
-  } = options;
+  if (stock === 1) {
+    return "Only 1 available";
+  }
 
-  const stock = getStock(product.id);
-  const categoryLabel = getCategoryLabel(product.category);
-  const badge = getProductBadge(product);
-  const badgeClass = getBadgeClass(badge);
-  const stockClass = getStockClass(stock);
-  const stockLabel = getStockLabel(stock);
+  if (stock <= 3) {
+    return `Only ${stock} available`;
+  }
 
-  const animationDelay = Math.min(
-    animationIndex * 55,
-    440
-  );
+  return `${stock} available`;
+}
 
-  const badgeMarkup =
-    showBadge && badge
-      ? `
-        <span class="product-badge ${escapeHTML(badgeClass)}">
-          ${escapeHTML(badge)}
-        </span>
-      `
-      : "";
+function getStockClass(stock) {
+  if (stock <= 0) {
+    return "availability-sold-out";
+  }
 
-  const categoryMarkup =
-    showCategory
-      ? `
-        <p class="product-card-category">
-          ${escapeHTML(categoryLabel)}
-        </p>
-      `
-      : "";
+  if (stock <= 3) {
+    return "availability-low";
+  }
 
-  const stockMarkup =
-    showStock
-      ? `
-        <p class="product-card-stock ${escapeHTML(stockClass)}">
-          ${escapeHTML(stockLabel)}
-        </p>
-      `
-      : "";
+  return "availability-available";
+}
 
-  const soldOutClass =
-    stock <= 0
-      ? "product-card-sold-out"
-      : "";
+
+/* =========================================================
+   PRODUCT CARD
+   ========================================================= */
+
+function renderCard(product) {
+
+  const stock =
+    getStock(product.id);
+
+  const badge =
+    getProductBadge(product);
+
+  const badgeClass =
+    getBadgeClass(badge);
 
   return `
     <a
-      class="card product-card fade ${soldOutClass}"
+      class="product-card fade"
       href="product.html?id=${encodeURIComponent(product.id)}"
-      style="animation-delay:${animationDelay}ms;"
-      aria-label="View ${escapeHTML(product.name)}"
     >
-      <div class="product-card-media">
+
+      <div class="product-card-image-wrap">
+
+        <div class="image-placeholder"></div>
+
         <img
-          class="card-img"
+          class="product-card-image"
           src="${escapeHTML(getProductImage(product))}"
           alt="${escapeHTML(product.name)}"
           loading="lazy"
+
+          onload="
+            this.classList.add('loaded');
+            this.previousElementSibling.remove();
+          "
+
           onerror="
-            this.onerror = null;
-            this.src = 'https://placehold.co/800x800/111111/d4af37?text=SUNQ';
+            this.onerror=null;
+            this.src='https://placehold.co/800x800/111111/d4af37?text=SUNQ';
           "
         >
 
-        ${badgeMarkup}
-
         ${
-          stock <= 0
+          badge
             ? `
-              <div class="sold-out-overlay">
-                Sold Out
-              </div>
+              <span
+                class="product-badge ${badgeClass}"
+              >
+                ${escapeHTML(badge)}
+              </span>
             `
             : ""
         }
+
       </div>
 
       <div class="product-card-content">
-        ${categoryMarkup}
 
-        <h3>${escapeHTML(product.name)}</h3>
+        <p class="product-card-category">
+          ${escapeHTML(
+            getCategoryLabel(
+              product.category
+            )
+          )}
+        </p>
 
-        <div class="product-card-bottom">
-          <p class="product-card-price">
-            ${formatPrice(product.price)}
-          </p>
+        <h3>
+          ${escapeHTML(product.name)}
+        </h3>
 
-          ${stockMarkup}
+        <p class="product-card-price">
+          ${formatPrice(product.price)}
+        </p>
+
+        <div class="product-card-meta">
+
+          <span>
+            ${escapeHTML(product.platform)}
+          </span>
+
+          <span>
+            ${escapeHTML(product.delivery)}
+          </span>
+
         </div>
+
+        <p class="
+          product-stock
+          ${getStockClass(stock)}
+        ">
+          ${getStockLabel(stock)}
+        </p>
+
       </div>
+
     </a>
   `;
 }
 
-function renderProductGrid(
-  containerOrId,
-  products,
-  options = {}
+
+/* =========================================================
+   PRODUCT GRID
+   ========================================================= */
+
+function renderGrid(
+  containerId,
+  products
 ) {
+
   const container =
-    typeof containerOrId === "string"
-      ? document.getElementById(containerOrId)
-      : containerOrId;
+    document.getElementById(containerId);
 
   if (!container) {
-    console.warn(
-      "SUNQ product grid container could not be found:",
-      containerOrId
-    );
-
     return;
   }
 
-  const productList = Array.isArray(products)
-    ? products
-    : [];
+  if (!products.length) {
 
-  if (productList.length === 0) {
     container.innerHTML = `
-      <div class="empty-state">
-        <h2>No products found</h2>
+      <section class="empty-state">
 
-        <p>
-          Try another search or choose a different category.
+        <p class="empty-state-kicker">
+          Nothing here yet.
         </p>
 
-        <a class="button-secondary" href="shop.html">
-          View all products
-        </a>
-      </div>
+        <h2>
+          We looked everywhere.
+        </h2>
+
+        <p>
+          Even behind the couch.
+        </p>
+
+      </section>
     `;
 
     return;
@@ -338,99 +252,68 @@ function renderProductGrid(
 
   container.innerHTML = `
     <div class="grid">
-      ${productList
-        .map((product, index) => {
-          return renderProductCard(product, {
-            ...options,
-            animationIndex: index
-          });
-        })
+
+      ${products
+        .map(renderCard)
         .join("")}
+
     </div>
   `;
 }
 
 
 /* =========================================================
-   RELATED PRODUCT RENDERING
+   RELATED PRODUCTS
    ========================================================= */
 
 function renderRelatedProducts(
-  containerOrId,
+  containerId,
   productId,
   limit = 4
 ) {
-  const relatedProducts = getRelatedProducts(
-    productId,
-    limit
+
+  renderGrid(
+    containerId,
+    getRelatedProducts(
+      productId,
+      limit
+    )
   );
 
-  renderProductGrid(
-    containerOrId,
-    relatedProducts,
-    {
-      showCategory: true,
-      showStock: true,
-      showBadge: true
-    }
-  );
 }
 
 
 /* =========================================================
-   FEATURED PRODUCT RENDERING
+   FEATURED PRODUCTS
    ========================================================= */
 
 function renderFeaturedProducts(
-  containerOrId,
-  limit = 6
+  containerId
 ) {
-  const featuredProducts = getFeaturedProducts()
-    .slice(0, limit);
 
-  renderProductGrid(
-    containerOrId,
-    featuredProducts,
-    {
-      showCategory: true,
-      showStock: true,
-      showBadge: true
-    }
+  renderGrid(
+    containerId,
+    getFeaturedProducts()
   );
+
 }
 
 
 /* =========================================================
-   PAGE SYNCHRONIZATION
+   GLOBAL EVENTS
    ========================================================= */
 
-function initializeSharedUI() {
-  updateCartCount();
-}
+window.addEventListener(
+  "storage",
+  () => {
 
-window.addEventListener("storage", event => {
-  if (
-    event.key === CART_STORAGE_KEY ||
-    event.key === "sunqStock"
-  ) {
     updateCartCount();
 
     window.dispatchEvent(
-      new CustomEvent("sunq:externalchange", {
-        detail: {
-          key: event.key
-        }
-      })
+      new Event("sunq:externalchange")
     );
+
   }
-});
-
-window.addEventListener(
-  "sunq:cartchange",
-  updateCartCount
 );
 
-document.addEventListener(
-  "DOMContentLoaded",
-  initializeSharedUI
-);
+updateCartCount();
