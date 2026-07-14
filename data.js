@@ -23,7 +23,7 @@ const PRODUCTS = [
     delivery: "5–15 minutes",
 
     description:
-      "A Diamond / Champ FA listing prepared for a quick and straightforward purchase. Product details, access instructions, and delivery information are kept clear so buyers know what to expect.",
+      "From yours truly, SUNQ :3.",
 
     featured: true,
     badge: "New"
@@ -41,7 +41,7 @@ const PRODUCTS = [
     delivery: "5–15 minutes",
 
     description:
-      "From yours truly, SUNQ.",
+      "From yours truly, SUNQ :3.",
 
     featured: false,
     badge: ""
@@ -59,7 +59,7 @@ const PRODUCTS = [
     delivery: "10–20 minutes",
 
     description:
-      "From yours truly, SUNQ .",
+      "From yours truly, SUNQ :3.",
 
     featured: false,
     badge: ""
@@ -77,7 +77,7 @@ const PRODUCTS = [
     delivery: "10–20 minutes",
 
     description:
-      "From yours truly, SUNQ.",
+      "From yours truly, SUNQ :3.",
 
     featured: false,
     badge: ""
@@ -95,7 +95,7 @@ const PRODUCTS = [
     delivery: "5–15 minutes",
 
     description:
-      "From yours truly, SUNQ.",
+      "From yours truly, SUNQ :3.",
 
     featured: true,
     badge: ""
@@ -113,7 +113,7 @@ const PRODUCTS = [
     delivery: "5–15 minutes",
 
     description:
-      "From yours truly, SUNQ.",
+      "From yours truly, SUNQ :3.",
 
     featured: false,
     badge: "Best Seller"
@@ -131,7 +131,7 @@ const PRODUCTS = [
     delivery: "10–20 minutes",
 
     description:
-      "From yours truly, SUNQ.",
+      "From yours truly, SUNQ :3.",
 
     featured: false,
     badge: ""
@@ -149,7 +149,7 @@ const PRODUCTS = [
     delivery: "10–20 minutes",
 
     description:
-      "From yours truly, SUNQ.",
+      "From yours truly, SUNQ :3.",
 
     featured: false,
     badge: ""
@@ -167,7 +167,7 @@ const PRODUCTS = [
     delivery: "5–15 minutes",
 
     description:
-      "From yours truly, SUNQ",
+      "From yours truly, SUNQ :3.",
 
     featured: true,
     badge: "New"
@@ -185,7 +185,7 @@ const PRODUCTS = [
     delivery: "5–15 minutes",
 
     description:
-      "From yours truly, SUNQ.",
+      "From yours truly, SUNQ :3.",
 
     featured: false,
     badge: ""
@@ -193,7 +193,7 @@ const PRODUCTS = [
 ];
 
 
-/* =========================================================
+/* ==========================================================
    PRODUCT HELPERS
    ========================================================= */
 
