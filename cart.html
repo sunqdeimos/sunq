@@ -25,20 +25,22 @@
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Supabase first -->
+  <!-- Supabase library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- Project connection -->
+  <!-- Supabase project connection -->
   <script src="supabase-config.js"></script>
 
-  <!-- Product data and shared UI -->
+  <!-- Product database and shared UI -->
   <script src="data.js"></script>
   <script src="store-ui.js"></script>
 </head>
 
 <body>
 
-  <!-- ================= NAVBAR ================= -->
+  <!-- =====================================================
+       NAVBAR
+       ===================================================== -->
 
   <nav class="navbar">
     <div class="nav-container">
@@ -73,7 +75,9 @@
   </nav>
 
 
-  <!-- ================= CART ================= -->
+  <!-- =====================================================
+       CART PAGE
+       ===================================================== -->
 
   <main class="shop">
 
@@ -118,7 +122,9 @@
   </main>
 
 
-  <!-- ================= TOAST ================= -->
+  <!-- =====================================================
+       TOAST NOTIFICATION
+       ===================================================== -->
 
   <div
     id="toast"
@@ -129,7 +135,9 @@
   ></div>
 
 
-  <!-- ================= FOOTER ================= -->
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
 
   <footer class="site-footer">
 
@@ -168,15 +176,19 @@
   </footer>
 
 
-  <!-- ================= CART LOGIC ================= -->
+  <!-- =====================================================
+       CART LOGIC
+       ===================================================== -->
 
   <script>
     const cartContainer =
       document.getElementById("cart-container");
 
-    let toastTimer;
-    let checkoutComplete = false;
+    let toastTimer = null;
     let cartReady = false;
+    let checkoutProcessing = false;
+    let checkoutComplete = false;
+    let completedOrderId = "";
 
 
     /* =====================================================
@@ -185,7 +197,8 @@
 
     function showToast(
       message,
-      type = "success"
+      type = "success",
+      duration = 2600
     ) {
       const toast =
         document.getElementById("toast");
@@ -196,7 +209,8 @@
 
       clearTimeout(toastTimer);
 
-      toast.textContent = message;
+      toast.textContent =
+        String(message || "");
 
       toast.className =
         `toast toast-${type} toast-visible`;
@@ -205,7 +219,7 @@
         toast.classList.remove(
           "toast-visible"
         );
-      }, 2400);
+      }, duration);
     }
 
 
@@ -216,7 +230,7 @@
     function animateQuantity(productId) {
       const quantityElement =
         document.querySelector(
-          `[data-quantity="${productId}"]`
+          `[data-quantity="${CSS.escape(productId)}"]`
         );
 
       if (!quantityElement) {
@@ -236,21 +250,105 @@
 
 
     /* =====================================================
-       CLEAN INVALID CART ITEMS
+       CART VALIDATION
        ===================================================== */
 
-    function cleanCartAgainstCatalog() {
-      const cart = getCart();
+    function getValidCart() {
+      const cart =
+        getCart();
 
-      const cleanCart = cart.filter(item => {
-        return Boolean(getProduct(item.id));
+      return cart.filter(item => {
+        const product =
+          getProduct(item.id);
+
+        const quantity =
+          Number(item.quantity);
+
+        return (
+          product &&
+          Number.isFinite(quantity) &&
+          quantity > 0
+        );
       });
+    }
 
-      if (cleanCart.length !== cart.length) {
+
+    function cleanCartAgainstCatalog() {
+      const originalCart =
+        getCart();
+
+      const cleanCart =
+        getValidCart();
+
+      if (
+        cleanCart.length !==
+        originalCart.length
+      ) {
         saveCart(cleanCart);
       }
 
       return cleanCart;
+    }
+
+
+    function validateCartForCheckout(cart) {
+      if (!Array.isArray(cart) || cart.length === 0) {
+        return {
+          valid: false,
+          message: "Your cart is empty."
+        };
+      }
+
+      for (const item of cart) {
+        const product =
+          getProduct(item.id);
+
+        if (!product) {
+          return {
+            valid: false,
+            message:
+              "One cart item is no longer available."
+          };
+        }
+
+        const quantity =
+          Number(item.quantity);
+
+        if (
+          !Number.isInteger(quantity) ||
+          quantity <= 0
+        ) {
+          return {
+            valid: false,
+            message:
+              `The quantity for ${product.name} is invalid.`
+          };
+        }
+
+        const availableStock =
+          getStock(item.id);
+
+        if (availableStock <= 0) {
+          return {
+            valid: false,
+            message:
+              `${product.name} is unavailable.`
+          };
+        }
+
+        if (quantity > availableStock) {
+          return {
+            valid: false,
+            message:
+              `${product.name} only has ${availableStock} available.`
+          };
+        }
+      }
+
+      return {
+        valid: true,
+        message: ""
+      };
     }
 
 
@@ -262,11 +360,15 @@
       productId,
       delta
     ) {
-      if (!cartReady) {
+      if (
+        !cartReady ||
+        checkoutProcessing
+      ) {
         return;
       }
 
       checkoutComplete = false;
+      completedOrderId = "";
 
       const product =
         getProduct(productId);
@@ -341,18 +443,22 @@
        ===================================================== */
 
     function removeCartItem(productId) {
-      if (!cartReady) {
+      if (
+        !cartReady ||
+        checkoutProcessing
+      ) {
         return;
       }
 
       checkoutComplete = false;
+      completedOrderId = "";
 
       const product =
         getProduct(productId);
 
       const cartItemElement =
         document.querySelector(
-          `[data-cart-item="${productId}"]`
+          `[data-cart-item="${CSS.escape(productId)}"]`
         );
 
       if (cartItemElement) {
@@ -360,6 +466,11 @@
           "cart-item-removing"
         );
       }
+
+      const delay =
+        cartItemElement
+          ? 260
+          : 0;
 
       setTimeout(() => {
         const updatedCart =
@@ -375,7 +486,7 @@
             ? `${product.name} removed from your cart.`
             : "Item removed from your cart."
         );
-      }, cartItemElement ? 260 : 0);
+      }, delay);
     }
 
 
@@ -384,11 +495,15 @@
        ===================================================== */
 
     function clearCart() {
-      if (!cartReady) {
+      if (
+        !cartReady ||
+        checkoutProcessing
+      ) {
         return;
       }
 
       checkoutComplete = false;
+      completedOrderId = "";
 
       const cart =
         getCart();
@@ -421,20 +536,60 @@
 
 
     /* =====================================================
-       DEMO CHECKOUT
+       CHECKOUT BUTTON STATE
        ===================================================== */
 
-    function checkout() {
-      if (!cartReady) {
+    function setCheckoutButtonState(
+      processing
+    ) {
+      const checkoutButton =
+        document.querySelector(
+          ".checkout-button"
+        );
+
+      if (!checkoutButton) {
         return;
       }
+
+      checkoutButton.disabled =
+        processing;
+
+      checkoutButton.setAttribute(
+        "aria-busy",
+        String(processing)
+      );
+
+      checkoutButton.textContent =
+        processing
+          ? "Processing..."
+          : "Checkout";
+    }
+
+
+    /* =====================================================
+       REAL DATABASE CHECKOUT
+       ===================================================== */
+
+    async function checkout() {
+      if (
+        !cartReady ||
+        checkoutProcessing
+      ) {
+        return;
+      }
+
+      checkoutComplete = false;
+      completedOrderId = "";
 
       const cart =
         cleanCartAgainstCatalog();
 
-      if (cart.length === 0) {
+      const validation =
+        validateCartForCheckout(cart);
+
+      if (!validation.valid) {
         showToast(
-          "Your cart is empty.",
+          validation.message,
           "error"
         );
 
@@ -442,63 +597,99 @@
         return;
       }
 
-      /*
-        Validate all quantities against the current product
-        stock returned by Supabase.
+      checkoutProcessing = true;
 
-        Database stock is not changed here. That must happen
-        through a protected server-side function.
-      */
+      setCheckoutButtonState(true);
 
-      for (const item of cart) {
-        const product =
-          getProduct(item.id);
+      try {
+        /*
+          Only product IDs and quantities are sent.
 
-        if (!product) {
-          showToast(
-            "One cart item is no longer available.",
-            "error"
-          );
+          Prices and totals are calculated inside the
+          database function so visitors cannot submit
+          their own fake prices.
+        */
 
-          renderCart();
-          return;
+        const cartPayload =
+          cart.map(item => {
+            return {
+              id: item.id,
+              quantity:
+                Number(item.quantity)
+            };
+          });
+
+        const {
+          data: orderId,
+          error
+        } = await supabaseClient.rpc(
+          "checkout_order",
+          {
+            p_cart_items: cartPayload
+          }
+        );
+
+        if (error) {
+          throw error;
         }
 
-        const availableStock =
-          getStock(item.id);
-
-        if (availableStock <= 0) {
-          showToast(
-            `${product.name} is unavailable.`,
-            "error"
+        if (!orderId) {
+          throw new Error(
+            "The database did not return an order ID."
           );
-
-          renderCart();
-          return;
         }
 
-        if (
-          Number(item.quantity) >
-          availableStock
-        ) {
-          showToast(
-            `${product.name} only has ${availableStock} available.`,
-            "error"
-          );
+        completedOrderId =
+          String(orderId);
 
-          renderCart();
-          return;
-        }
+        /*
+          Reload products so the new stock values appear
+          immediately without requiring a manual refresh.
+        */
+
+        await loadProducts();
+
+        checkoutComplete = true;
+
+        /*
+          Clearing the local cart dispatches a cart-change
+          event. checkoutComplete is already true, so that
+          event safely renders the success screen.
+        */
+
+        clearStoredCart();
+
+        renderCart();
+
+        showToast(
+          "Thank you for your purchase. Your order has been received.",
+          "success",
+          3200
+        );
+      } catch (error) {
+        console.error(
+          "SUNQ checkout failed:",
+          error
+        );
+
+        checkoutComplete = false;
+
+        const errorMessage =
+          error?.message ||
+          "Checkout could not be completed.";
+
+        showToast(
+          errorMessage,
+          "error",
+          4200
+        );
+
+        renderCart();
+      } finally {
+        checkoutProcessing = false;
+
+        setCheckoutButtonState(false);
       }
-
-      checkoutComplete = true;
-
-      clearStoredCart();
-      renderCart();
-
-      showToast(
-        "Checkout demo complete."
-      );
     }
 
 
@@ -534,7 +725,8 @@
                 </h2>
 
                 <p>
-                  Product ID: ${escapeHTML(item.id)}
+                  Product ID:
+                  ${escapeHTML(item.id)}
                 </p>
 
               </div>
@@ -559,7 +751,9 @@
       const itemQuantity =
         Math.max(
           1,
-          Number(item.quantity)
+          Math.floor(
+            Number(item.quantity)
+          )
         );
 
       const itemTotal =
@@ -572,10 +766,14 @@
         );
 
       const platform =
-        getProductPlatform(product);
+        getProductPlatform(
+          product
+        );
 
       const delivery =
-        getProductDelivery(product);
+        getProductDelivery(
+          product
+        );
 
       const stockClass =
         getStockClass(stock);
@@ -616,7 +814,7 @@
           </a>
 
 
-          <!-- DETAILS -->
+          <!-- PRODUCT DETAILS -->
 
           <div class="cart-item-details">
 
@@ -652,7 +850,7 @@
             </p>
 
 
-            <!-- CONTROLS -->
+            <!-- QUANTITY CONTROLS -->
 
             <div class="cart-item-actions">
 
@@ -700,7 +898,7 @@
           </div>
 
 
-          <!-- TOTAL -->
+          <!-- ITEM TOTAL -->
 
           <div class="cart-item-total">
 
@@ -761,6 +959,25 @@
        ===================================================== */
 
     function renderCheckoutComplete() {
+      const shortOrderReference =
+        completedOrderId
+          ? completedOrderId
+              .split("-")[0]
+              .toUpperCase()
+          : "";
+
+      const orderReferenceMarkup =
+        shortOrderReference
+          ? `
+            <p class="summary-note">
+              Order reference:
+              <strong>
+                ${escapeHTML(shortOrderReference)}
+              </strong>
+            </p>
+          `
+          : "";
+
       cartContainer.innerHTML = `
         <section class="checkout-complete">
 
@@ -772,17 +989,18 @@
           </div>
 
           <p class="section-kicker">
-            Demo checkout complete
+            Checkout complete
           </p>
 
           <h2>
-            Thank you for testing SUNQ.
+            Thank you for your purchase.
           </h2>
 
           <p>
-            No payment was processed and database stock
-            was not changed.
+            Your order has been received.
           </p>
+
+          ${orderReferenceMarkup}
 
           <div class="checkout-complete-actions">
 
@@ -829,7 +1047,8 @@
           </h2>
 
           <p>
-            Product information could not be loaded from the database.
+            Product information could not be loaded
+            from the database.
           </p>
 
           <button
@@ -859,8 +1078,10 @@
         return;
       }
 
-      const cart =
-        getCart();
+      cartContainer.setAttribute(
+        "aria-busy",
+        "true"
+      );
 
       updateCartCount();
 
@@ -868,6 +1089,9 @@
         renderCheckoutComplete();
         return;
       }
+
+      const cart =
+        getCart();
 
       if (cart.length === 0) {
         renderEmptyCart();
@@ -885,12 +1109,15 @@
           return;
         }
 
-        subtotal +=
-          Number(product.price) *
+        const quantity =
           Number(item.quantity);
 
+        subtotal +=
+          Number(product.price) *
+          quantity;
+
         totalItems +=
-          Number(item.quantity);
+          quantity;
       });
 
       const itemMarkup =
@@ -906,7 +1133,7 @@
       cartContainer.innerHTML = `
         <div class="cart-layout">
 
-          <!-- ITEMS -->
+          <!-- CART ITEMS -->
 
           <section
             class="cart-items"
@@ -916,7 +1143,7 @@
           </section>
 
 
-          <!-- SUMMARY -->
+          <!-- ORDER SUMMARY -->
 
           <aside class="cart-summary">
 
@@ -966,16 +1193,17 @@
             </div>
 
             <p class="summary-note">
-              Payment processing and protected inventory
-              updates are not connected yet.
+              Payment processing is not connected yet.
+              Checkout currently creates an order and reserves inventory.
             </p>
 
             <button
               class="button-primary checkout-button"
               type="button"
               onclick="checkout()"
+              aria-busy="false"
             >
-              Checkout demo
+              Checkout
             </button>
 
             <a
@@ -1002,11 +1230,15 @@
         "aria-busy",
         "false"
       );
+
+      setCheckoutButtonState(
+        checkoutProcessing
+      );
     }
 
 
     /* =====================================================
-       INITIALIZE
+       INITIALIZATION
        ===================================================== */
 
     async function initializeCart() {
@@ -1029,7 +1261,7 @@
         renderCart();
       } catch (error) {
         console.error(
-          "Could not initialize the cart:",
+          "Could not initialize the SUNQ cart:",
           error
         );
 
@@ -1039,32 +1271,38 @@
 
 
     /* =====================================================
-       CART UPDATES
+       CART EVENTS
        ===================================================== */
 
     window.addEventListener(
       "sunq:cartchange",
       () => {
-        if (cartReady) {
-          renderCart();
+        if (!cartReady) {
+          return;
         }
+
+        renderCart();
       }
     );
+
 
     window.addEventListener(
       "sunq:externalchange",
       () => {
-        checkoutComplete = false;
-
-        if (cartReady) {
-          renderCart();
+        if (!cartReady) {
+          return;
         }
+
+        checkoutComplete = false;
+        completedOrderId = "";
+
+        renderCart();
       }
     );
 
 
     /* =====================================================
-       FUTURE PRODUCT REFRESH
+       PRODUCT REFRESH EVENTS
        ===================================================== */
 
     window.addEventListener(
@@ -1074,12 +1312,23 @@
           return;
         }
 
-        checkoutComplete = false;
-        cleanCartAgainstCatalog();
+        /*
+          Keep the checkout completion page visible after
+          loadProducts() refreshes stock.
+        */
+
+        if (!checkoutComplete) {
+          cleanCartAgainstCatalog();
+        }
+
         renderCart();
       }
     );
 
+
+    /* =====================================================
+       START
+       ===================================================== */
 
     initializeCart();
   </script>
