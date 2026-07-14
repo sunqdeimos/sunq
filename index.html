@@ -25,7 +25,13 @@
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Load catalog first, then shared UI -->
+  <!-- Supabase first -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Project connection -->
+  <script src="supabase-config.js"></script>
+
+  <!-- Product data and shared UI -->
   <script src="data.js"></script>
   <script src="store-ui.js"></script>
 </head>
@@ -233,7 +239,29 @@
 
     </div>
 
-    <div id="featured-products"></div>
+    <div
+      id="featured-products"
+      aria-live="polite"
+      aria-busy="true"
+    >
+
+      <section class="empty-state">
+
+        <p class="empty-state-kicker">
+          Loading
+        </p>
+
+        <h2>
+          Finding the good stuff.
+        </h2>
+
+        <p>
+          This should only take a moment.
+        </p>
+
+      </section>
+
+    </div>
 
   </section>
 
@@ -344,51 +372,118 @@
   <!-- ================= HOME LOGIC ================= -->
 
   <script>
-    function initializeHomePage() {
-      updateCartCount();
+    const featuredContainer =
+      document.getElementById("featured-products");
 
-      renderFeaturedProducts(
-        "featured-products",
-        6
+
+    /* =====================================================
+       ERROR STATE
+       ===================================================== */
+
+    function renderFeaturedError() {
+      featuredContainer.innerHTML = `
+        <section class="empty-state">
+
+          <p class="empty-state-kicker">
+            Something went wrong
+          </p>
+
+          <h2>
+            Featured products did not load.
+          </h2>
+
+          <p>
+            Check the database connection and refresh the page.
+          </p>
+
+          <button
+            class="button-secondary"
+            type="button"
+            onclick="window.location.reload()"
+          >
+            Try again
+          </button>
+
+        </section>
+      `;
+
+      featuredContainer.setAttribute(
+        "aria-busy",
+        "false"
       );
     }
 
 
     /* =====================================================
-       LIVE STOCK UPDATES
+       RENDER FEATURED
        ===================================================== */
 
-    window.addEventListener(
-      "sunq:stockchange",
-      () => {
-        renderFeaturedProducts(
-          "featured-products",
-          6
-        );
-      }
-    );
+    function renderHomeFeatured() {
+      renderFeaturedProducts(
+        "featured-products",
+        6
+      );
 
-
-    /* =====================================================
-       CROSS-TAB UPDATES
-       ===================================================== */
-
-    window.addEventListener(
-      "sunq:externalchange",
-      () => {
-        updateCartCount();
-
-        renderFeaturedProducts(
-          "featured-products",
-          6
-        );
-      }
-    );
+      featuredContainer.setAttribute(
+        "aria-busy",
+        "false"
+      );
+    }
 
 
     /* =====================================================
        INITIALIZE
        ===================================================== */
+
+    async function initializeHomePage() {
+      updateCartCount();
+
+      try {
+        await productsReady;
+
+        if (
+          getProductsLoadError() ||
+          !areProductsLoaded()
+        ) {
+          renderFeaturedError();
+          return;
+        }
+
+        renderHomeFeatured();
+      } catch (error) {
+        console.error(
+          "Could not initialize SUNQ home page:",
+          error
+        );
+
+        renderFeaturedError();
+      }
+    }
+
+
+    /* =====================================================
+       FUTURE PRODUCT REFRESHES
+       ===================================================== */
+
+    window.addEventListener(
+      "sunq:productsloaded",
+      () => {
+        if (areProductsLoaded()) {
+          renderHomeFeatured();
+        }
+      }
+    );
+
+
+    /* =====================================================
+       CROSS-TAB CART UPDATES
+       ===================================================== */
+
+    window.addEventListener(
+      "sunq:externalchange",
+      updateCartCount
+    );
+
 
     initializeHomePage();
   </script>
