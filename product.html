@@ -11,7 +11,7 @@
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- MUST load first -->
+  <!-- PRODUCT DATA -->
   <script src="data.js"></script>
 </head>
 
@@ -33,11 +33,24 @@
     <div id="product-container"></div>
   </main>
 
+  <!-- TOAST POPUP -->
+  <div
+    id="toast"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+  ></div>
+
   <script>
     /* ================= CART ================= */
 
     function getCart() {
-      return JSON.parse(localStorage.getItem("sunqCart")) || [];
+      try {
+        return JSON.parse(localStorage.getItem("sunqCart")) || [];
+      } catch (error) {
+        console.error("Could not read cart:", error);
+        return [];
+      }
     }
 
     function saveCart(cart) {
@@ -47,9 +60,15 @@
 
     function updateCartCount() {
       const cart = getCart();
-      const total = cart.reduce((sum, i) => sum + i.quantity, 0);
+      const total = cart.reduce((sum, item) => {
+        return sum + Number(item.quantity || 0);
+      }, 0);
+
       const el = document.getElementById("cart-count");
-      if (el) el.textContent = total;
+
+      if (el) {
+        el.textContent = total;
+      }
     }
 
     /* ================= PRODUCT LOOKUP ================= */
@@ -57,62 +76,105 @@
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
-    function getProduct(id) {
-      return PRODUCTS.find(p => p.id === id);
+    function findProduct(productId) {
+      return PRODUCTS.find(product => product.id === productId);
     }
 
-    const product = getProduct(id);
+    const product = findProduct(id);
     const container = document.getElementById("product-container");
 
     /* ================= STOCK ================= */
 
-    function getStock(id) {
-      const data = JSON.parse(localStorage.getItem("sunqStock")) || {};
-      return data[id] ?? 0;
+    function readStockData() {
+      try {
+        return JSON.parse(localStorage.getItem("sunqStock")) || {};
+      } catch (error) {
+        console.error("Could not read stock:", error);
+        return {};
+      }
     }
 
-    function reduceStock(id, amount) {
-      const data = JSON.parse(localStorage.getItem("sunqStock")) || {};
+    function getCurrentStock(productId) {
+      const data = readStockData();
+      return Number(data[productId] ?? 0);
+    }
 
-      if (data[id] === undefined) return false;
-      if (data[id] < amount) return false;
+    /* ================= TOAST ================= */
 
-      data[id] -= amount;
-      localStorage.setItem("sunqStock", JSON.stringify(data));
-      return true;
+    let toastTimer;
+
+    function showToast(message, type = "success") {
+      const toast = document.getElementById("toast");
+
+      if (!toast) return;
+
+      clearTimeout(toastTimer);
+
+      toast.textContent = message;
+      toast.className = `toast toast-${type} toast-visible`;
+
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("toast-visible");
+      }, 2200);
+    }
+
+    /* ================= BUTTON FEEDBACK ================= */
+
+    function showButtonFeedback(button) {
+      if (!button) return;
+
+      const originalText = button.textContent;
+
+      button.textContent = "Added";
+      button.classList.add("button-added");
+      button.disabled = true;
+
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.classList.remove("button-added");
+        button.disabled = false;
+      }, 850);
     }
 
     /* ================= ADD TO CART ================= */
 
-    function addToCart(id) {
-      const product = getProduct(id);
-      if (!product) return;
+    function addToCart(productId, button) {
+      const selectedProduct = findProduct(productId);
 
-      const stockLeft = getStock(id);
+      if (!selectedProduct) {
+        showToast("Product could not be found.", "error");
+        return;
+      }
+
+      const stockLeft = getCurrentStock(productId);
 
       if (stockLeft <= 0) {
-        alert("Out of stock.");
+        showToast("This item is out of stock.", "error");
         return;
       }
 
       const cart = getCart();
-      const item = cart.find(i => i.id === id);
+      const item = cart.find(cartItem => cartItem.id === productId);
 
-      const newQty = item ? item.quantity + 1 : 1;
+      const newQuantity = item ? item.quantity + 1 : 1;
 
-      if (newQty > stockLeft) {
-        alert("Not enough stock left.");
+      if (newQuantity > stockLeft) {
+        showToast(`Only ${stockLeft} available.`, "error");
         return;
       }
 
       if (item) {
-        item.quantity = newQty;
+        item.quantity = newQuantity;
       } else {
-        cart.push({ id, quantity: 1 });
+        cart.push({
+          id: productId,
+          quantity: 1
+        });
       }
 
       saveCart(cart);
-      renderProduct();
+      showButtonFeedback(button);
+      showToast(`${selectedProduct.name} added to your cart.`);
     }
 
     /* ================= RENDER ================= */
@@ -122,33 +184,67 @@
         container.innerHTML = `
           <div class="card" style="text-align:center; padding:25px;">
             <h2>Item not found</h2>
-            <p style="opacity:0.7;">This product does not exist or link is incorrect.</p>
-            <a class="button-primary" href="shop.html">Back to shop</a>
+
+            <p style="opacity:0.7;">
+              This product does not exist or the link is incorrect.
+            </p>
+
+            <a class="button-primary" href="shop.html">
+              Back to shop
+            </a>
           </div>
         `;
+
         return;
       }
 
-      const stockLeft = getStock(product.id);
+      const stockLeft = getCurrentStock(product.id);
+
+      const stockMarkup = stockLeft > 0
+        ? `<p style="opacity:0.8;">Stock: ${stockLeft}</p>`
+        : `<p style="color:#ff5656; font-weight:700;">Out of stock</p>`;
+
+      const buttonMarkup = stockLeft > 0
+        ? `
+          <button
+            class="button-primary"
+            type="button"
+            onclick="addToCart('${product.id}', this)"
+          >
+            Add to cart
+          </button>
+        `
+        : `
+          <button
+            class="button-primary"
+            type="button"
+            disabled
+          >
+            Out of stock
+          </button>
+        `;
 
       container.innerHTML = `
         <div class="product-layout">
 
           <div class="product-media">
-            <img class="product-image-large" src="${product.image}" alt="${product.name}">
+            <img
+              class="product-image-large"
+              src="${product.image}"
+              alt="${product.name}"
+            >
           </div>
 
           <div class="product-info">
             <h1>${product.name}</h1>
-            <p class="price">$${product.price}</p>
 
-            <p style="opacity:0.8;">
-              Stock: ${stockLeft}
+            <p class="price">
+              $${Number(product.price).toFixed(2)}
             </p>
 
-            <button class="button-primary" onclick="addToCart('${product.id}')">
-              Add to cart
-            </button>
+            ${stockMarkup}
+
+            ${buttonMarkup}
 
             <div class="meta" style="opacity:0.7;">
               <p>✔ Secure checkout (demo)</p>
@@ -160,14 +256,106 @@
       `;
     }
 
+    /* ================= INIT ================= */
+
     updateCartCount();
     renderProduct();
 
-    window.addEventListener("storage", () => {
-      updateCartCount();
-      renderProduct();
+    window.addEventListener("storage", event => {
+      if (
+        event.key === "sunqCart" ||
+        event.key === "sunqStock"
+      ) {
+        updateCartCount();
+        renderProduct();
+      }
     });
   </script>
+
+  <style>
+    /* ================= TOAST POPUP ================= */
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      z-index: 1000;
+
+      width: calc(100% - 32px);
+      max-width: 420px;
+
+      padding: 15px 18px;
+
+      color: #fff;
+      text-align: center;
+
+      background: rgba(8, 8, 10, 0.96);
+
+      border: 1px solid rgba(212, 175, 55, 0.85);
+      border-radius: 4px;
+
+      box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.58),
+        0 0 18px rgba(212, 175, 55, 0.12);
+
+      opacity: 0;
+      pointer-events: none;
+
+      transform:
+        translate(-50%, 18px)
+        scale(0.98);
+
+      transition:
+        opacity 0.22s ease,
+        transform 0.22s ease;
+
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .toast-visible {
+      opacity: 1;
+
+      transform:
+        translate(-50%, 0)
+        scale(1);
+    }
+
+    .toast-error {
+      color: #fff;
+
+      border-color: rgba(255, 86, 86, 0.9);
+
+      box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.58),
+        0 0 18px rgba(255, 86, 86, 0.12);
+    }
+
+    /* ================= BUTTON SUCCESS STATE ================= */
+
+    .button-added {
+      color: #111 !important;
+
+      background: linear-gradient(
+        90deg,
+        #e2c45a,
+        #fff0a0
+      ) !important;
+
+      transform: scale(0.98);
+
+      box-shadow:
+        0 0 0 2px rgba(212, 175, 55, 0.18),
+        0 8px 22px rgba(0, 0, 0, 0.28);
+    }
+
+    @media (max-width: 600px) {
+      .toast {
+        bottom: 18px;
+      }
+    }
+  </style>
 
 </body>
 </html>
