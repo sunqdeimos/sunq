@@ -2,12 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Product | SUNQ</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
@@ -16,7 +25,7 @@
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Load data first, then shared UI -->
+  <!-- Load catalog first, then shared UI -->
   <script src="data.js"></script>
   <script src="store-ui.js"></script>
 </head>
@@ -27,16 +36,30 @@
 
   <nav class="navbar">
     <div class="nav-container">
-      <a href="index.html" class="logo">SUNQ</a>
+
+      <a
+        href="index.html"
+        class="logo"
+      >
+        SUNQ
+      </a>
 
       <div class="nav-links">
-        <a href="shop.html">Shop</a>
-        <a href="about.html">About</a>
+
+        <a href="shop.html">
+          Shop
+        </a>
+
+        <a href="about.html">
+          About
+        </a>
 
         <a href="cart.html">
           Cart (<span id="cart-count">0</span>)
         </a>
+
       </div>
+
     </div>
   </nav>
 
@@ -44,7 +67,9 @@
   <!-- ================= PRODUCT ================= -->
 
   <main class="shop">
+
     <div id="product-container"></div>
+
   </main>
 
 
@@ -62,16 +87,22 @@
   <!-- ================= FOOTER ================= -->
 
   <footer class="site-footer">
+
     <div class="footer-inner">
 
       <div class="footer-brand">
-        <a href="index.html" class="footer-logo">
+
+        <a
+          href="index.html"
+          class="footer-logo"
+        >
           SUNQ
         </a>
 
         <p>
           W.I.P online marketplace.
         </p>
+
       </div>
 
       <nav
@@ -88,6 +119,7 @@
       </p>
 
     </div>
+
   </footer>
 
 
@@ -99,9 +131,10 @@
     );
 
     const productId = params.get("id");
+
     const product = getProduct(productId);
 
-    const container =
+    const productContainer =
       document.getElementById("product-container");
 
     let toastTimer;
@@ -112,7 +145,8 @@
        ===================================================== */
 
     function showToast(message, type = "success") {
-      const toast = document.getElementById("toast");
+      const toast =
+        document.getElementById("toast");
 
       if (!toast) {
         return;
@@ -126,7 +160,9 @@
         `toast toast-${type} toast-visible`;
 
       toastTimer = setTimeout(() => {
-        toast.classList.remove("toast-visible");
+        toast.classList.remove(
+          "toast-visible"
+        );
       }, 2200);
     }
 
@@ -140,15 +176,25 @@
         return;
       }
 
-      const originalText = button.textContent;
+      const originalText =
+        button.textContent;
 
       button.textContent = "Added";
-      button.classList.add("button-added");
+
+      button.classList.add(
+        "button-added"
+      );
+
       button.disabled = true;
 
       setTimeout(() => {
-        button.textContent = originalText;
-        button.classList.remove("button-added");
+        button.textContent =
+          originalText;
+
+        button.classList.remove(
+          "button-added"
+        );
+
         button.disabled = false;
       }, 850);
     }
@@ -159,7 +205,8 @@
        ===================================================== */
 
     function addToCart(id, button) {
-      const selectedProduct = getProduct(id);
+      const selectedProduct =
+        getProduct(id);
 
       if (!selectedProduct) {
         showToast(
@@ -170,11 +217,12 @@
         return;
       }
 
-      const stock = getStock(id);
+      const availableStock =
+        getStock(id);
 
-      if (stock <= 0) {
+      if (availableStock <= 0) {
         showToast(
-          "This item is out of stock.",
+          "This item is unavailable.",
           "error"
         );
 
@@ -183,27 +231,30 @@
 
       const cart = getCart();
 
-      const item = cart.find(
-        cartItem => cartItem.id === id
-      );
+      const cartItem = cart.find(item => {
+        return item.id === id;
+      });
 
       const currentQuantity =
-        item ? Number(item.quantity) : 0;
+        cartItem
+          ? Number(cartItem.quantity)
+          : 0;
 
       const nextQuantity =
         currentQuantity + 1;
 
-      if (nextQuantity > stock) {
+      if (nextQuantity > availableStock) {
         showToast(
-          `Only ${stock} available.`,
+          `Only ${availableStock} available.`,
           "error"
         );
 
         return;
       }
 
-      if (item) {
-        item.quantity = nextQuantity;
+      if (cartItem) {
+        cartItem.quantity =
+          nextQuantity;
       } else {
         cart.push({
           id,
@@ -219,61 +270,119 @@
         `${selectedProduct.name} added to your cart.`
       );
 
+      updateCartCount();
       renderProduct();
     }
 
 
     /* =====================================================
-       MAIN PRODUCT MARKUP
+       PRODUCT NOT FOUND
+       ===================================================== */
+
+    function renderMissingProduct() {
+      productContainer.innerHTML = `
+        <section class="empty-state product-not-found">
+
+          <p class="empty-state-kicker">
+            Product page
+          </p>
+
+          <h1>
+            Item not found
+          </h1>
+
+          <p>
+            This product does not exist or the link is incorrect.
+          </p>
+
+          <a
+            class="button-secondary"
+            href="shop.html"
+          >
+            Back to shop
+          </a>
+
+        </section>
+      `;
+    }
+
+
+    /* =====================================================
+       PRODUCT SPECIFICATION
+       ===================================================== */
+
+    function renderProductSpecification(
+      label,
+      value,
+      extraClass = ""
+    ) {
+      return `
+        <div class="product-spec ${escapeHTML(extraClass)}">
+
+          <span class="product-spec-label">
+            ${escapeHTML(label)}
+          </span>
+
+          <strong class="product-spec-value">
+            ${escapeHTML(value)}
+          </strong>
+
+        </div>
+      `;
+    }
+
+
+    /* =====================================================
+       PRODUCT RENDER
        ===================================================== */
 
     function renderProduct() {
       if (!product) {
-        container.innerHTML = `
-          <section class="empty-state product-not-found">
-            <h1>Item not found</h1>
-
-            <p>
-              This product does not exist or the link is incorrect.
-            </p>
-
-            <a
-              class="button-secondary"
-              href="shop.html"
-            >
-              Back to shop
-            </a>
-          </section>
-        `;
-
+        renderMissingProduct();
         return;
       }
 
-      const stock = getStock(product.id);
+      const stock =
+        getStock(product.id);
 
       const categoryLabel =
-        getCategoryLabel(product.category);
+        getCategoryLabel(
+          product.category
+        );
 
-      const badge = getProductBadge(product);
+      const platform =
+        getProductPlatform(product);
+
+      const delivery =
+        getProductDelivery(product);
+
+      const availability =
+        getAvailabilityLabel(
+          product.id
+        );
+
+      const availabilityClass =
+        getAvailabilityClass(
+          product.id
+        );
+
+      const badge =
+        getProductBadge(product);
 
       const badgeClass =
         getBadgeClass(badge);
 
-      const stockClass =
-        getStockClass(stock);
-
-      const stockLabel =
-        getStockLabel(stock);
-
       const badgeMarkup = badge
         ? `
-          <span class="product-detail-badge ${escapeHTML(badgeClass)}">
+          <span
+            class="product-detail-badge ${escapeHTML(badgeClass)}"
+          >
             ${escapeHTML(badge)}
           </span>
         `
         : "";
 
-      const buttonMarkup =
+      const addButtonMarkup =
         stock > 0
           ? `
             <button
@@ -290,14 +399,17 @@
               type="button"
               disabled
             >
-              Out of stock
+              Unavailable
             </button>
           `;
 
-      container.innerHTML = `
+      productContainer.innerHTML = `
         <article class="product-layout">
 
+          <!-- PRODUCT IMAGE -->
+
           <div class="product-media">
+
             <div class="product-image-frame">
 
               <img
@@ -313,8 +425,11 @@
               ${badgeMarkup}
 
             </div>
+
           </div>
 
+
+          <!-- PRODUCT INFORMATION -->
 
           <div class="product-info">
 
@@ -330,23 +445,71 @@
               ${formatPrice(product.price)}
             </p>
 
-            <p class="product-stock ${escapeHTML(stockClass)}">
-              ${escapeHTML(stockLabel)}
-            </p>
+
+            <!-- SPECIFICATIONS -->
+
+            <div class="product-spec-grid">
+
+              ${renderProductSpecification(
+                "Platform",
+                platform
+              )}
+
+              ${renderProductSpecification(
+                "Delivery",
+                delivery
+              )}
+
+              ${renderProductSpecification(
+                "Category",
+                categoryLabel
+              )}
+
+              ${renderProductSpecification(
+                "Availability",
+                availability,
+                availabilityClass
+              )}
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
 
             <section class="product-description">
-              <h2>Description</h2>
+
+              <h2>
+                Description
+              </h2>
 
               <p>
                 ${escapeHTML(product.description)}
               </p>
+
             </section>
 
-            ${buttonMarkup}
+
+            <!-- ADD BUTTON -->
+
+            ${addButtonMarkup}
+
+
+            <!-- SMALL DETAILS -->
 
             <div class="meta">
-              <p>Secure checkout demo</p>
-              <p>Limited availability</p>
+
+              <p>
+                ✔ Secure checkout
+              </p>
+
+              <p>
+                ✔ No crashes
+              </p>
+
+              <p>
+                ✔ Most likely.
+              </p>
+
             </div>
 
           </div>
@@ -354,11 +517,23 @@
         </article>
 
 
+        <!-- RELATED PRODUCTS -->
+
         <section class="related-section">
+
           <div class="section-heading-row">
-            <h2 class="collection-title">
-              You may also like
-            </h2>
+
+            <div>
+
+              <p class="section-kicker">
+                More listings
+              </p>
+
+              <h2 class="collection-title">
+                You may also like
+              </h2>
+
+            </div>
 
             <a
               class="text-link"
@@ -366,9 +541,11 @@
             >
               View all
             </a>
+
           </div>
 
           <div id="related-products"></div>
+
         </section>
       `;
 
@@ -381,7 +558,7 @@
 
 
     /* =====================================================
-       UPDATES
+       LIVE UPDATES
        ===================================================== */
 
     window.addEventListener(
@@ -391,7 +568,10 @@
 
     window.addEventListener(
       "sunq:externalchange",
-      renderProduct
+      () => {
+        updateCartCount();
+        renderProduct();
+      }
     );
 
     window.addEventListener(
