@@ -2,12 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Shop | SUNQ</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
@@ -16,7 +25,7 @@
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Load product data before the shared UI -->
+  <!-- Load product data before shared UI -->
   <script src="data.js"></script>
   <script src="store-ui.js"></script>
 </head>
@@ -27,16 +36,30 @@
 
   <nav class="navbar">
     <div class="nav-container">
-      <a href="index.html" class="logo">SUNQ</a>
+
+      <a href="index.html" class="logo">
+        SUNQ
+      </a>
 
       <div class="nav-links">
-        <a href="shop.html" aria-current="page">Shop</a>
-        <a href="about.html">About</a>
+
+        <a
+          href="shop.html"
+          aria-current="page"
+        >
+          Shop
+        </a>
+
+        <a href="about.html">
+          About
+        </a>
 
         <a href="cart.html">
           Cart (<span id="cart-count">0</span>)
         </a>
+
       </div>
+
     </div>
   </nav>
 
@@ -46,19 +69,30 @@
   <main class="shop">
 
     <header class="page-header">
-      <h1 class="page-title">Shop</h1>
+
+      <h1 class="page-title">
+        Shop
+      </h1>
 
       <p class="page-intro">
-        Browse available listings by category, price, stock, or name.
+        Browse available listings by category, price,
+        stock, or name.
       </p>
+
     </header>
 
 
-    <!-- ================= SEARCH ================= -->
+    <!-- ================= CONTROLS ================= -->
 
     <div class="shop-controls">
 
-      <label class="search-wrapper" for="searchInput">
+      <!-- SEARCH -->
+
+      <label
+        class="search-wrapper"
+        for="searchInput"
+      >
+
         <span class="visually-hidden">
           Search products
         </span>
@@ -71,15 +105,17 @@
           autocomplete="off"
           spellcheck="false"
         >
+
       </label>
 
 
-      <!-- ================= CATEGORY FILTERS ================= -->
+      <!-- CATEGORY FILTERS -->
 
       <section
         class="filter-section"
         aria-labelledby="category-filter-title"
       >
+
         <h2
           id="category-filter-title"
           class="control-label"
@@ -92,6 +128,7 @@
           role="group"
           aria-label="Product categories"
         >
+
           <button
             class="filter-btn active"
             type="button"
@@ -145,16 +182,19 @@
           >
             Rank Ready
           </button>
+
         </div>
+
       </section>
 
 
-      <!-- ================= PRICE SORTING ================= -->
+      <!-- PRICE SORTING -->
 
       <section
         class="filter-section"
         aria-labelledby="sort-filter-title"
       >
+
         <h2
           id="sort-filter-title"
           class="control-label"
@@ -167,6 +207,7 @@
           role="group"
           aria-label="Sort products"
         >
+
           <button
             class="sort-btn active"
             type="button"
@@ -193,16 +234,23 @@
           >
             High → Low
           </button>
+
         </div>
+
       </section>
 
     </div>
 
 
-    <!-- ================= RESULTS SUMMARY ================= -->
+    <!-- ================= RESULTS TOOLBAR ================= -->
 
     <div class="results-toolbar">
-      <p id="resultsCount" class="results-count">
+
+      <p
+        id="resultsCount"
+        class="results-count"
+        aria-live="polite"
+      >
         Loading products...
       </p>
 
@@ -214,6 +262,7 @@
       >
         Clear filters
       </button>
+
     </div>
 
 
@@ -231,16 +280,22 @@
   <!-- ================= FOOTER ================= -->
 
   <footer class="site-footer">
+
     <div class="footer-inner">
 
       <div class="footer-brand">
-        <a href="index.html" class="footer-logo">
+
+        <a
+          href="index.html"
+          class="footer-logo"
+        >
           SUNQ
         </a>
 
         <p>
           W.I.P online marketplace.
         </p>
+
       </div>
 
       <nav
@@ -257,15 +312,42 @@
       </p>
 
     </div>
+
   </footer>
 
 
   <!-- ================= SHOP LOGIC ================= -->
 
   <script>
-    const productGrid = document.getElementById("productGrid");
-    const searchInput = document.getElementById("searchInput");
-    const resultsCount = document.getElementById("resultsCount");
+    const VALID_CATEGORIES = [
+      "all",
+      "diamond-fa",
+      "diamond-nfa",
+      "emerald-fa",
+      "emerald-nfa",
+      "rank-ready"
+    ];
+
+    const VALID_SORT_MODES = [
+      "default",
+      "low-high",
+      "high-low"
+    ];
+
+
+    /* =====================================================
+       ELEMENTS
+       ===================================================== */
+
+    const productGrid =
+      document.getElementById("productGrid");
+
+    const searchInput =
+      document.getElementById("searchInput");
+
+    const resultsCount =
+      document.getElementById("resultsCount");
+
     const clearFiltersButton =
       document.getElementById("clearFiltersButton");
 
@@ -275,9 +357,89 @@
     const sortButtons =
       document.querySelectorAll("[data-sort]");
 
+
+    /* =====================================================
+       STATE
+       ===================================================== */
+
     let currentCategory = "all";
     let currentSort = "default";
     let currentSearch = "";
+
+
+    /* =====================================================
+       URL STATE
+       ===================================================== */
+
+    function readStateFromURL() {
+      const params = new URLSearchParams(
+        window.location.search
+      );
+
+      const requestedCategory =
+        params.get("category") || "all";
+
+      const requestedSort =
+        params.get("sort") || "default";
+
+      const requestedSearch =
+        params.get("q") || "";
+
+      currentCategory =
+        VALID_CATEGORIES.includes(requestedCategory)
+          ? requestedCategory
+          : "all";
+
+      currentSort =
+        VALID_SORT_MODES.includes(requestedSort)
+          ? requestedSort
+          : "default";
+
+      currentSearch = requestedSearch.trim();
+
+      searchInput.value = currentSearch;
+    }
+
+    function updateURL() {
+      const params = new URLSearchParams();
+
+      if (currentCategory !== "all") {
+        params.set(
+          "category",
+          currentCategory
+        );
+      }
+
+      if (currentSort !== "default") {
+        params.set(
+          "sort",
+          currentSort
+        );
+      }
+
+      if (currentSearch.trim()) {
+        params.set(
+          "q",
+          currentSearch.trim()
+        );
+      }
+
+      const queryString = params.toString();
+
+      const newURL = queryString
+        ? `${window.location.pathname}?${queryString}`
+        : window.location.pathname;
+
+      window.history.replaceState(
+        {
+          category: currentCategory,
+          sort: currentSort,
+          search: currentSearch
+        },
+        "",
+        newURL
+      );
+    }
 
 
     /* =====================================================
@@ -331,10 +493,13 @@
           ? "all categories"
           : getCategoryLabel(currentCategory);
 
-      if (currentSearch.trim()) {
+      const trimmedSearch =
+        currentSearch.trim();
+
+      if (trimmedSearch) {
         resultsCount.textContent =
           `${count} result${count === 1 ? "" : "s"} ` +
-          `for “${currentSearch.trim()}” in ${categoryText}.`;
+          `for “${trimmedSearch}” in ${categoryText}.`;
 
         return;
       }
@@ -346,21 +511,7 @@
 
 
     /* =====================================================
-       CLEAR BUTTON
-       ===================================================== */
-
-    function updateClearFiltersButton() {
-      const filtersAreActive =
-        currentCategory !== "all" ||
-        currentSort !== "default" ||
-        currentSearch.trim() !== "";
-
-      clearFiltersButton.hidden = !filtersAreActive;
-    }
-
-
-    /* =====================================================
-       BUTTON STATES
+       ACTIVE BUTTON STATES
        ===================================================== */
 
     function updateCategoryButtons() {
@@ -368,7 +519,10 @@
         const isActive =
           button.dataset.filter === currentCategory;
 
-        button.classList.toggle("active", isActive);
+        button.classList.toggle(
+          "active",
+          isActive
+        );
 
         button.setAttribute(
           "aria-pressed",
@@ -382,7 +536,10 @@
         const isActive =
           button.dataset.sort === currentSort;
 
-        button.classList.toggle("active", isActive);
+        button.classList.toggle(
+          "active",
+          isActive
+        );
 
         button.setAttribute(
           "aria-pressed",
@@ -393,13 +550,36 @@
 
 
     /* =====================================================
+       CLEAR FILTER BUTTON
+       ===================================================== */
+
+    function updateClearFiltersButton() {
+      const filtersAreActive =
+        currentCategory !== "all" ||
+        currentSort !== "default" ||
+        currentSearch.trim() !== "";
+
+      clearFiltersButton.hidden =
+        !filtersAreActive;
+    }
+
+
+    /* =====================================================
        RENDER
        ===================================================== */
 
-    function renderShop() {
-      productGrid.setAttribute("aria-busy", "true");
+    function renderShop(options = {}) {
+      const {
+        updateAddress = true
+      } = options;
 
-      const products = getFilteredProducts();
+      productGrid.setAttribute(
+        "aria-busy",
+        "true"
+      );
+
+      const products =
+        getFilteredProducts();
 
       renderProductGrid(
         productGrid,
@@ -411,10 +591,19 @@
         }
       );
 
+      updateCategoryButtons();
+      updateSortButtons();
       updateResultsCount(products);
       updateClearFiltersButton();
 
-      productGrid.setAttribute("aria-busy", "false");
+      if (updateAddress) {
+        updateURL();
+      }
+
+      productGrid.setAttribute(
+        "aria-busy",
+        "false"
+      );
     }
 
 
@@ -424,9 +613,9 @@
 
     categoryButtons.forEach(button => {
       button.addEventListener("click", () => {
-        currentCategory = button.dataset.filter;
+        currentCategory =
+          button.dataset.filter;
 
-        updateCategoryButtons();
         renderShop();
       });
     });
@@ -438,9 +627,9 @@
 
     sortButtons.forEach(button => {
       button.addEventListener("click", () => {
-        currentSort = button.dataset.sort;
+        currentSort =
+          button.dataset.sort;
 
-        updateSortButtons();
         renderShop();
       });
     });
@@ -450,53 +639,87 @@
        SEARCH EVENT
        ===================================================== */
 
-    searchInput.addEventListener("input", event => {
-      currentSearch = event.target.value;
+    searchInput.addEventListener(
+      "input",
+      event => {
+        currentSearch =
+          event.target.value;
 
-      renderShop();
-    });
+        renderShop();
+      }
+    );
 
 
     /* =====================================================
        CLEAR FILTERS
        ===================================================== */
 
-    clearFiltersButton.addEventListener("click", () => {
-      currentCategory = "all";
-      currentSort = "default";
-      currentSearch = "";
+    clearFiltersButton.addEventListener(
+      "click",
+      () => {
+        currentCategory = "all";
+        currentSort = "default";
+        currentSearch = "";
 
-      searchInput.value = "";
+        searchInput.value = "";
 
-      updateCategoryButtons();
-      updateSortButtons();
-      renderShop();
+        renderShop();
+        searchInput.focus();
+      }
+    );
 
-      searchInput.focus();
-    });
+
+    /* =====================================================
+       BROWSER BACK / FORWARD
+       ===================================================== */
+
+    window.addEventListener(
+      "popstate",
+      () => {
+        readStateFromURL();
+
+        renderShop({
+          updateAddress: false
+        });
+      }
+    );
 
 
     /* =====================================================
        STOCK AND CROSS-TAB UPDATES
        ===================================================== */
 
-    window.addEventListener("sunq:stockchange", () => {
-      renderShop();
-    });
+    window.addEventListener(
+      "sunq:stockchange",
+      () => {
+        renderShop({
+          updateAddress: false
+        });
+      }
+    );
 
-    window.addEventListener("sunq:externalchange", () => {
-      renderShop();
-    });
+    window.addEventListener(
+      "sunq:externalchange",
+      () => {
+        updateCartCount();
+
+        renderShop({
+          updateAddress: false
+        });
+      }
+    );
 
 
     /* =====================================================
        INITIALIZE
        ===================================================== */
 
+    readStateFromURL();
     updateCartCount();
-    updateCategoryButtons();
-    updateSortButtons();
-    renderShop();
+
+    renderShop({
+      updateAddress: false
+    });
   </script>
 
 </body>
