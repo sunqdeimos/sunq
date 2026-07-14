@@ -3,150 +3,500 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Shop | SUNQ</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
 
   <link rel="stylesheet" href="styles.css">
 
+  <!-- Load product data before the shared UI -->
   <script src="data.js"></script>
+  <script src="store-ui.js"></script>
 </head>
 
 <body>
+
+  <!-- ================= NAVBAR ================= -->
 
   <nav class="navbar">
     <div class="nav-container">
       <a href="index.html" class="logo">SUNQ</a>
 
       <div class="nav-links">
-        <a href="shop.html">Shop</a>
+        <a href="shop.html" aria-current="page">Shop</a>
         <a href="about.html">About</a>
-        <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+
+        <a href="cart.html">
+          Cart (<span id="cart-count">0</span>)
+        </a>
       </div>
     </div>
   </nav>
 
+
+  <!-- ================= SHOP ================= -->
+
   <main class="shop">
 
-    <h1 class="page-title">Shop</h1>
+    <header class="page-header">
+      <h1 class="page-title">Shop</h1>
 
-    <!-- SEARCH -->
-    <input id="searchInput" placeholder="Search products..." class="search-bar" />
+      <p class="page-intro">
+        Browse available listings by category, price, stock, or name.
+      </p>
+    </header>
 
-    <!-- FILTERS -->
-    <div class="filter-bar">
-      <button class="filter-btn active" onclick="setFilter('all', event)">All</button>
-      <button class="filter-btn" onclick="setFilter('sunq', event)">SUNQ</button>
-      <button class="filter-btn" onclick="setFilter('diamond', event)">Diamond / Champ FA</button>
+
+    <!-- ================= SEARCH ================= -->
+
+    <div class="shop-controls">
+
+      <label class="search-wrapper" for="searchInput">
+        <span class="visually-hidden">
+          Search products
+        </span>
+
+        <input
+          id="searchInput"
+          class="search-bar"
+          type="search"
+          placeholder="Search products, categories, or badges..."
+          autocomplete="off"
+          spellcheck="false"
+        >
+      </label>
+
+
+      <!-- ================= CATEGORY FILTERS ================= -->
+
+      <section
+        class="filter-section"
+        aria-labelledby="category-filter-title"
+      >
+        <h2
+          id="category-filter-title"
+          class="control-label"
+        >
+          Category
+        </h2>
+
+        <div
+          class="filter-bar category-filter-bar"
+          role="group"
+          aria-label="Product categories"
+        >
+          <button
+            class="filter-btn active"
+            type="button"
+            data-filter="all"
+            aria-pressed="true"
+          >
+            All
+          </button>
+
+          <button
+            class="filter-btn"
+            type="button"
+            data-filter="diamond-fa"
+            aria-pressed="false"
+          >
+            Diamond / Champ FA
+          </button>
+
+          <button
+            class="filter-btn"
+            type="button"
+            data-filter="diamond-nfa"
+            aria-pressed="false"
+          >
+            Diamond / Champ NFA
+          </button>
+
+          <button
+            class="filter-btn"
+            type="button"
+            data-filter="emerald-fa"
+            aria-pressed="false"
+          >
+            Emerald FA
+          </button>
+
+          <button
+            class="filter-btn"
+            type="button"
+            data-filter="emerald-nfa"
+            aria-pressed="false"
+          >
+            Emerald NFA
+          </button>
+
+          <button
+            class="filter-btn"
+            type="button"
+            data-filter="rank-ready"
+            aria-pressed="false"
+          >
+            Rank Ready
+          </button>
+        </div>
+      </section>
+
+
+      <!-- ================= PRICE SORTING ================= -->
+
+      <section
+        class="filter-section"
+        aria-labelledby="sort-filter-title"
+      >
+        <h2
+          id="sort-filter-title"
+          class="control-label"
+        >
+          Sort
+        </h2>
+
+        <div
+          class="filter-bar sort-filter-bar"
+          role="group"
+          aria-label="Sort products"
+        >
+          <button
+            class="sort-btn active"
+            type="button"
+            data-sort="default"
+            aria-pressed="true"
+          >
+            Default
+          </button>
+
+          <button
+            class="sort-btn"
+            type="button"
+            data-sort="low-high"
+            aria-pressed="false"
+          >
+            Low → High
+          </button>
+
+          <button
+            class="sort-btn"
+            type="button"
+            data-sort="high-low"
+            aria-pressed="false"
+          >
+            High → Low
+          </button>
+        </div>
+      </section>
+
     </div>
 
-    <!-- SORT -->
-    <div class="filter-bar">
-      <button class="filter-btn" onclick="setSort('none')">Default</button>
-      <button class="filter-btn" onclick="setSort('low')">Low → High</button>
-      <button class="filter-btn" onclick="setSort('high')">High → Low</button>
+
+    <!-- ================= RESULTS SUMMARY ================= -->
+
+    <div class="results-toolbar">
+      <p id="resultsCount" class="results-count">
+        Loading products...
+      </p>
+
+      <button
+        id="clearFiltersButton"
+        class="text-button"
+        type="button"
+        hidden
+      >
+        Clear filters
+      </button>
     </div>
 
-    <!-- GRID -->
-    <div class="grid" id="productGrid"></div>
+
+    <!-- ================= PRODUCT GRID ================= -->
+
+    <section
+      id="productGrid"
+      aria-live="polite"
+      aria-busy="false"
+    ></section>
 
   </main>
 
-  <!-- CART COUNT -->
+
+  <!-- ================= FOOTER ================= -->
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo">
+          SUNQ
+        </a>
+
+        <p>
+          W.I.P online marketplace.
+        </p>
+      </div>
+
+      <nav
+        class="footer-links"
+        aria-label="Footer navigation"
+      >
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="cart.html">Cart</a>
+      </nav>
+
+      <p class="footer-copy">
+        © 2026 SUNQ
+      </p>
+
+    </div>
+  </footer>
+
+
+  <!-- ================= SHOP LOGIC ================= -->
+
   <script>
-    function getCart() {
-      return JSON.parse(localStorage.getItem("sunqCart")) || [];
-    }
+    const productGrid = document.getElementById("productGrid");
+    const searchInput = document.getElementById("searchInput");
+    const resultsCount = document.getElementById("resultsCount");
+    const clearFiltersButton =
+      document.getElementById("clearFiltersButton");
 
-    function updateCartCount() {
-      const cart = getCart();
-      const total = cart.reduce((sum, i) => sum + i.quantity, 0);
-      const el = document.getElementById("cart-count");
-      if (el) el.textContent = total;
-    }
+    const categoryButtons =
+      document.querySelectorAll("[data-filter]");
 
-    updateCartCount();
-    window.addEventListener("storage", updateCartCount);
-  </script>
+    const sortButtons =
+      document.querySelectorAll("[data-sort]");
 
-  <!-- SHOP LOGIC -->
-  <script>
-    const diamondSet = ["s1","s2","s3"];
-    const sunqSet = ["s4","s5","s6","s7","s8","s9","s10"];
+    let currentCategory = "all";
+    let currentSort = "default";
+    let currentSearch = "";
 
-    let currentFilter = "all";
-    let searchQuery = "";
-    let sortMode = "none";
 
-    const grid = document.getElementById("productGrid");
+    /* =====================================================
+       FILTERING
+       ===================================================== */
 
     function getFilteredProducts() {
-      let products = Object.values(PRODUCTS);
+      let products = [...PRODUCTS];
 
-      if (currentFilter === "diamond") {
-        products = products.filter(p => diamondSet.includes(p.id));
+      if (currentCategory !== "all") {
+        products = products.filter(product => {
+          return product.category === currentCategory;
+        });
       }
 
-      if (currentFilter === "sunq") {
-        products = products.filter(p => sunqSet.includes(p.id));
+      const normalizedSearch =
+        currentSearch.trim().toLowerCase();
+
+      if (normalizedSearch) {
+        products = products.filter(product => {
+          return getProductSearchText(product)
+            .includes(normalizedSearch);
+        });
       }
 
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        products = products.filter(p =>
-          p.name.toLowerCase().includes(q)
-        );
+      if (currentSort === "low-high") {
+        products.sort((a, b) => {
+          return Number(a.price) - Number(b.price);
+        });
       }
 
-      if (sortMode === "low") products.sort((a,b) => a.price - b.price);
-      if (sortMode === "high") products.sort((a,b) => b.price - a.price);
+      if (currentSort === "high-low") {
+        products.sort((a, b) => {
+          return Number(b.price) - Number(a.price);
+        });
+      }
 
       return products;
     }
 
-    function renderProducts() {
+
+    /* =====================================================
+       RESULTS TEXT
+       ===================================================== */
+
+    function updateResultsCount(products) {
+      const count = products.length;
+
+      const categoryText =
+        currentCategory === "all"
+          ? "all categories"
+          : getCategoryLabel(currentCategory);
+
+      if (currentSearch.trim()) {
+        resultsCount.textContent =
+          `${count} result${count === 1 ? "" : "s"} ` +
+          `for “${currentSearch.trim()}” in ${categoryText}.`;
+
+        return;
+      }
+
+      resultsCount.textContent =
+        `${count} product${count === 1 ? "" : "s"} ` +
+        `in ${categoryText}.`;
+    }
+
+
+    /* =====================================================
+       CLEAR BUTTON
+       ===================================================== */
+
+    function updateClearFiltersButton() {
+      const filtersAreActive =
+        currentCategory !== "all" ||
+        currentSort !== "default" ||
+        currentSearch.trim() !== "";
+
+      clearFiltersButton.hidden = !filtersAreActive;
+    }
+
+
+    /* =====================================================
+       BUTTON STATES
+       ===================================================== */
+
+    function updateCategoryButtons() {
+      categoryButtons.forEach(button => {
+        const isActive =
+          button.dataset.filter === currentCategory;
+
+        button.classList.toggle("active", isActive);
+
+        button.setAttribute(
+          "aria-pressed",
+          String(isActive)
+        );
+      });
+    }
+
+    function updateSortButtons() {
+      sortButtons.forEach(button => {
+        const isActive =
+          button.dataset.sort === currentSort;
+
+        button.classList.toggle("active", isActive);
+
+        button.setAttribute(
+          "aria-pressed",
+          String(isActive)
+        );
+      });
+    }
+
+
+    /* =====================================================
+       RENDER
+       ===================================================== */
+
+    function renderShop() {
+      productGrid.setAttribute("aria-busy", "true");
+
       const products = getFilteredProducts();
 
-      grid.innerHTML = products.map(p => `
-        <a class="card fade" href="product.html?id=${p.id}">
+      renderProductGrid(
+        productGrid,
+        products,
+        {
+          showCategory: true,
+          showStock: true,
+          showBadge: true
+        }
+      );
 
-          <img
-            src="${p.image}"
-            class="card-img"
-            loading="lazy"
-          />
+      updateResultsCount(products);
+      updateClearFiltersButton();
 
-          <h3>${p.name}</h3>
-          <p>$${p.price}</p>
-
-        </a>
-      `).join("");
+      productGrid.setAttribute("aria-busy", "false");
     }
 
-    function setFilter(type, e) {
-      currentFilter = type;
 
-      document.querySelectorAll(".filter-btn")
-        .forEach(b => b.classList.remove("active"));
+    /* =====================================================
+       CATEGORY EVENTS
+       ===================================================== */
 
-      if (e?.target) e.target.classList.add("active");
+    categoryButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        currentCategory = button.dataset.filter;
 
-      renderProducts();
-    }
-
-    function setSort(mode) {
-      sortMode = mode;
-      renderProducts();
-    }
-
-    document.getElementById("searchInput").addEventListener("input", (e) => {
-      searchQuery = e.target.value;
-      renderProducts();
+        updateCategoryButtons();
+        renderShop();
+      });
     });
 
-    renderProducts();
+
+    /* =====================================================
+       SORT EVENTS
+       ===================================================== */
+
+    sortButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        currentSort = button.dataset.sort;
+
+        updateSortButtons();
+        renderShop();
+      });
+    });
+
+
+    /* =====================================================
+       SEARCH EVENT
+       ===================================================== */
+
+    searchInput.addEventListener("input", event => {
+      currentSearch = event.target.value;
+
+      renderShop();
+    });
+
+
+    /* =====================================================
+       CLEAR FILTERS
+       ===================================================== */
+
+    clearFiltersButton.addEventListener("click", () => {
+      currentCategory = "all";
+      currentSort = "default";
+      currentSearch = "";
+
+      searchInput.value = "";
+
+      updateCategoryButtons();
+      updateSortButtons();
+      renderShop();
+
+      searchInput.focus();
+    });
+
+
+    /* =====================================================
+       STOCK AND CROSS-TAB UPDATES
+       ===================================================== */
+
+    window.addEventListener("sunq:stockchange", () => {
+      renderShop();
+    });
+
+    window.addEventListener("sunq:externalchange", () => {
+      renderShop();
+    });
+
+
+    /* =====================================================
+       INITIALIZE
+       ===================================================== */
+
+    updateCartCount();
+    updateCategoryButtons();
+    updateSortButtons();
+    renderShop();
   </script>
 
 </body>
