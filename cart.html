@@ -25,7 +25,13 @@
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Load catalog first, then shared UI -->
+  <!-- Supabase first -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Project connection -->
+  <script src="supabase-config.js"></script>
+
+  <!-- Product data and shared UI -->
   <script src="data.js"></script>
   <script src="store-ui.js"></script>
 </head>
@@ -84,7 +90,30 @@
 
     </header>
 
-    <div id="cart-container"></div>
+
+    <div
+      id="cart-container"
+      aria-live="polite"
+      aria-busy="true"
+    >
+
+      <section class="empty-state">
+
+        <p class="empty-state-kicker">
+          Loading
+        </p>
+
+        <h2>
+          Checking your cart.
+        </h2>
+
+        <p>
+          This should only take a moment.
+        </p>
+
+      </section>
+
+    </div>
 
   </main>
 
@@ -147,13 +176,17 @@
 
     let toastTimer;
     let checkoutComplete = false;
+    let cartReady = false;
 
 
     /* =====================================================
        TOAST
        ===================================================== */
 
-    function showToast(message, type = "success") {
+    function showToast(
+      message,
+      type = "success"
+    ) {
       const toast =
         document.getElementById("toast");
 
@@ -172,7 +205,7 @@
         toast.classList.remove(
           "toast-visible"
         );
-      }, 2200);
+      }, 2400);
     }
 
 
@@ -203,10 +236,36 @@
 
 
     /* =====================================================
+       CLEAN INVALID CART ITEMS
+       ===================================================== */
+
+    function cleanCartAgainstCatalog() {
+      const cart = getCart();
+
+      const cleanCart = cart.filter(item => {
+        return Boolean(getProduct(item.id));
+      });
+
+      if (cleanCart.length !== cart.length) {
+        saveCart(cleanCart);
+      }
+
+      return cleanCart;
+    }
+
+
+    /* =====================================================
        CHANGE QUANTITY
        ===================================================== */
 
-    function changeQuantity(productId, delta) {
+    function changeQuantity(
+      productId,
+      delta
+    ) {
+      if (!cartReady) {
+        return;
+      }
+
       checkoutComplete = false;
 
       const product =
@@ -214,18 +273,20 @@
 
       if (!product) {
         showToast(
-          "This product could not be found.",
+          "This product is no longer available.",
           "error"
         );
 
         return;
       }
 
-      const cart = getCart();
+      const cart =
+        getCart();
 
-      const item = cart.find(cartItem => {
-        return cartItem.id === productId;
-      });
+      const item =
+        cart.find(cartItem => {
+          return cartItem.id === productId;
+        });
 
       if (!item) {
         return;
@@ -245,6 +306,15 @@
       const availableStock =
         getStock(productId);
 
+      if (availableStock <= 0) {
+        showToast(
+          `${product.name} is unavailable.`,
+          "error"
+        );
+
+        return;
+      }
+
       if (nextQuantity > availableStock) {
         showToast(
           `Only ${availableStock} available.`,
@@ -254,7 +324,8 @@
         return;
       }
 
-      item.quantity = nextQuantity;
+      item.quantity =
+        nextQuantity;
 
       saveCart(cart);
       renderCart();
@@ -270,6 +341,10 @@
        ===================================================== */
 
     function removeCartItem(productId) {
+      if (!cartReady) {
+        return;
+      }
+
       checkoutComplete = false;
 
       const product =
@@ -295,11 +370,11 @@
         saveCart(updatedCart);
         renderCart();
 
-        if (product) {
-          showToast(
-            `${product.name} removed from your cart.`
-          );
-        }
+        showToast(
+          product
+            ? `${product.name} removed from your cart.`
+            : "Item removed from your cart."
+        );
       }, cartItemElement ? 260 : 0);
     }
 
@@ -309,9 +384,14 @@
        ===================================================== */
 
     function clearCart() {
+      if (!cartReady) {
+        return;
+      }
+
       checkoutComplete = false;
 
-      const cart = getCart();
+      const cart =
+        getCart();
 
       if (cart.length === 0) {
         showToast(
@@ -322,9 +402,10 @@
         return;
       }
 
-      const confirmed = window.confirm(
-        "Remove every item from your cart?"
-      );
+      const confirmed =
+        window.confirm(
+          "Remove every item from your cart?"
+        );
 
       if (!confirmed) {
         return;
@@ -340,11 +421,16 @@
 
 
     /* =====================================================
-       CHECKOUT
+       DEMO CHECKOUT
        ===================================================== */
 
     function checkout() {
-      const cart = getCart();
+      if (!cartReady) {
+        return;
+      }
+
+      const cart =
+        cleanCartAgainstCatalog();
 
       if (cart.length === 0) {
         showToast(
@@ -352,11 +438,16 @@
           "error"
         );
 
+        renderCart();
         return;
       }
 
       /*
-        Validate the whole cart before reducing any stock.
+        Validate all quantities against the current product
+        stock returned by Supabase.
+
+        Database stock is not changed here. That must happen
+        through a protected server-side function.
       */
 
       for (const item of cart) {
@@ -369,6 +460,7 @@
             "error"
           );
 
+          renderCart();
           return;
         }
 
@@ -377,7 +469,7 @@
 
         if (availableStock <= 0) {
           showToast(
-            `${product.name} is no longer available.`,
+            `${product.name} is unavailable.`,
             "error"
           );
 
@@ -399,34 +491,13 @@
         }
       }
 
-      /*
-        Reduce stock only after every item passes validation.
-      */
-
-      for (const item of cart) {
-        const success = reduceStock(
-          item.id,
-          Number(item.quantity)
-        );
-
-        if (!success) {
-          showToast(
-            "Stock changed before checkout. Please review your cart.",
-            "error"
-          );
-
-          renderCart();
-          return;
-        }
-      }
-
       checkoutComplete = true;
 
       clearStoredCart();
       renderCart();
 
       showToast(
-        "Checkout complete."
+        "Checkout demo complete."
       );
     }
 
@@ -435,7 +506,10 @@
        CART ITEM MARKUP
        ===================================================== */
 
-    function renderCartItem(item, index) {
+    function renderCartItem(
+      item,
+      index
+    ) {
       const product =
         getProduct(item.id);
 
@@ -456,7 +530,7 @@
                 </p>
 
                 <h2>
-                  Item not found
+                  Item no longer available
                 </h2>
 
                 <p>
@@ -483,7 +557,10 @@
         getStock(product.id);
 
       const itemQuantity =
-        Number(item.quantity);
+        Math.max(
+          1,
+          Number(item.quantity)
+        );
 
       const itemTotal =
         Number(product.price) *
@@ -671,6 +748,11 @@
 
         </section>
       `;
+
+      cartContainer.setAttribute(
+        "aria-busy",
+        "false"
+      );
     }
 
 
@@ -690,15 +772,16 @@
           </div>
 
           <p class="section-kicker">
-            Checkout complete
+            Demo checkout complete
           </p>
 
           <h2>
-            Thank you for your purchase.
+            Thank you for testing SUNQ.
           </h2>
 
           <p>
-            Your order has been received.
+            No payment was processed and database stock
+            was not changed.
           </p>
 
           <div class="checkout-complete-actions">
@@ -721,6 +804,49 @@
 
         </section>
       `;
+
+      cartContainer.setAttribute(
+        "aria-busy",
+        "false"
+      );
+    }
+
+
+    /* =====================================================
+       DATABASE ERROR
+       ===================================================== */
+
+    function renderLoadError() {
+      cartContainer.innerHTML = `
+        <section class="empty-state">
+
+          <p class="empty-state-kicker">
+            Something went wrong
+          </p>
+
+          <h2>
+            Your cart could not be checked.
+          </h2>
+
+          <p>
+            Product information could not be loaded from the database.
+          </p>
+
+          <button
+            class="button-secondary"
+            type="button"
+            onclick="window.location.reload()"
+          >
+            Try again
+          </button>
+
+        </section>
+      `;
+
+      cartContainer.setAttribute(
+        "aria-busy",
+        "false"
+      );
     }
 
 
@@ -729,7 +855,12 @@
        ===================================================== */
 
     function renderCart() {
-      const cart = getCart();
+      if (!cartReady) {
+        return;
+      }
+
+      const cart =
+        getCart();
 
       updateCartCount();
 
@@ -762,14 +893,15 @@
           Number(item.quantity);
       });
 
-      const itemMarkup = cart
-        .map((item, index) => {
-          return renderCartItem(
-            item,
-            index
-          );
-        })
-        .join("");
+      const itemMarkup =
+        cart
+          .map((item, index) => {
+            return renderCartItem(
+              item,
+              index
+            );
+          })
+          .join("");
 
       cartContainer.innerHTML = `
         <div class="cart-layout">
@@ -834,7 +966,8 @@
             </div>
 
             <p class="summary-note">
-              Taxes and payment processing are not connected yet.
+              Payment processing and protected inventory
+              updates are not connected yet.
             </p>
 
             <button
@@ -842,7 +975,7 @@
               type="button"
               onclick="checkout()"
             >
-              Checkout
+              Checkout demo
             </button>
 
             <a
@@ -864,38 +997,91 @@
 
         </div>
       `;
+
+      cartContainer.setAttribute(
+        "aria-busy",
+        "false"
+      );
     }
-
-
-    /* =====================================================
-       LIVE UPDATES
-       ===================================================== */
-
-    window.addEventListener(
-      "sunq:cartchange",
-      renderCart
-    );
-
-    window.addEventListener(
-      "sunq:stockchange",
-      renderCart
-    );
-
-    window.addEventListener(
-      "sunq:externalchange",
-      () => {
-        checkoutComplete = false;
-        renderCart();
-      }
-    );
 
 
     /* =====================================================
        INITIALIZE
        ===================================================== */
 
-    updateCartCount();
-    renderCart();
+    async function initializeCart() {
+      updateCartCount();
+
+      try {
+        await productsReady;
+
+        if (
+          getProductsLoadError() ||
+          !areProductsLoaded()
+        ) {
+          renderLoadError();
+          return;
+        }
+
+        cartReady = true;
+
+        cleanCartAgainstCatalog();
+        renderCart();
+      } catch (error) {
+        console.error(
+          "Could not initialize the cart:",
+          error
+        );
+
+        renderLoadError();
+      }
+    }
+
+
+    /* =====================================================
+       CART UPDATES
+       ===================================================== */
+
+    window.addEventListener(
+      "sunq:cartchange",
+      () => {
+        if (cartReady) {
+          renderCart();
+        }
+      }
+    );
+
+    window.addEventListener(
+      "sunq:externalchange",
+      () => {
+        checkoutComplete = false;
+
+        if (cartReady) {
+          renderCart();
+        }
+      }
+    );
+
+
+    /* =====================================================
+       FUTURE PRODUCT REFRESH
+       ===================================================== */
+
+    window.addEventListener(
+      "sunq:productsloaded",
+      () => {
+        if (!cartReady) {
+          return;
+        }
+
+        checkoutComplete = false;
+        cleanCartAgainstCatalog();
+        renderCart();
+      }
+    );
+
+
+    initializeCart();
   </script>
 
 </body>
