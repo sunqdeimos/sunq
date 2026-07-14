@@ -35,11 +35,11 @@ async function loadProducts() {
 
   try {
     const { data, error } = await supabaseClient
-      .from("products")
-      .select("*")
-      .order("created_at", {
-        ascending: true
-      });
+  .from("products")
+  .select("*")
+  .order("display_order", {
+    ascending: true
+  });
 
     if (error) {
       throw error;
