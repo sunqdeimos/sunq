@@ -21,14 +21,14 @@
     .sunq-menu-close { position:absolute; top:24px; right:20px; padding:8px; background:transparent; color:inherit; cursor:pointer; font-size:1.2rem; }
     .sunq-menu-backdrop { position:fixed; inset:0; z-index:999; background:rgba(0,0,0,.65); opacity:0; pointer-events:none; transition:opacity 160ms ease; }
     .sunq-menu-backdrop.is-open { opacity:1; pointer-events:auto; }
-    .sunq-home-logo { width:min(260px,38vw); height:auto; margin:0 0 0 auto; }
-    .sunq-home-hero .hero-content { display:flex; justify-content:center; align-items:center; min-height:55vh; }
-    .sunq-home-hero .hero-content img { max-width:100%; height:auto; }
-    .sunq-home-nav .nav-container { display:flex; align-items:center; justify-content:flex-start; }
+    .sunq-home-logo { width:min(260px,38vw); height:auto; }
+    .sunq-home-nav .nav-container { display:flex; align-items:center; justify-content:space-between; }
     .sunq-home-nav .nav-links { display:none; }
+    .sunq-home-nav .sunq-home-logo { display:block; width:min(260px,38vw); height:auto; margin:0; }
+    .sunq-home-hero .hero-content { display:flex; justify-content:center; align-items:center; min-height:55vh; }
     .sunq-home-actions { display:flex; justify-content:center; align-items:center; gap:42px; margin-top:24px; }
-    .sunq-home-actions a { font-size:1.8rem; }
-    .sunq-welcome { margin-top:18px; text-align:center; font-size:1.15rem; }
+    .sunq-home-actions a { font-size:2.4rem; }
+    .sunq-welcome { margin-top:26px; text-align:center; font-size:2.4rem; line-height:1.1; }
   </style>
 </head>
 <body>
@@ -38,6 +38,7 @@
       <button class="sunq-menu-button" id="sunqMenuButton" type="button" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
+      <img class="sunq-home-logo" src="sunq-logo-design.png" alt="SUNQ">
     </div>
   </nav>
 
@@ -52,7 +53,6 @@
   <header class="hero sunq-home-hero">
     <div class="hero-content">
       <div>
-        <img class="sunq-home-logo" src="sunq-logo-design.png" alt="SUNQ">
         <div class="sunq-home-actions">
           <a href="shop.html">Shop</a>
           <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
