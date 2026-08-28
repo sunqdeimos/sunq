@@ -7,25 +7,25 @@
 
 :root {
   --bg: #000000;
-  --bg-soft: #050505;
-  --bg-red: #100204;
+  --bg-soft: #111111;
+  --bg-red: #180000;
 
-  --panel: #050505;
-  --panel-alt: #090405;
+  --panel: #080808;
+  --panel-alt: #111111;
 
-  --red-dark: #5a0c18;
-  --red: #a0152a;
-  --red-main: #d31f38;
-  --red-bright: #ef4055;
+  --red-dark: #550000;
+  --red: #990000;
+  --red-main: #aa0000;
+  --red-bright: #ff0000;
 
-  --text: #f3eff0;
-  --text-soft: #b9afb2;
-  --text-muted: #71676a;
+  --text: #cccccc;
+  --text-soft: #999999;
+  --text-muted: #666666;
 
-  --border: #330810;
-  --border-hover: #9c172a;
+  --border: #330000;
+  --border-hover: #aa0000;
 
-  --danger: #ff5a6c;
+  --danger: #ff0000;
 }
 
 
@@ -153,16 +153,16 @@ input,
 textarea,
 select {
   font-family:
-    "Cormorant Garamond",
-    Georgia,
+    "Times New Roman",
+    Times,
     serif;
 }
 
 button {
   font-family:
-    "Cormorant SC",
-    Georgia,
-    serif;
+    Arial,
+    Helvetica,
+    sans-serif;
 }
 
 h1,
@@ -175,8 +175,8 @@ h3,
 .category-link-card span,
 .cart-item-name {
   font-family:
-    "IM Fell English SC",
-    Georgia,
+    "Times New Roman",
+    Times,
     serif;
 }
 
