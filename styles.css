@@ -1,9 +1,4 @@
-@font-face {
-  font-family: "GothicHandDirty";
-  src: url("fonts/fontsGothicHandDirty-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
+@import url("https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap");
 
 /* =========================================================
    SUNQ HORROR THEME
@@ -155,16 +150,11 @@ body::after {
 body,
 input,
 textarea,
-select {
-  font-family:
-    "GothicHandDirty",
-    cursive;
-}
-
+select,
 button {
   font-family:
-    "GothicHandDirty",
-    cursive;
+    "UnifrakturCook",
+    serif;
 }
 
 h1,
@@ -177,8 +167,8 @@ h3,
 .category-link-card span,
 .cart-item-name {
   font-family:
-    "GothicHandDirty",
-    cursive;
+    "UnifrakturCook",
+    serif;
 }
 
 .nav-links a,
@@ -193,8 +183,8 @@ h3,
 .cart-item-category,
 .product-spec-label {
   font-family:
-    "GothicHandDirty",
-    cursive;
+    "UnifrakturCook",
+    serif;
 }
 
 a {
