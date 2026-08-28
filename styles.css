@@ -3082,3 +3082,32 @@ button {
       0.01ms !important;
   }
 }
+
+/* TEMPORARY FONT TEST */
+body,
+input,
+textarea,
+select,
+button,
+h1,
+h2,
+h3,
+.logo,
+.footer-logo,
+.page-title,
+.collection-title,
+.category-link-card span,
+.cart-item-name,
+.nav-links a,
+.section-kicker,
+.hero-kicker,
+.about-kicker,
+.empty-state-kicker,
+.cart-summary-label,
+.control-label,
+.product-card-category,
+.product-category,
+.cart-item-category,
+.product-spec-label {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
