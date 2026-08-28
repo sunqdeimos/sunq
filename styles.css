@@ -1,5 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Cormorant+SC:wght@500;600;700&family=IM+Fell+English+SC&display=swap");
-
+@font-face {
+  font-family: "GothicHandDirty";
+  src: url("fonts/fontsGothicHandDirty-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
 
 /* =========================================================
    SUNQ HORROR THEME
@@ -153,16 +157,14 @@ input,
 textarea,
 select {
   font-family:
-    "Cormorant Garamond",
-    Georgia,
-    serif;
+    "GothicHandDirty",
+    cursive;
 }
 
 button {
   font-family:
-    "Cormorant SC",
-    Georgia,
-    serif;
+    "GothicHandDirty",
+    cursive;
 }
 
 h1,
@@ -175,9 +177,8 @@ h3,
 .category-link-card span,
 .cart-item-name {
   font-family:
-    "IM Fell English SC",
-    Georgia,
-    serif;
+    "GothicHandDirty",
+    cursive;
 }
 
 .nav-links a,
@@ -192,9 +193,8 @@ h3,
 .cart-item-category,
 .product-spec-label {
   font-family:
-    "Cormorant SC",
-    Georgia,
-    serif;
+    "GothicHandDirty",
+    cursive;
 }
 
 a {
@@ -236,7 +236,6 @@ button {
 
   outline-offset: 3px;
 }
-
 
 /* =========================================================
    ACCESSIBILITY
