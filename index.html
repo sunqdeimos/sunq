@@ -2,116 +2,484 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>SUNQ</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Supabase first -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Project connection -->
   <script src="supabase-config.js"></script>
+
+  <!-- Product data and shared UI -->
   <script src="data.js"></script>
   <script src="store-ui.js"></script>
-  <style>
-    .sunq-menu-button { display:flex; flex-direction:column; justify-content:center; gap:6px; width:46px; height:46px; padding:8px; background:transparent; color:inherit; cursor:pointer; }
-    .sunq-menu-button span { display:block; width:30px; height:2px; background:currentColor; }
-    .sunq-menu { position:fixed; top:0; left:0; z-index:1000; width:min(320px,85vw); height:100vh; padding:90px 28px 28px; background:#050505; border-right:2px solid var(--red,#a0152a); transform:translateX(-100%); transition:transform 160ms ease; }
-    .sunq-menu.is-open { transform:translateX(0); }
-    .sunq-menu a { display:block; margin:0 0 22px; color:inherit; text-decoration:none; font-size:1.25rem; }
-    .sunq-menu-close { position:absolute; top:24px; right:20px; padding:8px; background:transparent; color:inherit; cursor:pointer; font-size:1.2rem; }
-    .sunq-menu-backdrop { position:fixed; inset:0; z-index:999; background:rgba(0,0,0,.65); opacity:0; pointer-events:none; transition:opacity 160ms ease; }
-    .sunq-menu-backdrop.is-open { opacity:1; pointer-events:auto; }
-    .sunq-home-logo { width:min(260px,38vw); height:auto; }
-    .sunq-home-nav .nav-container { display:flex; align-items:center; justify-content:space-between; }
-    .sunq-home-nav .nav-links { display:none; }
-    .sunq-home-nav .sunq-home-logo { display:block; width:min(260px,38vw); height:auto; margin:0; }
-    .sunq-home-hero .hero-content { display:flex; justify-content:center; align-items:center; min-height:55vh; transform:translateY(-100px); }
-    .sunq-home-actions { display:flex; justify-content:center; align-items:center; gap:42px; margin-top:28px; }
-    .sunq-home-actions a { font-size:2.4rem; }
-    .sunq-welcome { margin:0; text-align:center; font-size:2.4rem; line-height:1.1; }
-  </style>
 </head>
+
 <body>
 
-  <nav class="navbar sunq-home-nav">
+  <!-- ================= NAVBAR ================= -->
+
+  <nav class="navbar">
     <div class="nav-container">
-      <button class="sunq-menu-button" id="sunqMenuButton" type="button" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <img class="sunq-home-logo" src="sunq-logo-design.png" alt="SUNQ">
+
+<a href="index.html" class="logo" aria-label="SUNQ">
+    <img src="sunq-logo-design.png" alt="SUNQ">
+</a>
+
+      <div class="nav-links">
+
+        <a href="shop.html">
+          Shop
+        </a>
+
+        <a href="about.html">
+          About
+        </a>
+
+        <a href="cart.html">
+          Cart (<span id="cart-count">0</span>)
+        </a>
+
+      </div>
+
     </div>
   </nav>
 
-  <div class="sunq-menu-backdrop" id="sunqMenuBackdrop"></div>
-  <aside class="sunq-menu" id="sunqMenu" aria-hidden="true">
-    <button class="sunq-menu-close" id="sunqMenuClose" type="button" aria-label="Close menu">X</button>
-    <a href="index.html">Home</a>
-    <a href="about.html">About Us</a>
-    <a href="contact.html">Contact Us</a>
-  </aside>
 
-  <header class="hero sunq-home-hero">
+  <!-- ================= HERO ================= -->
+
+  <header class="hero">
+
     <div class="hero-content">
-      <div>
-        <p class="sunq-welcome">You've finally made it, welcome.</p>
-        <div class="sunq-home-actions">
-          <a href="shop.html">Shop</a>
-          <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
-        </div>
+
+      
+      <h1>
+        Welcome mat deployed.
+      </h1>
+
+      <p>
+        You made it this far. Might as well browse.
+      </p>
+
+      <div class="hero-actions">
+
+        <a
+          href="shop.html"
+          class="button-primary"
+        >
+          Enter Shop
+        </a>
+
+        <a
+          href="#featured"
+          class="button-secondary"
+        >
+          View Featured
+        </a>
+
       </div>
+
     </div>
+
   </header>
 
+
+  <!-- ================= CATEGORY SHORTCUTS ================= -->
+
   <section class="shop home-section">
+
     <div class="section-heading-row">
-      <div><p class="section-kicker">Find your way around</p><h2 class="page-title">Categories</h2></div>
+
+      <div>
+
+        <p class="section-kicker">
+          Find your way around
+        </p>
+
+        <h2 class="page-title">
+          Categories
+        </h2>
+
+      </div>
+
     </div>
+
+
     <div class="category-link-grid">
-      <a class="category-link-card" href="shop.html?category=diamond-fa"><span>Diamond / Champ FA</span><small>View listings</small></a>
-      <a class="category-link-card" href="shop.html?category=diamond-nfa"><span>Diamond / Champ NFA</span><small>View listings</small></a>
-      <a class="category-link-card" href="shop.html?category=emerald-fa"><span>Emerald FA</span><small>View listings</small></a>
-      <a class="category-link-card" href="shop.html?category=emerald-nfa"><span>Emerald NFA</span><small>View listings</small></a>
-      <a class="category-link-card" href="shop.html?category=rank-ready"><span>Rank Ready</span><small>View listings</small></a>
+
+      <a
+        class="category-link-card"
+        href="shop.html?category=diamond-fa"
+      >
+        <span>
+          Diamond / Champ FA
+        </span>
+
+        <small>
+          View listings
+        </small>
+      </a>
+
+
+      <a
+        class="category-link-card"
+        href="shop.html?category=diamond-nfa"
+      >
+        <span>
+          Diamond / Champ NFA
+        </span>
+
+        <small>
+          View listings
+        </small>
+      </a>
+
+
+      <a
+        class="category-link-card"
+        href="shop.html?category=emerald-fa"
+      >
+        <span>
+          Emerald FA
+        </span>
+
+        <small>
+          View listings
+        </small>
+      </a>
+
+
+      <a
+        class="category-link-card"
+        href="shop.html?category=emerald-nfa"
+      >
+        <span>
+          Emerald NFA
+        </span>
+
+        <small>
+          View listings
+        </small>
+      </a>
+
+
+      <a
+        class="category-link-card"
+        href="shop.html?category=rank-ready"
+      >
+        <span>
+          Rank Ready
+        </span>
+
+        <small>
+          View listings
+        </small>
+      </a>
+
     </div>
+
   </section>
 
-  <section class="shop home-section" id="featured">
+
+  <!-- ================= FEATURED ================= -->
+
+  <section
+    class="shop home-section"
+    id="featured"
+  >
+
     <div class="section-heading-row">
-      <div><p class="section-kicker">Worth a look</p><h2 class="page-title">Featured Drops</h2></div>
-      <a class="text-link" href="shop.html">View all</a>
+
+      <div>
+
+        <p class="section-kicker">
+          Worth a look
+        </p>
+
+        <h2 class="page-title">
+          Featured Drops
+        </h2>
+
+      </div>
+
+      <a
+        class="text-link"
+        href="shop.html"
+      >
+        View all
+      </a>
+
     </div>
-    <div id="featured-products" aria-live="polite" aria-busy="true">
-      <section class="empty-state"><p class="empty-state-kicker">Loading</p><h2>Finding the good stuff.</h2><p>This should only take a moment.</p></section>
+
+    <div
+      id="featured-products"
+      aria-live="polite"
+      aria-busy="true"
+    >
+
+      <section class="empty-state">
+
+        <p class="empty-state-kicker">
+          Loading
+        </p>
+
+        <h2>
+          Finding the good stuff.
+        </h2>
+
+        <p>
+          This should only take a moment.
+        </p>
+
+      </section>
+
     </div>
+
   </section>
+
+
+  <!-- ================= HOW IT WORKS ================= -->
 
   <section class="shop home-section">
+
     <div class="home-info-grid">
-      <article class="home-info-card"><span class="home-info-number">01</span><h2>Pick a category</h2><p>Use the filters to narrow things down without scrolling through the entire shop.</p></article>
-      <article class="home-info-card"><span class="home-info-number">02</span><h2>Check availability</h2><p>Each listing shows its price, platform, delivery estimate, and remaining stock.</p></article>
-      <article class="home-info-card"><span class="home-info-number">03</span><h2>Review your cart</h2><p>Adjust the quantity, check the total, and make sure everything looks right before checkout.</p></article>
+
+      <article class="home-info-card">
+
+        <span class="home-info-number">
+          01
+        </span>
+
+        <h2>
+          Pick a category
+        </h2>
+
+        <p>
+          Use the filters to narrow things down without
+          scrolling through the entire shop.
+        </p>
+
+      </article>
+
+
+      <article class="home-info-card">
+
+        <span class="home-info-number">
+          02
+        </span>
+
+        <h2>
+          Check availability
+        </h2>
+
+        <p>
+          Each listing shows its price, platform,
+          delivery estimate, and remaining stock.
+        </p>
+
+      </article>
+
+
+      <article class="home-info-card">
+
+        <span class="home-info-number">
+          03
+        </span>
+
+        <h2>
+          Review your cart
+        </h2>
+
+        <p>
+          Adjust the quantity, check the total, and make
+          sure everything looks right before checkout.
+        </p>
+
+      </article>
+
     </div>
+
   </section>
+
+
+  <!-- ================= FOOTER ================= -->
 
   <footer class="site-footer">
+
     <div class="footer-inner">
-      <div class="footer-brand"><a href="index.html" class="footer-logo">SUNQ</a><p>Didn't get paid enough to come up with anything here.</p></div>
-      <nav class="footer-links" aria-label="Footer navigation"><a href="shop.html">Shop</a><a href="about.html">About</a><a href="cart.html">Cart</a></nav>
-      <p class="footer-copy">© 2026 SUNQ</p>
+
+      <div class="footer-brand">
+
+        <a
+          href="index.html"
+          class="footer-logo"
+        >
+          SUNQ
+        </a>
+
+        <p>
+         Didn't get paid enough to come up with anything here.
+        </p>
+
+      </div>
+
+      <nav
+        class="footer-links"
+        aria-label="Footer navigation"
+      >
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="cart.html">Cart</a>
+      </nav>
+
+      <p class="footer-copy">
+        © 2026 SUNQ
+      </p>
+
     </div>
+
   </footer>
 
+
+  <!-- ================= HOME LOGIC ================= -->
+
   <script>
-    const featuredContainer = document.getElementById("featured-products");
-    function renderFeaturedError() { featuredContainer.innerHTML = `<section class="empty-state"><p class="empty-state-kicker">Something went wrong</p><h2>Featured products did not load.</h2><p>Check the database connection and refresh the page.</p><button class="button-secondary" type="button" onclick="window.location.reload()">Try again</button></section>`; featuredContainer.setAttribute("aria-busy","false"); }
-    function renderHomeFeatured() { renderFeaturedProducts("featured-products",6); featuredContainer.setAttribute("aria-busy","false"); }
-    async function initializeHomePage() { updateCartCount(); try { await productsReady; if (getProductsLoadError() || !areProductsLoaded()) { renderFeaturedError(); return; } renderHomeFeatured(); } catch(error) { console.error("Could not initialize SUNQ home page:",error); renderFeaturedError(); } }
-    window.addEventListener("sunq:productsloaded",()=>{ if(areProductsLoaded()) renderHomeFeatured(); });
-    window.addEventListener("sunq:externalchange",updateCartCount);
+    const featuredContainer =
+      document.getElementById("featured-products");
+
+
+    /* =====================================================
+       ERROR STATE
+       ===================================================== */
+
+    function renderFeaturedError() {
+      featuredContainer.innerHTML = `
+        <section class="empty-state">
+
+          <p class="empty-state-kicker">
+            Something went wrong
+          </p>
+
+          <h2>
+            Featured products did not load.
+          </h2>
+
+          <p>
+            Check the database connection and refresh the page.
+          </p>
+
+          <button
+            class="button-secondary"
+            type="button"
+            onclick="window.location.reload()"
+          >
+            Try again
+          </button>
+
+        </section>
+      `;
+
+      featuredContainer.setAttribute(
+        "aria-busy",
+        "false"
+      );
+    }
+
+
+    /* =====================================================
+       RENDER FEATURED
+       ===================================================== */
+
+    function renderHomeFeatured() {
+      renderFeaturedProducts(
+        "featured-products",
+        6
+      );
+
+      featuredContainer.setAttribute(
+        "aria-busy",
+        "false"
+      );
+    }
+
+
+    /* =====================================================
+       INITIALIZE
+       ===================================================== */
+
+    async function initializeHomePage() {
+      updateCartCount();
+
+      try {
+        await productsReady;
+
+        if (
+          getProductsLoadError() ||
+          !areProductsLoaded()
+        ) {
+          renderFeaturedError();
+          return;
+        }
+
+        renderHomeFeatured();
+      } catch (error) {
+        console.error(
+          "Could not initialize SUNQ home page:",
+          error
+        );
+
+        renderFeaturedError();
+      }
+    }
+
+
+    /* =====================================================
+       FUTURE PRODUCT REFRESHES
+       ===================================================== */
+
+    window.addEventListener(
+      "sunq:productsloaded",
+      () => {
+        if (areProductsLoaded()) {
+          renderHomeFeatured();
+        }
+      }
+    );
+
+
+    /* =====================================================
+       CROSS-TAB CART UPDATES
+       ===================================================== */
+
+    window.addEventListener(
+      "sunq:externalchange",
+      updateCartCount
+    );
+
+
     initializeHomePage();
-    const menu=document.getElementById("sunqMenu"), menuButton=document.getElementById("sunqMenuButton"), menuClose=document.getElementById("sunqMenuClose"), menuBackdrop=document.getElementById("sunqMenuBackdrop");
-    function setMenu(open){ menu.classList.toggle("is-open",open); menuBackdrop.classList.toggle("is-open",open); menu.setAttribute("aria-hidden",String(!open)); menuButton.setAttribute("aria-expanded",String(open)); }
-    menuButton.addEventListener("click",()=>setMenu(true)); menuClose.addEventListener("click",()=>setMenu(false)); menuBackdrop.addEventListener("click",()=>setMenu(false)); document.addEventListener("keydown",event=>{if(event.key==="Escape") setMenu(false);});
   </script>
+
 </body>
 </html>
