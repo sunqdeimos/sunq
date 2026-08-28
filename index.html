@@ -25,10 +25,10 @@
     .sunq-home-nav .nav-container { display:flex; align-items:center; justify-content:space-between; }
     .sunq-home-nav .nav-links { display:none; }
     .sunq-home-nav .sunq-home-logo { display:block; width:min(260px,38vw); height:auto; margin:0; }
-    .sunq-home-hero .hero-content { display:flex; justify-content:center; align-items:center; min-height:55vh; }
-    .sunq-home-actions { display:flex; justify-content:center; align-items:center; gap:42px; margin-top:24px; }
+    .sunq-home-hero .hero-content { display:flex; justify-content:center; align-items:center; min-height:55vh; transform:translateY(-55px); }
+    .sunq-home-actions { display:flex; justify-content:center; align-items:center; gap:42px; margin-top:26px; }
     .sunq-home-actions a { font-size:2.4rem; }
-    .sunq-welcome { margin-top:26px; text-align:center; font-size:2.4rem; line-height:1.1; }
+    .sunq-welcome { margin:0; text-align:center; font-size:2.4rem; line-height:1.1; }
   </style>
 </head>
 <body>
@@ -53,11 +53,11 @@
   <header class="hero sunq-home-hero">
     <div class="hero-content">
       <div>
+        <p class="sunq-welcome">You've finally made it, welcome.</p>
         <div class="sunq-home-actions">
           <a href="shop.html">Shop</a>
           <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
         </div>
-        <p class="sunq-welcome">You've finally made it, welcome.</p>
       </div>
     </div>
   </header>
